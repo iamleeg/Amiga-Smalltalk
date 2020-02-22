@@ -20,6 +20,12 @@ short ObjectMemory_ot(ObjectPointer objectPointer) {
     ObjectTableStart + objectPointer);
 }
 
+void ObjectMemory_ot_put(ObjectPointer objectPointer, short value) {
+  RealWordMemory_segment_word_put(ObjectTableSegment,
+    ObjectTableStart + objectPointer,
+    value);
+}
+
 short *segmentPointers[HeapSegmentCount];
 
 void ObjectMemory_new() {

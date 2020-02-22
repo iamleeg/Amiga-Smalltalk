@@ -26,6 +26,11 @@ short ObjectMemory_isIntegerObject(unsigned short objectPointer);
 short ObjectMemory_ot(ObjectPointer objectPointer);
 
 /**
+ * Set the first word of an object table entry.
+ */
+void ObjectMemory_ot_put(ObjectPointer objectPointer, short value);
+
+/**
  * Initialize the ObjectMemory. This MUST be done once before
  * using the VM.
  */

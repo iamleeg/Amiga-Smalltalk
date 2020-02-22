@@ -28,6 +28,15 @@ short test_ObjectTableLookupFindsWordInRealWordMemory() {
   return (result == value);
 }
 
+short test_ObjectTableStorageSetsWordInRealWordMemory() {
+  ObjectPointer objectPointer = 0x1234;
+  short value = 0xcafe, result = 0;
+  ObjectMemory_ot_put(objectPointer, value);
+  result = RealWordMemory_segment_word(ObjectTableSegment,
+    ObjectTableStart + objectPointer);
+  return (result == value);
+}
+
 #define RunTest(t) do { \
   short result = 0; \
   tr->ran++; \
@@ -45,6 +54,7 @@ void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(test_NonIntegerObjectIsNotIntegerObject);
   RunTest(test_IntegerObjectIsIntegerObject);
   RunTest(test_ObjectTableLookupFindsWordInRealWordMemory);
+  RunTest(test_ObjectTableStorageSetsWordInRealWordMemory);
 }
 
 short test_PutAndRetrieveWordInSegment() {
