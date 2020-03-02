@@ -10,46 +10,61 @@ void ObjectMemory_cantBeIntegerObject(ObjectPointer op) {
   assert((op & 0x0001) == 0);
 }
 
-short ObjectMemory_isIntegerObject(unsigned short objectPointer) {
+Word ObjectMemory_isIntegerObject(Word objectPointer) {
   return (objectPointer & 0x0001);
 }
 
-short ObjectMemory_ot(ObjectPointer objectPointer) {
+Word ObjectMemory_ot(ObjectPointer objectPointer) {
   ObjectMemory_cantBeIntegerObject(objectPointer);
   return RealWordMemory_segment_word(ObjectTableSegment,
     ObjectTableStart + objectPointer);
 }
 
-void ObjectMemory_ot_put(ObjectPointer objectPointer, short value) {
+void ObjectMemory_ot_put(ObjectPointer objectPointer, Word value) {
   RealWordMemory_segment_word_put(ObjectTableSegment,
     ObjectTableStart + objectPointer,
     value);
 }
 
-static short *segmentPointers[HeapSegmentCount];
+Word ObjectMemory_ot_bits_to(ObjectPointer objectPointer, Word firstBitIndex, Word lastBitIndex) {
+  return RealWordMemory_segment_word_bits_to(ObjectTableSegment,
+    ObjectTableStart + objectPointer,
+    firstBitIndex,
+    lastBitIndex);
+}
+
+void ObjectMemory_ot_bits_to_put(ObjectPointer objectPointer, Word firstBitIndex, Word lastBitIndex, Word value) {
+  RealWordMemory_segment_word_bits_to_put(ObjectTableSegment,
+    ObjectTableStart + objectPointer,
+    firstBitIndex,
+    lastBitIndex,
+    value);
+}
+
+static Word *segmentPointers[HeapSegmentCount];
 
 void ObjectMemory_new() {
   short i;
   for(i = FirstHeapSegment; i <= LastHeapSegment; i++) {
-    segmentPointers[i] = malloc(HeapSpaceStop*sizeof(short));
+    segmentPointers[i] = malloc(HeapSpaceStop*sizeof(Word));
   }
 }
 
-void RealWordMemory_segment_word_put(short s, short w, short value) {
+void RealWordMemory_segment_word_put(Word s, Word w, Word value) {
   segmentPointers[s][w] = value;
 }
 
-short RealWordMemory_segment_word(short s, short w) {
+Word RealWordMemory_segment_word(Word s, Word w) {
   return segmentPointers[s][w];
 }
 
-void RealWordMemory_bit_indices_should_be_in_word_range(short firstBitIndex, short lastBitIndex) {
+void RealWordMemory_bit_indices_should_be_in_word_range(Word firstBitIndex, Word lastBitIndex) {
   assert(firstBitIndex >= 0 && firstBitIndex <= 15);
   assert(lastBitIndex >= firstBitIndex && lastBitIndex <= 15);
 }
 
-short RealWordMemory_mask_bits(short firstBitIndex, short lastBitIndex) {
-  short i,j, mask = 0;
+Word RealWordMemory_mask_bits(Word firstBitIndex, Word lastBitIndex) {
+  Word i,j, mask = 0;
   for(i = 0, j = 15; i < 16; i++, j--) {
     if (i >= firstBitIndex && i <= lastBitIndex) {
       mask |= (1 << j);
@@ -58,9 +73,9 @@ short RealWordMemory_mask_bits(short firstBitIndex, short lastBitIndex) {
   return mask;
 }
 
-void RealWordMemory_segment_word_bits_to_put(short s, short w, short firstBitIndex, short lastBitIndex, short value) {
+void RealWordMemory_segment_word_bits_to_put(Word s, Word w, Word firstBitIndex, Word lastBitIndex, Word value) {
   RealWordMemory_bit_indices_should_be_in_word_range(firstBitIndex, lastBitIndex);
-  short mask, inverseMask, shiftedValue, currentStore, newStore;
+  Word mask, inverseMask, shiftedValue, currentStore, newStore;
   mask = RealWordMemory_mask_bits(firstBitIndex, lastBitIndex);
   inverseMask = ~mask;
   currentStore = RealWordMemory_segment_word(s, w);
@@ -70,10 +85,10 @@ void RealWordMemory_segment_word_bits_to_put(short s, short w, short firstBitInd
   RealWordMemory_segment_word_put(s, w, newStore);
 }
 
-short RealWordMemory_segment_word_bits_to(short s, short w, short firstBitIndex, short lastBitIndex) {
+Word RealWordMemory_segment_word_bits_to(Word s, Word w, Word firstBitIndex, Word lastBitIndex) {
   RealWordMemory_bit_indices_should_be_in_word_range(firstBitIndex, lastBitIndex);
 
-  short mask, wordValue, maskedValue, shiftedValue;
+  Word mask, wordValue, maskedValue, shiftedValue;
   mask = RealWordMemory_mask_bits(firstBitIndex, lastBitIndex);
   wordValue = RealWordMemory_segment_word(s, w);
   maskedValue = wordValue & mask;

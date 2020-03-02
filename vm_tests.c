@@ -37,6 +37,23 @@ short test_ObjectTableStorageSetsWordInRealWordMemory() {
   return (result == value);
 }
 
+short test_ObjectTableStorageRetrievesSpecificBitsInRealWordMemory() {
+  ObjectPointer objectPointer = 0x369C;
+  short value = 0xAAAA, firstBitIndex = 0, lastBitIndex = 3, result = 0, expected = 0xA;
+  ObjectMemory_ot_put(objectPointer, value);
+  result = ObjectMemory_ot_bits_to(objectPointer, firstBitIndex, lastBitIndex);
+  return (result == expected);
+}
+
+short test_ObjectTableStorageSetsSpecificBitsInRealWordMemory() {
+  ObjectPointer objectPointer = 0xfda0;
+  short value = 0, firstBitIndex = 11, lastBitIndex = 14, setBits = 0xf, result = 0, expected = 0x1e;
+  ObjectMemory_ot_put(objectPointer, value);
+  ObjectMemory_ot_bits_to_put(objectPointer, firstBitIndex, lastBitIndex, setBits);
+  result = ObjectMemory_ot(objectPointer);
+  return (result == expected);
+}
+
 #define RunTest(t) do { \
   short result = 0; \
   tr->ran++; \
@@ -55,6 +72,8 @@ void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(test_IntegerObjectIsIntegerObject);
   RunTest(test_ObjectTableLookupFindsWordInRealWordMemory);
   RunTest(test_ObjectTableStorageSetsWordInRealWordMemory);
+  RunTest(test_ObjectTableStorageRetrievesSpecificBitsInRealWordMemory);
+  RunTest(test_ObjectTableStorageSetsSpecificBitsInRealWordMemory);
 }
 
 short test_PutAndRetrieveWordInSegment() {
