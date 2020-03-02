@@ -26,7 +26,7 @@ void ObjectMemory_ot_put(ObjectPointer objectPointer, short value) {
     value);
 }
 
-short *segmentPointers[HeapSegmentCount];
+static short *segmentPointers[HeapSegmentCount];
 
 void ObjectMemory_new() {
   short i;

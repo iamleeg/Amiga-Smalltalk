@@ -1,0 +1,3 @@
+include $(TOP)/config/make.cfg
+
+%build_prog mmake=local-amigasmalltalktests files="ObjectMemory vm_tests" progname=AmigaSmalltalkTests
