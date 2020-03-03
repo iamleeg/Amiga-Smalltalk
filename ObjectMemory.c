@@ -81,3 +81,16 @@ Word ObjectMemory_segmentBitsOf(ObjectPointer objectPointer) {
 void ObjectMemory_segmentBitsOf_put(ObjectPointer objectPointer, Word value) {
   ObjectMemory_ot_bits_to_put(objectPointer, 12, 15, value);
 }
+
+Word ObjectMemory_locationBitsOf(ObjectPointer objectPointer) {
+  ObjectMemory_cantBeIntegerObject(objectPointer);
+  return RealWordMemory_segment_word(ObjectTableSegment,
+    ObjectTableStart + objectPointer + 1);
+}
+
+void ObjectMemory_locationBitsOf_put(ObjectPointer objectPointer, Word value) {
+  ObjectMemory_cantBeIntegerObject(objectPointer);
+  RealWordMemory_segment_word_put(ObjectTableSegment,
+    ObjectTableStart + objectPointer + 1,
+    value);
+}

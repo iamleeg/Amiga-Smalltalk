@@ -87,4 +87,14 @@ Word ObjectMemory_segmentBitsOf(ObjectPointer objectPointer);
  */
 void ObjectMemory_segmentBitsOf_put(ObjectPointer objectPointer, Word value);
 
+/**
+ * The location of an object.
+ */
+Word ObjectMemory_locationBitsOf(ObjectPointer objectPointer);
+
+/**
+ * Set the location of an object.
+ */
+void ObjectMemory_locationBitsOf_put(ObjectPointer objectPointer, Word value);
+
 #endif

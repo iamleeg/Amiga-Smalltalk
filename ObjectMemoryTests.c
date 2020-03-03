@@ -133,6 +133,25 @@ short test_SegmentBitsStoredInLowestNybbleOfObjectHeader() {
     return (result == expected);
 }
 
+short test_LocationBitsAreInTheSecondWordOfObjectHeader() {
+    ObjectPointer objectPointer = 0x0;
+    short locationWord = objectPointer + 1, value = 0xcafe, result = 0;
+    RealWordMemory_segment_word_put(ObjectTableSegment,
+      ObjectTableStart + locationWord,
+      value);
+    result = ObjectMemory_locationBitsOf(objectPointer);
+    return (result == value);
+}
+
+short test_LocationBitsStoredInSecondWordOfObjectHeader() {
+    ObjectPointer objectPointer = 0x0;
+    short locationWord = objectPointer + 1, value = 0xb33f, result = 0;
+    ObjectMemory_locationBitsOf_put(objectPointer, value);
+    result = RealWordMemory_segment_word(ObjectTableSegment,
+      ObjectTableStart + objectPointer + 1);
+    return (result == value);
+}
+
 void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(test_NonIntegerObjectIsNotIntegerObject);
   RunTest(test_IntegerObjectIsIntegerObject);
@@ -150,4 +169,6 @@ void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(test_FreeBitIsSetAtBitTenOfObjectHeader);
   RunTest(test_SegmentBitsAtLowestNybbleOfObjectHeader);
   RunTest(test_SegmentBitsStoredInLowestNybbleOfObjectHeader);
+  RunTest(test_LocationBitsAreInTheSecondWordOfObjectHeader);
+  RunTest(test_LocationBitsStoredInSecondWordOfObjectHeader);
 }
