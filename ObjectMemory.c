@@ -43,7 +43,7 @@ void ObjectMemory_ot_bits_to_put(ObjectPointer objectPointer, Word firstBitIndex
 }
 
 Word ObjectMemory_countBitsOf(ObjectPointer objectPointer) {
-  ObjectMemory_ot_bits_to(objectPointer, 0, 7);
+  return ObjectMemory_ot_bits_to(objectPointer, 0, 7);
 }
 
 void ObjectMemory_countBitsOf_put(ObjectPointer objectPointer, Word value) {
@@ -51,7 +51,7 @@ void ObjectMemory_countBitsOf_put(ObjectPointer objectPointer, Word value) {
 }
 
 Word ObjectMemory_oddBitOf(ObjectPointer objectPointer) {
-  ObjectMemory_ot_bits_to(objectPointer, 8, 8);
+  return ObjectMemory_ot_bits_to(objectPointer, 8, 8);
 }
 
 void ObjectMemory_oddBitOf_put(ObjectPointer objectPointer, Word value) {
@@ -59,7 +59,7 @@ void ObjectMemory_oddBitOf_put(ObjectPointer objectPointer, Word value) {
 }
 
 Word ObjectMemory_pointerBitOf(ObjectPointer objectPointer) {
-  ObjectMemory_ot_bits_to(objectPointer, 9, 9);
+  return ObjectMemory_ot_bits_to(objectPointer, 9, 9);
 }
 
 void ObjectMemory_pointerBitOf_put(ObjectPointer objectPointer, Word value) {
@@ -67,9 +67,17 @@ void ObjectMemory_pointerBitOf_put(ObjectPointer objectPointer, Word value) {
 }
 
 Word ObjectMemory_freeBitOf(ObjectPointer objectPointer) {
-  ObjectMemory_ot_bits_to(objectPointer, 10, 10);
+  return ObjectMemory_ot_bits_to(objectPointer, 10, 10);
 }
 
 void ObjectMemory_freeBitOf_put(ObjectPointer objectPointer, Word value) {
   ObjectMemory_ot_bits_to_put(objectPointer, 10, 10, value);
+}
+
+Word ObjectMemory_segmentBitsOf(ObjectPointer objectPointer) {
+  return ObjectMemory_ot_bits_to(objectPointer, 12, 15);
+}
+
+void ObjectMemory_segmentBitsOf_put(ObjectPointer objectPointer, Word value) {
+  ObjectMemory_ot_bits_to_put(objectPointer, 12, 15, value);
 }

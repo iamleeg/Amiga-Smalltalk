@@ -116,6 +116,23 @@ short test_FreeBitIsSetAtBitTenOfObjectHeader() {
     return (result == expected);
 }
 
+short test_SegmentBitsAtLowestNybbleOfObjectHeader() {
+    ObjectPointer objectPointer = 0x0;
+    short value = 0x000f, segment = 0, expected = 0xf;
+    ObjectMemory_ot_put(objectPointer, value);
+    segment = ObjectMemory_segmentBitsOf(objectPointer);
+    return (segment == expected);
+}
+
+short test_SegmentBitsStoredInLowestNybbleOfObjectHeader() {
+    ObjectPointer objectPointer = 0x0;
+    short value = 0x0000, segment = 0xf, result = 0, expected = 0x000f;
+    ObjectMemory_ot_put(objectPointer, value);
+    ObjectMemory_segmentBitsOf_put(objectPointer, segment);
+    result = ObjectMemory_ot(objectPointer);
+    return (result == expected);
+}
+
 void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(test_NonIntegerObjectIsNotIntegerObject);
   RunTest(test_IntegerObjectIsIntegerObject);
@@ -131,4 +148,6 @@ void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(test_PointerBitIsSetAtBitNineOfObjectHeader);
   RunTest(test_FreeBitIsAtBitTenOfObjectHeader);
   RunTest(test_FreeBitIsSetAtBitTenOfObjectHeader);
+  RunTest(test_SegmentBitsAtLowestNybbleOfObjectHeader);
+  RunTest(test_SegmentBitsStoredInLowestNybbleOfObjectHeader);
 }

@@ -77,4 +77,14 @@ Word ObjectMemory_freeBitOf(ObjectPointer objectPointer);
  */
 void ObjectMemory_freeBitOf_put(ObjectPointer objectPointer, Word value);
 
+/**
+ * Return the object's memory segment.
+ */
+Word ObjectMemory_segmentBitsOf(ObjectPointer objectPointer);
+
+/**
+ * Set the memory segment of the object.
+ */
+void ObjectMemory_segmentBitsOf_put(ObjectPointer objectPointer, Word value);
+
 #endif
