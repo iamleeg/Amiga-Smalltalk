@@ -3,5 +3,11 @@ check: ast_tests
 
 .PHONY: check
 
-ast_tests: ObjectMemory.c ObjectMemory.h RealWordMemory.c RealWordMemory.h ObjectMemoryTests.c ObjectMemoryTests.h vm_tests.c tests.h
-	gcc -ggdb ObjectMemory.c RealWordMemory.c ObjectMemoryTests.c vm_tests.c -o ast_tests
+SOURCE_FILES = ObjectMemory.c RealWordMemory.c
+HEADER_FILES = ObjectMemory.h RealWordMemory.h Types.h
+
+TEST_SOURCES = test_main.c ObjectMemoryTests.c RealWordMemoryTests.c
+TEST_HEADERS = tests.h ObjectMemoryTests.h RealWordMemoryTests.h
+
+ast_tests: $(SOURCE_FILES) $(HEADER_FILES) $(TEST_SOURCES) $(TEST_HEADERS)
+	gcc -ggdb $(SOURCE_FILES) $(TEST_SOURCES) -o ast_tests
