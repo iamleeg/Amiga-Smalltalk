@@ -193,6 +193,7 @@ short test_StoreHeapChunkOfObjectMemoryByByte() {
   char byteValue = 0xb4;
   ObjectMemory_locationBitsOf_put(objectPointer, location);
   ObjectMemory_segmentBitsOf_put(objectPointer, segment);
+  ObjectMemory_heapChunkOf_word_put(objectPointer, wordOffset, 0x0);
   ObjectMemory_heapChunkOf_byte_put(objectPointer, byteOffset, byteValue);
   retrieved = ObjectMemory_heapChunkOf_word(objectPointer, wordOffset);
   return (retrieved == ((short)byteValue) << 8);
