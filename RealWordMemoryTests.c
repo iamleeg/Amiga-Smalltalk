@@ -39,8 +39,22 @@ short test_RetrieveSpecificBitsFromAWord() {
   return (retrievedValue == expectedValue);
 }
 
+short test_PutAndRetrieveByteInSegment() {
+  short s = 7;
+  short w = 23;
+  short b = 1;
+  short wordValue = 0x0, expected = 0x007d;
+  char value = 0x7d, retrieved = 0;
+  RealWordMemory_segment_word_byte_put(s, w, b, value);
+  retrieved = RealWordMemory_segment_word_byte(s, w, b);
+  wordValue = RealWordMemory_segment_word(s, w);
+
+  return (retrieved == value && wordValue == expected);
+}
+
 void RealWordMemoryTests(struct TestResult *tr) {
   RunTest(test_PutAndRetrieveWordInSegment);
   RunTest(test_PutSpecificBitsInAWord);
   RunTest(test_RetrieveSpecificBitsFromAWord);
+  RunTest(test_PutAndRetrieveByteInSegment);
 }

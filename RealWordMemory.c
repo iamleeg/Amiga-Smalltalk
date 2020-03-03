@@ -63,3 +63,17 @@ Word RealWordMemory_segment_word_bits_to(Word s, Word w, Word firstBitIndex, Wor
   shiftedValue = maskedValue >> (15 - lastBitIndex);
   return shiftedValue;
 }
+
+Byte RealWordMemory_segment_word_byte(Word s, Word w, Byte b) {
+  assert(b == 0 || b == 1);
+  Word firstBit = (b == 0) ? 0 : 8;
+  Word lastBit = (b == 0) ? 7 : 15;
+  return RealWordMemory_segment_word_bits_to(s, w, firstBit, lastBit);
+}
+
+void RealWordMemory_segment_word_byte_put(Word s, Word w, Byte b, Byte value) {
+  assert(b == 0 || b == 1);
+  Word firstBit = (b == 0) ? 0 : 8;
+  Word lastBit = (b == 0) ? 7 : 15;
+  RealWordMemory_segment_word_bits_to_put(s, w, firstBit, lastBit, value);
+}

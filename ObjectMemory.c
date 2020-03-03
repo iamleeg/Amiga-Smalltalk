@@ -105,3 +105,18 @@ void ObjectMemory_heapChunkOf_word_put(ObjectPointer objectPointer, Word offset,
     ObjectMemory_locationBitsOf(objectPointer) + offset,
     value);
 }
+
+Byte ObjectMemory_heapChunkOf_byte(ObjectPointer objectPointer, Word offset) {
+  Word wordLocation = ObjectMemory_locationBitsOf(objectPointer) + (offset / 2);
+  return RealWordMemory_segment_word_byte(ObjectMemory_segmentBitsOf(objectPointer),
+    wordLocation,
+    offset % 2);
+}
+
+void ObjectMemory_heapChunkOf_byte_put(ObjectPointer objectPointer, Word offset, Byte value) {
+  Word wordLocation = ObjectMemory_locationBitsOf(objectPointer) + (offset / 2);
+  RealWordMemory_segment_word_byte_put(ObjectMemory_segmentBitsOf(objectPointer),
+    wordLocation,
+    offset % 2,
+    value);
+}

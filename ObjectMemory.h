@@ -99,12 +99,26 @@ void ObjectMemory_locationBitsOf_put(ObjectPointer objectPointer, Word value);
 
 /**
  * Get the word in the object's heap storage at the given offset.
+ * Offset is counted in words (2 bytes).
  */
 Word ObjectMemory_heapChunkOf_word(ObjectPointer objectPointer, Word offset);
 
 /**
  * Store the word in the object's heap storage at the given offset.
+ * Offset is counted in words (2 bytes).
  */
 void ObjectMemory_heapChunkOf_word_put(ObjectPointer objectPointer, Word offset, Word value);
+
+/**
+ * Get a byte in the object's heap storage at the given offset.
+ * Offset is counted in bytes.
+ */
+Byte ObjectMemory_heapChunkOf_byte(ObjectPointer objectPointer, Word offset);
+
+/**
+ * Store a byte in the object's heap storage at the given offset.
+ * Offset is counted in bytes.
+ */
+void ObjectMemory_heapChunkOf_byte_put(ObjectPointer objectPointer, Word offset, Byte value);
 
 #endif

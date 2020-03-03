@@ -41,5 +41,16 @@ void RealWordMemory_segment_word_bits_to_put(Word s, Word w, Word firstBitIndex,
  */
 Word RealWordMemory_segment_word_bits_to(Word s, Word w, Word firstBitIndex, Word lastBitIndex);
 
+/**
+ * Retrieve the value of the memory in the specified byte of the given word and segment address.
+ * The byte must be 0 (MSB) or 1 (LSB)
+ */
+Byte RealWordMemory_segment_word_byte(Word s, Word w, Byte b);
+
+/**
+ * Set the byte in the specified segment and word to the given value.
+ * The byte must be 0 (MSB) or 1 (LSB)
+ */
+void RealWordMemory_segment_word_byte_put(Word s, Word w, Byte b, Byte value);
 
 #endif
