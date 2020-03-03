@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "ObjectMemory.h"
+#include "RealWordMemory.h"
 #include "ObjectMemoryTests.h"
 #include "tests.h"
 
@@ -48,7 +48,7 @@ void RealWordMemoryTests(struct TestResult *tr) {
 }
 
 int main(int argc, const char *argv[]) {
-  ObjectMemory_new();
+  RealWordMemory_new();
 
   struct TestResult result;
   result.ran = 0;
