@@ -94,3 +94,14 @@ void ObjectMemory_locationBitsOf_put(ObjectPointer objectPointer, Word value) {
     ObjectTableStart + objectPointer + 1,
     value);
 }
+
+Word ObjectMemory_heapChunkOf_word(ObjectPointer objectPointer, Word offset) {
+  return RealWordMemory_segment_word(ObjectMemory_segmentBitsOf(objectPointer),
+    ObjectMemory_locationBitsOf(objectPointer) + offset);
+}
+
+void ObjectMemory_heapChunkOf_word_put(ObjectPointer objectPointer, Word offset, Word value) {
+  RealWordMemory_segment_word_put(ObjectMemory_segmentBitsOf(objectPointer),
+    ObjectMemory_locationBitsOf(objectPointer) + offset,
+    value);
+}

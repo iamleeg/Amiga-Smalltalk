@@ -97,4 +97,14 @@ Word ObjectMemory_locationBitsOf(ObjectPointer objectPointer);
  */
 void ObjectMemory_locationBitsOf_put(ObjectPointer objectPointer, Word value);
 
+/**
+ * Get the word in the object's heap storage at the given offset.
+ */
+Word ObjectMemory_heapChunkOf_word(ObjectPointer objectPointer, Word offset);
+
+/**
+ * Store the word in the object's heap storage at the given offset.
+ */
+void ObjectMemory_heapChunkOf_word_put(ObjectPointer objectPointer, Word offset, Word value);
+
 #endif

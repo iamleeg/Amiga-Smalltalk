@@ -152,6 +152,30 @@ short test_LocationBitsStoredInSecondWordOfObjectHeader() {
     return (result == value);
 }
 
+short test_GrabbingHeapChunkOfObjectGetsWordDeeperIntoMemory() {
+    ObjectPointer objectPointer = 0x1000;
+    short segment = 1, location = 0x0f0f, offset = 4, value = 0x4321, result = 0;
+    ObjectMemory_locationBitsOf_put(objectPointer, location);
+    ObjectMemory_segmentBitsOf_put(objectPointer, segment);
+    RealWordMemory_segment_word_put(segment,
+      location + offset,
+      value);
+    
+    result = ObjectMemory_heapChunkOf_word(objectPointer, offset);
+    return (result == value);
+}
+
+short test_StoringHeapChunkOfObjectWritesWordDeeperIntoMemory() {
+    ObjectPointer objectPointer = 0x100e;
+    short segment = 3, location = 0xcccc, offset = 0xaa, value = 0x4321, result = 0;
+    ObjectMemory_locationBitsOf_put(objectPointer, location);
+    ObjectMemory_segmentBitsOf_put(objectPointer, segment);
+    ObjectMemory_heapChunkOf_word_put(objectPointer, offset, value);
+
+    result = RealWordMemory_segment_word(segment, location+offset);
+    return(result == value);
+}
+
 void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(test_NonIntegerObjectIsNotIntegerObject);
   RunTest(test_IntegerObjectIsIntegerObject);
@@ -171,4 +195,6 @@ void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(test_SegmentBitsStoredInLowestNybbleOfObjectHeader);
   RunTest(test_LocationBitsAreInTheSecondWordOfObjectHeader);
   RunTest(test_LocationBitsStoredInSecondWordOfObjectHeader);
+  RunTest(test_GrabbingHeapChunkOfObjectGetsWordDeeperIntoMemory);
+  RunTest(test_StoringHeapChunkOfObjectWritesWordDeeperIntoMemory);
 }
