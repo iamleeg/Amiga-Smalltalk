@@ -57,3 +57,11 @@ Word ObjectMemory_oddBitOf(ObjectPointer objectPointer) {
 void ObjectMemory_oddBitOf_put(ObjectPointer objectPointer, Word value) {
   ObjectMemory_ot_bits_to_put(objectPointer, 8, 8, value);
 }
+
+Word ObjectMemory_pointerBitOf(ObjectPointer objectPointer) {
+  ObjectMemory_ot_bits_to(objectPointer, 9, 9);
+}
+
+void ObjectMemory_pointerBitOf_put(ObjectPointer objectPointer, Word value) {
+  ObjectMemory_ot_bits_to_put(objectPointer, 9, 9, value);
+}

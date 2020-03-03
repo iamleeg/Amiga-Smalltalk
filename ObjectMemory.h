@@ -57,4 +57,14 @@ Word ObjectMemory_oddBitOf(ObjectPointer objectPointer);
  */
 void ObjectMemory_oddBitOf_put(ObjectPointer objectPointer, Word value);
 
+/**
+ * Return the object's is-a-pointer flag.
+ */
+Word ObjectMemory_pointerBitOf(ObjectPointer objectPointer);
+
+/**
+ * Set the is-a-pointer flag of the object.
+ */
+void ObjectMemory_pointerBitOf_put(ObjectPointer objectPointer, Word value);
+
 #endif

@@ -75,9 +75,26 @@ short test_OddBitIsAtBitEightOfObjectHeader() {
 
 short test_OddBitIsSetAtBitEightOfObjectHeader() {
     ObjectPointer objectPointer = 0x0;
-    short value = 0, oddBit = 1, result = 0, expected = 1<<7;
+    short value = 0, bit = 1, result = 0, expected = 1<<7;
     ObjectMemory_ot_put(objectPointer, value);
-    ObjectMemory_oddBitOf_put(objectPointer, oddBit);
+    ObjectMemory_oddBitOf_put(objectPointer, bit);
+    result = ObjectMemory_ot(objectPointer);
+    return (result == expected);
+}
+
+short test_PointerBitIsAtBitNineOfObjectHeader() {
+    ObjectPointer objectPointer = 0x0;
+    short value = 1<<6, result = 0, expected = 1;
+    ObjectMemory_ot_put(objectPointer, value);
+    result = ObjectMemory_pointerBitOf(objectPointer);
+    return (result == expected);
+}
+
+short test_PointerBitIsSetAtBitNineOfObjectHeader() {
+    ObjectPointer objectPointer = 0x0;
+    short value = 0, bit = 1, result = 0, expected = 1<<6;
+    ObjectMemory_ot_put(objectPointer, value);
+    ObjectMemory_pointerBitOf_put(objectPointer, bit);
     result = ObjectMemory_ot(objectPointer);
     return (result == expected);
 }
@@ -93,4 +110,6 @@ void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(test_CountBitsStoredInMostSignificantByteOfObjectHeader);
   RunTest(test_OddBitIsAtBitEightOfObjectHeader);
   RunTest(test_OddBitIsSetAtBitEightOfObjectHeader);
+  RunTest(test_PointerBitIsAtBitNineOfObjectHeader);
+  RunTest(test_PointerBitIsSetAtBitNineOfObjectHeader);
 }
