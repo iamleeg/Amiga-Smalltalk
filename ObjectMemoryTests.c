@@ -48,6 +48,23 @@ short test_ObjectTableStorageSetsSpecificBitsInRealWordMemory() {
   return (result == expected);
 }
 
+short test_CountBitsInObjectStorageAreMostSignificantByteOfObjectHeader() {
+  ObjectPointer objectPointer = 0x1234;
+  short value = 0xbbcc, countBits = 0, expected = 0xbb;
+  ObjectMemory_ot_put(objectPointer, value);
+  countBits = ObjectMemory_countBitsOf(objectPointer);
+  return (countBits == expected);
+}
+
+short test_CountBitsStoredInMostSignificantByteOfObjectHeader() {
+  ObjectPointer objectPointer = 0xfffe;
+  short value = 0x1122, countBits = 0x35, result = 0, expected = 0x3522;
+  ObjectMemory_ot_put(objectPointer, value);
+  ObjectMemory_countBitsOf_put(objectPointer, countBits);
+  result = ObjectMemory_ot(objectPointer);
+  return (result == expected);
+}
+
 void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(test_NonIntegerObjectIsNotIntegerObject);
   RunTest(test_IntegerObjectIsIntegerObject);
@@ -55,4 +72,6 @@ void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(test_ObjectTableStorageSetsWordInRealWordMemory);
   RunTest(test_ObjectTableStorageRetrievesSpecificBitsInRealWordMemory);
   RunTest(test_ObjectTableStorageSetsSpecificBitsInRealWordMemory);
+  RunTest(test_CountBitsInObjectStorageAreMostSignificantByteOfObjectHeader);
+  RunTest(test_CountBitsStoredInMostSignificantByteOfObjectHeader);
 }

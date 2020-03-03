@@ -41,3 +41,11 @@ void ObjectMemory_ot_bits_to_put(ObjectPointer objectPointer, Word firstBitIndex
     lastBitIndex,
     value);
 }
+
+Word ObjectMemory_countBitsOf(ObjectPointer objectPointer) {
+  ObjectMemory_ot_bits_to(objectPointer, 0, 7);
+}
+
+void ObjectMemory_countBitsOf_put(ObjectPointer objectPointer, Word value) {
+  ObjectMemory_ot_bits_to_put(objectPointer, 0, 7, value);
+}

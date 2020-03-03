@@ -37,4 +37,14 @@ Word ObjectMemory_ot_bits_to(ObjectPointer objectPointer, Word firstBitIndex, Wo
  */
 void ObjectMemory_ot_bits_to_put(ObjectPointer objectPointer, Word firstBitIndex, Word lastBitIndex, Word value);
 
+/**
+ * Return the object's reference count.
+ */
+Word ObjectMemory_countBitsOf(ObjectPointer objectPointer);
+
+/**
+ * Update the object's reference count.
+ */
+void ObjectMemory_countBitsOf_put(ObjectPointer objectPointer, Word value);
+
 #endif
