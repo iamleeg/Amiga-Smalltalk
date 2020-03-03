@@ -67,4 +67,14 @@ Word ObjectMemory_pointerBitOf(ObjectPointer objectPointer);
  */
 void ObjectMemory_pointerBitOf_put(ObjectPointer objectPointer, Word value);
 
+/**
+ * Return the object's free flag.
+ */
+Word ObjectMemory_freeBitOf(ObjectPointer objectPointer);
+
+/**
+ * Set the free flag of the object.
+ */
+void ObjectMemory_freeBitOf_put(ObjectPointer objectPointer, Word value);
+
 #endif

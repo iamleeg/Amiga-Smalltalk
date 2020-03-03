@@ -99,6 +99,23 @@ short test_PointerBitIsSetAtBitNineOfObjectHeader() {
     return (result == expected);
 }
 
+short test_FreeBitIsAtBitTenOfObjectHeader() {
+    ObjectPointer objectPointer = 0x0;
+    short value = 1<<5, result = 0, expected = 1;
+    ObjectMemory_ot_put(objectPointer, value);
+    result = ObjectMemory_freeBitOf(objectPointer);
+    return (result == expected);
+}
+
+short test_FreeBitIsSetAtBitTenOfObjectHeader() {
+    ObjectPointer objectPointer = 0x0;
+    short value = 0, bit = 1, result = 0, expected = 1<<5;
+    ObjectMemory_ot_put(objectPointer, value);
+    ObjectMemory_freeBitOf_put(objectPointer, bit);
+    result = ObjectMemory_ot(objectPointer);
+    return (result == expected);
+}
+
 void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(test_NonIntegerObjectIsNotIntegerObject);
   RunTest(test_IntegerObjectIsIntegerObject);
@@ -112,4 +129,6 @@ void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(test_OddBitIsSetAtBitEightOfObjectHeader);
   RunTest(test_PointerBitIsAtBitNineOfObjectHeader);
   RunTest(test_PointerBitIsSetAtBitNineOfObjectHeader);
+  RunTest(test_FreeBitIsAtBitTenOfObjectHeader);
+  RunTest(test_FreeBitIsSetAtBitTenOfObjectHeader);
 }
