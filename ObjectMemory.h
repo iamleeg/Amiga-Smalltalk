@@ -47,4 +47,14 @@ Word ObjectMemory_countBitsOf(ObjectPointer objectPointer);
  */
 void ObjectMemory_countBitsOf_put(ObjectPointer objectPointer, Word value);
 
+/**
+ * Return the object's odd-length flag.
+ */
+Word ObjectMemory_oddBitOf(ObjectPointer objectPointer);
+
+/**
+ * Set the odd-length flag of the object.
+ */
+void ObjectMemory_oddBitOf_put(ObjectPointer objectPointer, Word value);
+
 #endif
