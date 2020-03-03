@@ -141,4 +141,17 @@ Word ObjectMemory_classBitsOf(ObjectPointer objectPointer);
  */
 void ObjectMemory_classBitsOf_put(ObjectPointer objectPointer, Word value);
 
+/**
+ * The last pointer of an object.
+ * @note this implementation is preliminary and untested.
+ */
+Word ObjectMemory_lastPointerOf(ObjectPointer objectPointer);
+
+/**
+ * The space occupied by an object.
+ * @note this implementation is preliminary and untested.
+ */
+Word ObjectMemory_spaceOccupiedBy(ObjectPointer objectPointer);
+
+
 #endif

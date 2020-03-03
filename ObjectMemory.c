@@ -136,3 +136,11 @@ Word ObjectMemory_classBitsOf(ObjectPointer objectPointer) {
 void ObjectMemory_classBitsOf_put(ObjectPointer objectPointer, Word value) {
   ObjectMemory_heapChunkOf_word_put(objectPointer, 1, value);
 }
+
+Word ObjectMemory_lastPointerOf(ObjectPointer objectPointer) {
+  return ObjectMemory_sizeBitsOf(objectPointer);
+}
+
+Word ObjectMemory_spaceOccupiedBy(ObjectPointer objectPointer) {
+  return ObjectMemory_sizeBitsOf(objectPointer);
+}
