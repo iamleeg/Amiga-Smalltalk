@@ -121,4 +121,24 @@ Byte ObjectMemory_heapChunkOf_byte(ObjectPointer objectPointer, Word offset);
  */
 void ObjectMemory_heapChunkOf_byte_put(ObjectPointer objectPointer, Word offset, Byte value);
 
+/**
+ * Retrieve this object's size on the heap.
+ */
+Word ObjectMemory_sizeBitsOf(ObjectPointer objectPointer);
+
+/**
+ * Store this object's size on the heap.
+ */
+void ObjectMemory_sizeBitsOf_put(ObjectPointer objectPointer, Word value);
+
+/**
+ * Retrieve this object's class.
+ */
+Word ObjectMemory_classBitsOf(ObjectPointer objectPointer);
+
+/**
+ * Store this object's class.
+ */
+void ObjectMemory_classBitsOf_put(ObjectPointer objectPointer, Word value);
+
 #endif

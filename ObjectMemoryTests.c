@@ -198,6 +198,46 @@ short test_StoreHeapChunkOfObjectMemoryByByte() {
   return (retrieved == ((short)byteValue) << 8);
 }
 
+short test_SizeBitsOfObjectAreInFirstWordOfHeap() {
+  ObjectPointer objectPointer = 0x0864;
+  short segment = 2, location = 0x1212, wordOffset = 0, size = 0xfeca, retrievedWord = 0;
+  ObjectMemory_locationBitsOf_put(objectPointer, location);
+  ObjectMemory_segmentBitsOf_put(objectPointer, segment);
+  ObjectMemory_heapChunkOf_word_put(objectPointer, wordOffset, size);
+  retrievedWord = ObjectMemory_sizeBitsOf(objectPointer);
+  return(retrievedWord == size);
+}
+
+short test_StoreSizeBitsOfObjectInFirstWordOfItsHeap() {
+  ObjectPointer objectPointer = 0xa428;
+  short segment = 1, location = 0xb79a, wordOffset = 0, word = 0xacee, size = 0;
+  ObjectMemory_locationBitsOf_put(objectPointer, location);
+  ObjectMemory_segmentBitsOf_put(objectPointer, segment);
+  ObjectMemory_sizeBitsOf_put(objectPointer, word);
+  size = ObjectMemory_heapChunkOf_word(objectPointer, wordOffset);
+  return (size == word);
+}
+
+short test_ClassBitsOfObjectAreInSecondWordOfHeap() {
+  ObjectPointer objectPointer = 0x0864;
+  short segment = 2, location = 0x1212, wordOffset = 1, size = 0xfeca, retrievedWord = 0;
+  ObjectMemory_locationBitsOf_put(objectPointer, location);
+  ObjectMemory_segmentBitsOf_put(objectPointer, segment);
+  ObjectMemory_heapChunkOf_word_put(objectPointer, wordOffset, size);
+  retrievedWord = ObjectMemory_classBitsOf(objectPointer);
+  return(retrievedWord == size);
+}
+
+short test_StoreClassBitsOfObjectInSecondWordOfItsHeap() {
+  ObjectPointer objectPointer = 0xa428;
+  short segment = 1, location = 0xb79a, wordOffset = 1, word = 0xacee, size = 0;
+  ObjectMemory_locationBitsOf_put(objectPointer, location);
+  ObjectMemory_segmentBitsOf_put(objectPointer, segment);
+  ObjectMemory_classBitsOf_put(objectPointer, word);
+  size = ObjectMemory_heapChunkOf_word(objectPointer, wordOffset);
+  return (size == word);
+}
+
 void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(test_NonIntegerObjectIsNotIntegerObject);
   RunTest(test_IntegerObjectIsIntegerObject);
@@ -221,4 +261,8 @@ void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(test_StoringHeapChunkOfObjectWritesWordDeeperIntoMemory);
   RunTest(test_GetHeapChunkOfObjectMemoryByByte);
   RunTest(test_StoreHeapChunkOfObjectMemoryByByte);
+  RunTest(test_SizeBitsOfObjectAreInFirstWordOfHeap);
+  RunTest(test_StoreSizeBitsOfObjectInFirstWordOfItsHeap);
+  RunTest(test_ClassBitsOfObjectAreInSecondWordOfHeap);
+  RunTest(test_StoreClassBitsOfObjectInSecondWordOfItsHeap);
 }

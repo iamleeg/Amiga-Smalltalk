@@ -120,3 +120,19 @@ void ObjectMemory_heapChunkOf_byte_put(ObjectPointer objectPointer, Word offset,
     offset % 2,
     value);
 }
+
+Word ObjectMemory_sizeBitsOf(ObjectPointer objectPointer) {
+  return ObjectMemory_heapChunkOf_word(objectPointer, 0);
+}
+
+void ObjectMemory_sizeBitsOf_put(ObjectPointer objectPointer, Word value) {
+  ObjectMemory_heapChunkOf_word_put(objectPointer, 0, value);
+}
+
+Word ObjectMemory_classBitsOf(ObjectPointer objectPointer) {
+  return ObjectMemory_heapChunkOf_word(objectPointer, 1);
+}
+
+void ObjectMemory_classBitsOf_put(ObjectPointer objectPointer, Word value) {
+  ObjectMemory_heapChunkOf_word_put(objectPointer, 1, value);
+}
