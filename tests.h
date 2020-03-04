@@ -12,7 +12,7 @@ struct TestResult {
 #define Test(t) void t (short *failures)
 
 #define Expect(condition) do { \
-  if(!condition) { \
+  if(!(condition)) { \
     fprintf(stderr, "Expectation unsatisfied: " #condition "\n"); \
     *failures = *failures + 1; \
   } \
