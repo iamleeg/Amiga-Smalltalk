@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #define HeapSegmentCount 16
 #define FirstHeapSegment 0
@@ -14,7 +15,9 @@ static Word *segmentPointers[HeapSegmentCount];
 void RealWordMemory_new() {
   short i;
   for(i = FirstHeapSegment; i <= LastHeapSegment; i++) {
-    segmentPointers[i] = malloc(HeapSpaceStop*sizeof(Word));
+    size_t size = HeapSpaceStop*sizeof(Word);
+    segmentPointers[i] = malloc(size);
+    memset(segmentPointers[i], 0, size);
   }
 }
 
