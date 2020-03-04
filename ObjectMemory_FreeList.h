@@ -6,7 +6,7 @@
 /**
  * The location in the object table of the head of the free pointer list.
  */
-#define FreePointerList 0x1000
+#define FreePointerList 0x8000
 
 /**
  * A pointer value that cannot be an object pointer.

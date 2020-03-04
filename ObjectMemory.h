@@ -5,7 +5,7 @@
 
 #define ObjectTableSegment 0
 #define ObjectTableStart 0
-#define ObjectTableSize 0xFFFF
+#define ObjectTableSize 0x7FFF
 #define HugeSize 0x0100
 #define NilPointer 2
 
