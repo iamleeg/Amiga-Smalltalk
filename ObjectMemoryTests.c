@@ -2,157 +2,157 @@
 #include "ObjectMemory.h"
 #include "RealWordMemory.h"
 
-short test_NonIntegerObjectIsNotIntegerObject() {
+Test(NonIntegerObjectIsNotIntegerObject) {
   short result = ObjectMemory_isIntegerObject(0);
-  return !result;
+  Expect(!result);
 }
 
-short test_IntegerObjectIsIntegerObject() {
+Test(IntegerObjectIsIntegerObject) {
   short result = ObjectMemory_isIntegerObject(1);
-  return result;
+  Expect(result);
 }
 
-short test_ObjectTableLookupFindsWordInRealWordMemory() {
+Test(ObjectTableLookupFindsWordInRealWordMemory) {
   ObjectPointer objectPointer = 0x2468;
   short value = 0xbeef, result = 0;
   RealWordMemory_segment_word_put(ObjectTableSegment,
     ObjectTableStart + objectPointer,
     value);
   result = ObjectMemory_ot(objectPointer);
-  return (result == value);
+  Expect(result == value);
 }
 
-short test_ObjectTableStorageSetsWordInRealWordMemory() {
+Test(ObjectTableStorageSetsWordInRealWordMemory) {
   ObjectPointer objectPointer = 0x1234;
   short value = 0xcafe, result = 0;
   ObjectMemory_ot_put(objectPointer, value);
   result = RealWordMemory_segment_word(ObjectTableSegment,
     ObjectTableStart + objectPointer);
-  return (result == value);
+  Expect(result == value);
 }
 
-short test_ObjectTableStorageRetrievesSpecificBitsInRealWordMemory() {
+Test(ObjectTableStorageRetrievesSpecificBitsInRealWordMemory) {
   ObjectPointer objectPointer = 0x369C;
   short value = 0xAAAA, firstBitIndex = 0, lastBitIndex = 3, result = 0, expected = 0xA;
   ObjectMemory_ot_put(objectPointer, value);
   result = ObjectMemory_ot_bits_to(objectPointer, firstBitIndex, lastBitIndex);
-  return (result == expected);
+  Expect(result == expected);
 }
 
-short test_ObjectTableStorageSetsSpecificBitsInRealWordMemory() {
+Test(ObjectTableStorageSetsSpecificBitsInRealWordMemory) {
   ObjectPointer objectPointer = 0xfda0;
   short value = 0, firstBitIndex = 11, lastBitIndex = 14, setBits = 0xf, result = 0, expected = 0x1e;
   ObjectMemory_ot_put(objectPointer, value);
   ObjectMemory_ot_bits_to_put(objectPointer, firstBitIndex, lastBitIndex, setBits);
   result = ObjectMemory_ot(objectPointer);
-  return (result == expected);
+  Expect(result == expected);
 }
 
-short test_CountBitsInObjectStorageAreMostSignificantByteOfObjectHeader() {
+Test(CountBitsInObjectStorageAreMostSignificantByteOfObjectHeader) {
   ObjectPointer objectPointer = 0x1234;
   short value = 0xbbcc, countBits = 0, expected = 0xbb;
   ObjectMemory_ot_put(objectPointer, value);
   countBits = ObjectMemory_countBitsOf(objectPointer);
-  return (countBits == expected);
+  Expect(countBits == expected);
 }
 
-short test_CountBitsStoredInMostSignificantByteOfObjectHeader() {
+Test(CountBitsStoredInMostSignificantByteOfObjectHeader) {
   ObjectPointer objectPointer = 0xfffe;
   short value = 0x1122, countBits = 0x35, result = 0, expected = 0x3522;
   ObjectMemory_ot_put(objectPointer, value);
   ObjectMemory_countBitsOf_put(objectPointer, countBits);
   result = ObjectMemory_ot(objectPointer);
-  return (result == expected);
+  Expect(result == expected);
 }
 
-short test_OddBitIsAtBitEightOfObjectHeader() {
+Test(OddBitIsAtBitEightOfObjectHeader) {
   ObjectPointer objectPointer = 0x0;
   short value = 1<<7, result = 0, expected = 1;
   ObjectMemory_ot_put(objectPointer, value);
   result = ObjectMemory_oddBitOf(objectPointer);
-  return (result == expected);
+  Expect(result == expected);
 }
 
-short test_OddBitIsSetAtBitEightOfObjectHeader() {
+Test(OddBitIsSetAtBitEightOfObjectHeader) {
   ObjectPointer objectPointer = 0x0;
   short value = 0, bit = 1, result = 0, expected = 1<<7;
   ObjectMemory_ot_put(objectPointer, value);
   ObjectMemory_oddBitOf_put(objectPointer, bit);
   result = ObjectMemory_ot(objectPointer);
-  return (result == expected);
+  Expect(result == expected);
 }
 
-short test_PointerBitIsAtBitNineOfObjectHeader() {
+Test(PointerBitIsAtBitNineOfObjectHeader) {
   ObjectPointer objectPointer = 0x0;
   short value = 1<<6, result = 0, expected = 1;
   ObjectMemory_ot_put(objectPointer, value);
   result = ObjectMemory_pointerBitOf(objectPointer);
-  return (result == expected);
+  Expect(result == expected);
 }
 
-short test_PointerBitIsSetAtBitNineOfObjectHeader() {
+Test(PointerBitIsSetAtBitNineOfObjectHeader) {
   ObjectPointer objectPointer = 0x0;
   short value = 0, bit = 1, result = 0, expected = 1<<6;
   ObjectMemory_ot_put(objectPointer, value);
   ObjectMemory_pointerBitOf_put(objectPointer, bit);
   result = ObjectMemory_ot(objectPointer);
-  return (result == expected);
+  Expect(result == expected);
 }
 
-short test_FreeBitIsAtBitTenOfObjectHeader() {
+Test(FreeBitIsAtBitTenOfObjectHeader) {
   ObjectPointer objectPointer = 0x0;
   short value = 1<<5, result = 0, expected = 1;
   ObjectMemory_ot_put(objectPointer, value);
   result = ObjectMemory_freeBitOf(objectPointer);
-  return (result == expected);
+  Expect(result == expected);
 }
 
-short test_FreeBitIsSetAtBitTenOfObjectHeader() {
+Test(FreeBitIsSetAtBitTenOfObjectHeader) {
   ObjectPointer objectPointer = 0x0;
   short value = 0, bit = 1, result = 0, expected = 1<<5;
   ObjectMemory_ot_put(objectPointer, value);
   ObjectMemory_freeBitOf_put(objectPointer, bit);
   result = ObjectMemory_ot(objectPointer);
-  return (result == expected);
+  Expect(result == expected);
 }
 
-short test_SegmentBitsAtLowestNybbleOfObjectHeader() {
+Test(SegmentBitsAtLowestNybbleOfObjectHeader) {
   ObjectPointer objectPointer = 0x0;
   short value = 0x000f, segment = 0, expected = 0xf;
   ObjectMemory_ot_put(objectPointer, value);
   segment = ObjectMemory_segmentBitsOf(objectPointer);
-  return (segment == expected);
+  Expect(segment == expected);
 }
 
-short test_SegmentBitsStoredInLowestNybbleOfObjectHeader() {
+Test(SegmentBitsStoredInLowestNybbleOfObjectHeader) {
   ObjectPointer objectPointer = 0x0;
   short value = 0x0000, segment = 0xf, result = 0, expected = 0x000f;
   ObjectMemory_ot_put(objectPointer, value);
   ObjectMemory_segmentBitsOf_put(objectPointer, segment);
   result = ObjectMemory_ot(objectPointer);
-  return (result == expected);
+  Expect(result == expected);
 }
 
-short test_LocationBitsAreInTheSecondWordOfObjectHeader() {
+Test(LocationBitsAreInTheSecondWordOfObjectHeader) {
   ObjectPointer objectPointer = 0x0;
   short locationWord = objectPointer + 1, value = 0xcafe, result = 0;
   RealWordMemory_segment_word_put(ObjectTableSegment,
     ObjectTableStart + locationWord,
     value);
   result = ObjectMemory_locationBitsOf(objectPointer);
-  return (result == value);
+  Expect(result == value);
 }
 
-short test_LocationBitsStoredInSecondWordOfObjectHeader() {
+Test(LocationBitsStoredInSecondWordOfObjectHeader) {
   ObjectPointer objectPointer = 0x0;
   short locationWord = objectPointer + 1, value = 0xb33f, result = 0;
   ObjectMemory_locationBitsOf_put(objectPointer, value);
   result = RealWordMemory_segment_word(ObjectTableSegment,
     ObjectTableStart + objectPointer + 1);
-  return (result == value);
+  Expect(result == value);
 }
 
-short test_GrabbingHeapChunkOfObjectGetsWordDeeperIntoMemory() {
+Test(GrabbingHeapChunkOfObjectGetsWordDeeperIntoMemory) {
   ObjectPointer objectPointer = 0x1000;
   short segment = 1, location = 0x0f0f, offset = 4, value = 0x4321, result = 0;
   ObjectMemory_locationBitsOf_put(objectPointer, location);
@@ -162,10 +162,10 @@ short test_GrabbingHeapChunkOfObjectGetsWordDeeperIntoMemory() {
     value);
     
   result = ObjectMemory_heapChunkOf_word(objectPointer, offset);
-  return (result == value);
+  Expect(result == value);
 }
 
-short test_StoringHeapChunkOfObjectWritesWordDeeperIntoMemory() {
+Test(StoringHeapChunkOfObjectWritesWordDeeperIntoMemory) {
   ObjectPointer objectPointer = 0x100e;
   short segment = 3, location = 0xcccc, offset = 0xaa, value = 0x4321, result = 0;
   ObjectMemory_locationBitsOf_put(objectPointer, location);
@@ -173,10 +173,10 @@ short test_StoringHeapChunkOfObjectWritesWordDeeperIntoMemory() {
   ObjectMemory_heapChunkOf_word_put(objectPointer, offset, value);
 
   result = RealWordMemory_segment_word(segment, location+offset);
-  return(result == value);
+  Expect(result == value);
 }
 
-short test_GetHeapChunkOfObjectMemoryByByte() {
+Test(GetHeapChunkOfObjectMemoryByByte) {
   ObjectPointer objectPointer = 0x2222;
   short segment = 5, location = 0x0202, wordOffset = 0x40, wordValue = 0xfedc, byteOffset = (wordOffset * 2) + 1;
   char lowByte = 0, expected = 0xdc;
@@ -184,10 +184,10 @@ short test_GetHeapChunkOfObjectMemoryByByte() {
   ObjectMemory_segmentBitsOf_put(objectPointer, segment);
   ObjectMemory_heapChunkOf_word_put(objectPointer, wordOffset, wordValue);
   lowByte = ObjectMemory_heapChunkOf_byte(objectPointer, byteOffset);
-  return (lowByte == expected);
+  Expect(lowByte == expected);
 }
 
-short test_StoreHeapChunkOfObjectMemoryByByte() {
+Test(StoreHeapChunkOfObjectMemoryByByte) {
   ObjectPointer objectPointer = 0x3434;
   short segment = 2, location = 0x099a, wordOffset = 0x72, byteOffset = (wordOffset * 2), retrieved = 0;
   char byteValue = 0xb4;
@@ -196,74 +196,74 @@ short test_StoreHeapChunkOfObjectMemoryByByte() {
   ObjectMemory_heapChunkOf_word_put(objectPointer, wordOffset, 0x0);
   ObjectMemory_heapChunkOf_byte_put(objectPointer, byteOffset, byteValue);
   retrieved = ObjectMemory_heapChunkOf_word(objectPointer, wordOffset);
-  return (retrieved == ((short)byteValue) << 8);
+  Expect(retrieved == ((short)byteValue) << 8);
 }
 
-short test_SizeBitsOfObjectAreInFirstWordOfHeap() {
+Test(SizeBitsOfObjectAreInFirstWordOfHeap) {
   ObjectPointer objectPointer = 0x0864;
   short segment = 2, location = 0x1212, wordOffset = 0, size = 0xfeca, retrievedWord = 0;
   ObjectMemory_locationBitsOf_put(objectPointer, location);
   ObjectMemory_segmentBitsOf_put(objectPointer, segment);
   ObjectMemory_heapChunkOf_word_put(objectPointer, wordOffset, size);
   retrievedWord = ObjectMemory_sizeBitsOf(objectPointer);
-  return(retrievedWord == size);
+  Expect(retrievedWord == size);
 }
 
-short test_StoreSizeBitsOfObjectInFirstWordOfItsHeap() {
+Test(StoreSizeBitsOfObjectInFirstWordOfItsHeap) {
   ObjectPointer objectPointer = 0xa428;
   short segment = 1, location = 0xb79a, wordOffset = 0, word = 0xacee, size = 0;
   ObjectMemory_locationBitsOf_put(objectPointer, location);
   ObjectMemory_segmentBitsOf_put(objectPointer, segment);
   ObjectMemory_sizeBitsOf_put(objectPointer, word);
   size = ObjectMemory_heapChunkOf_word(objectPointer, wordOffset);
-  return (size == word);
+  Expect(size == word);
 }
 
-short test_ClassBitsOfObjectAreInSecondWordOfHeap() {
+Test(ClassBitsOfObjectAreInSecondWordOfHeap) {
   ObjectPointer objectPointer = 0x0864;
   short segment = 2, location = 0x1212, wordOffset = 1, size = 0xfeca, retrievedWord = 0;
   ObjectMemory_locationBitsOf_put(objectPointer, location);
   ObjectMemory_segmentBitsOf_put(objectPointer, segment);
   ObjectMemory_heapChunkOf_word_put(objectPointer, wordOffset, size);
   retrievedWord = ObjectMemory_classBitsOf(objectPointer);
-  return(retrievedWord == size);
+  Expect(retrievedWord == size);
 }
 
-short test_StoreClassBitsOfObjectInSecondWordOfItsHeap() {
+Test(StoreClassBitsOfObjectInSecondWordOfItsHeap) {
   ObjectPointer objectPointer = 0xa428;
   short segment = 1, location = 0xb79a, wordOffset = 1, word = 0xacee, size = 0;
   ObjectMemory_locationBitsOf_put(objectPointer, location);
   ObjectMemory_segmentBitsOf_put(objectPointer, segment);
   ObjectMemory_classBitsOf_put(objectPointer, word);
   size = ObjectMemory_heapChunkOf_word(objectPointer, wordOffset);
-  return (size == word);
+  Expect(size == word);
 }
 
 void ObjectMemoryTests(struct TestResult *tr) {
-  RunTest(test_NonIntegerObjectIsNotIntegerObject);
-  RunTest(test_IntegerObjectIsIntegerObject);
-  RunTest(test_ObjectTableLookupFindsWordInRealWordMemory);
-  RunTest(test_ObjectTableStorageSetsWordInRealWordMemory);
-  RunTest(test_ObjectTableStorageRetrievesSpecificBitsInRealWordMemory);
-  RunTest(test_ObjectTableStorageSetsSpecificBitsInRealWordMemory);
-  RunTest(test_CountBitsInObjectStorageAreMostSignificantByteOfObjectHeader);
-  RunTest(test_CountBitsStoredInMostSignificantByteOfObjectHeader);
-  RunTest(test_OddBitIsAtBitEightOfObjectHeader);
-  RunTest(test_OddBitIsSetAtBitEightOfObjectHeader);
-  RunTest(test_PointerBitIsAtBitNineOfObjectHeader);
-  RunTest(test_PointerBitIsSetAtBitNineOfObjectHeader);
-  RunTest(test_FreeBitIsAtBitTenOfObjectHeader);
-  RunTest(test_FreeBitIsSetAtBitTenOfObjectHeader);
-  RunTest(test_SegmentBitsAtLowestNybbleOfObjectHeader);
-  RunTest(test_SegmentBitsStoredInLowestNybbleOfObjectHeader);
-  RunTest(test_LocationBitsAreInTheSecondWordOfObjectHeader);
-  RunTest(test_LocationBitsStoredInSecondWordOfObjectHeader);
-  RunTest(test_GrabbingHeapChunkOfObjectGetsWordDeeperIntoMemory);
-  RunTest(test_StoringHeapChunkOfObjectWritesWordDeeperIntoMemory);
-  RunTest(test_GetHeapChunkOfObjectMemoryByByte);
-  RunTest(test_StoreHeapChunkOfObjectMemoryByByte);
-  RunTest(test_SizeBitsOfObjectAreInFirstWordOfHeap);
-  RunTest(test_StoreSizeBitsOfObjectInFirstWordOfItsHeap);
-  RunTest(test_ClassBitsOfObjectAreInSecondWordOfHeap);
-  RunTest(test_StoreClassBitsOfObjectInSecondWordOfItsHeap);
+  RunTest(NonIntegerObjectIsNotIntegerObject);
+  RunTest(IntegerObjectIsIntegerObject);
+  RunTest(ObjectTableLookupFindsWordInRealWordMemory);
+  RunTest(ObjectTableStorageSetsWordInRealWordMemory);
+  RunTest(ObjectTableStorageRetrievesSpecificBitsInRealWordMemory);
+  RunTest(ObjectTableStorageSetsSpecificBitsInRealWordMemory);
+  RunTest(CountBitsInObjectStorageAreMostSignificantByteOfObjectHeader);
+  RunTest(CountBitsStoredInMostSignificantByteOfObjectHeader);
+  RunTest(OddBitIsAtBitEightOfObjectHeader);
+  RunTest(OddBitIsSetAtBitEightOfObjectHeader);
+  RunTest(PointerBitIsAtBitNineOfObjectHeader);
+  RunTest(PointerBitIsSetAtBitNineOfObjectHeader);
+  RunTest(FreeBitIsAtBitTenOfObjectHeader);
+  RunTest(FreeBitIsSetAtBitTenOfObjectHeader);
+  RunTest(SegmentBitsAtLowestNybbleOfObjectHeader);
+  RunTest(SegmentBitsStoredInLowestNybbleOfObjectHeader);
+  RunTest(LocationBitsAreInTheSecondWordOfObjectHeader);
+  RunTest(LocationBitsStoredInSecondWordOfObjectHeader);
+  RunTest(GrabbingHeapChunkOfObjectGetsWordDeeperIntoMemory);
+  RunTest(StoringHeapChunkOfObjectWritesWordDeeperIntoMemory);
+  RunTest(GetHeapChunkOfObjectMemoryByByte);
+  RunTest(StoreHeapChunkOfObjectMemoryByByte);
+  RunTest(SizeBitsOfObjectAreInFirstWordOfHeap);
+  RunTest(StoreSizeBitsOfObjectInFirstWordOfItsHeap);
+  RunTest(ClassBitsOfObjectAreInSecondWordOfHeap);
+  RunTest(StoreClassBitsOfObjectInSecondWordOfItsHeap);
 }

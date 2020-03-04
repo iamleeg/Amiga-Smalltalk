@@ -9,11 +9,20 @@ struct TestResult {
   int failed;
 };
 
+#define Test(t) void t (short *failures)
+
+#define Expect(condition) do { \
+  if(!condition) { \
+    fprintf(stderr, "Expectation unsatisfied: " #condition "\n"); \
+    *failures = *failures + 1; \
+  } \
+} while (0)
+
 #define RunTest(t) do { \
-  short result = 0; \
+  short failed = 0; \
   tr->ran++; \
-  result = t(); \
-  if (result) { \
+  t(&failed); \
+  if (failed == 0) { \
     tr->passed++; \
     printf("PASS " #t "\n"); \
   } else { \
