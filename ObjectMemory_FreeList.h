@@ -6,12 +6,12 @@
 /**
  * The location in the object table of the head of the free pointer list.
  */
-#define FreePointerList 0x8000
+#define FreePointerList 0xfefe
 
 /**
  * The location in each segment of the first free chunk list.
  */
-#define FirstFreeChunkList 0xf000
+#define FirstFreeChunkList 0xff00
 /**
  * The location in each segment of the last free chunk list.
  */
