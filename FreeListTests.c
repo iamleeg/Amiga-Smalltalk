@@ -20,7 +20,17 @@ short test_SetHeadOfFreePointerListInObjectTable() {
   return (result == value);
 }
 
+short test_AppendingEntryToFreePointerList() {
+  Word object1 = 0x0002, object2 = 0x0004, retrievedHead = 0, retrievedNext = 0;
+  ObjectMemory_headOfFreePointerList_put(object1);
+  ObjectMemory_toFreePointerListAdd(object2);
+  retrievedHead = ObjectMemory_headOfFreePointerList();
+  retrievedNext = ObjectMemory_locationBitsOf(retrievedHead);
+  return ((retrievedHead == object2) && (retrievedNext == object1));
+}
+
 void FreeListTests(struct TestResult *tr) {
   RunTest(test_RetrieveHeadOfFreePointerListFromObjectTable);
   RunTest(test_SetHeadOfFreePointerListInObjectTable);
+  RunTest(test_AppendingEntryToFreePointerList);
 }

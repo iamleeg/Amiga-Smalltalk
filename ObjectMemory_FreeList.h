@@ -11,11 +11,16 @@
 /**
  * Return the head of the free pointer list.
  */
-Word ObjectMemory_headOfFreePointerList(void);
+ObjectPointer ObjectMemory_headOfFreePointerList(void);
 
 /**
  * Set the head of the free pointer list.
  */
-void ObjectMemory_headOfFreePointerList_put(Word value);
+void ObjectMemory_headOfFreePointerList_put(ObjectPointer objectPointer);
+
+/**
+ * Add another object pointer to the free pointer list.
+ */
+void ObjectMemory_toFreePointerListAdd(ObjectPointer objectPointer);
 
 #endif
