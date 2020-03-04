@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "RealWordMemory.h"
+#include "FreeListTests.h"
 #include "ObjectMemoryTests.h"
 #include "RealWordMemoryTests.h"
 #include "tests.h"
@@ -12,6 +13,7 @@ int main(int argc, const char *argv[]) {
   result.passed = 0;
   result.failed = 0;
   
+  FreeListTests(&result);
   ObjectMemoryTests(&result);
   RealWordMemoryTests(&result);  
   

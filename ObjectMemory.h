@@ -153,5 +153,6 @@ Word ObjectMemory_lastPointerOf(ObjectPointer objectPointer);
  */
 Word ObjectMemory_spaceOccupiedBy(ObjectPointer objectPointer);
 
+#include "ObjectMemory_FreeList.h"
 
 #endif
