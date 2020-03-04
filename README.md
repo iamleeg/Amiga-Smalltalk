@@ -15,3 +15,8 @@ It's Smalltalk. For Amiga.
 3. `./configure`
 4. `make local-amigasmalltalktests`
 5. The tests are available in AROS as `:local/AmigaSmalltalk/AmigaSmalltalkTests`.
+
+
+## Copying
+
+Amiga-Smalltalk is made available under the terms of the European Union Public License, version 1.2. See LICENSE.txt.
