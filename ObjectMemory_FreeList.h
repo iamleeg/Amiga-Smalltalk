@@ -9,6 +9,15 @@
 #define FreePointerList 0x8000
 
 /**
+ * The location in each segment of the first free chunk list.
+ */
+#define FirstFreeChunkList 0xf000
+/**
+ * The location in each segment of the last free chunk list.
+ */
+#define LastFreeChunkList 0xfffe
+
+/**
  * A pointer value that cannot be an object pointer.
  */
 #define NonPointer 0xffff
@@ -33,5 +42,15 @@ void ObjectMemory_toFreePointerListAdd(ObjectPointer objectPointer);
  * If the list is empty, then return nil.
  */
 ObjectPointer ObjectMemory_removeFromFreePointerList();
+
+/**
+ * Return the head of the free chunk list of given size in the specified segment.
+ */
+ObjectPointer ObjectMemory_headOfFreeChunkList_inSegment(Word size, Word segment);
+
+/**
+ * Set the head of the free chunk list of given size in the specified segment.
+ */
+void ObjectMemory_headOfFreeChunkList_inSegment_put(Word size, Word segment, ObjectPointer objectPointer);
 
 #endif

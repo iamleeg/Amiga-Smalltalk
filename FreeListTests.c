@@ -47,10 +47,29 @@ Test(GettingNilWhenTryingToRemoveFromEmptyFreePointerList) {
   Expect(removedObject == NilPointer);
 }
 
+Test(RetrieveHeadOfFreeChunkListFromRealWordMemory) {
+  Word value = 0x37b5, size = 0x24, segment = 3, result = 0;
+  RealWordMemory_segment_word_put(segment,
+    FirstFreeChunkList + size,
+    value);
+  result = ObjectMemory_headOfFreeChunkList_inSegment(size, segment);
+  Expect(result == value);
+}
+
+Test(SetHeadOfFreeChunkListInRealWordMemory) {
+  Word value = 0x37b5, size = 0x24, segment = 3, result = 0;
+  ObjectMemory_headOfFreeChunkList_inSegment_put(size, segment, value);
+  result = RealWordMemory_segment_word(segment,
+    FirstFreeChunkList + size);
+  Expect(result == value);
+}
+
 void FreeListTests(struct TestResult *tr) {
   RunTest(RetrieveHeadOfFreePointerListFromObjectTable);
   RunTest(SetHeadOfFreePointerListInObjectTable);
   RunTest(AppendingEntryToFreePointerList);
   RunTest(RemovingEntryFromFreePointerList);
   RunTest(GettingNilWhenTryingToRemoveFromEmptyFreePointerList);
+  RunTest(RetrieveHeadOfFreeChunkListFromRealWordMemory);
+  RunTest(SetHeadOfFreeChunkListInRealWordMemory);
 }
