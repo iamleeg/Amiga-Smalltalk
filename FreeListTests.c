@@ -64,6 +64,52 @@ Test(SetHeadOfFreeChunkListInRealWordMemory) {
   Expect(result == value);
 }
 
+Test(AddObjectToFreeChunkListInItsSegment) {
+  ObjectPointer objectPointer = 0x2468, otherObject = 0x1238, head = 0, next = 0;
+  Word size = 0x10, segment = 8;
+  ObjectMemory_headOfFreeChunkList_inSegment_put(size, segment, otherObject);
+  ObjectMemory_segmentBitsOf_put(objectPointer, segment);
+  ObjectMemory_toFreeChunkList_add(size, objectPointer);
+
+  head = ObjectMemory_headOfFreeChunkList_inSegment(size, segment);
+  Expect(head == objectPointer);
+  next = ObjectMemory_classBitsOf(objectPointer);
+  Expect(next == otherObject);
+}
+
+Test(RemoveEntryFromCurrentSegmentFreeChunkList) {
+  ObjectPointer object1 = 0x1234, object2 = 0x1236, removedObject = 0, newHead = 0;
+  Word segment = 4, size = 2;
+  ObjectMemory_segmentBitsOf_put(object1, segment);
+  ObjectMemory_segmentBitsOf_put(object2, segment);
+  ObjectMemory_headOfFreeChunkList_inSegment_put(size, segment, object1);
+  ObjectMemory_toFreeChunkList_add(size, object2);
+  currentSegment = segment;
+
+  removedObject = ObjectMemory_removeFromFreeChunkList(size);
+  Expect(removedObject == object2);
+  newHead = ObjectMemory_headOfFreeChunkList_inSegment(size, segment);
+  Expect(newHead == object1);
+}
+
+Test(GetNilWhenTryingToRemoveFromEmptyFreeChunkList) {
+  ObjectPointer removed = 0;
+  Word segment = 4, size = 0xc;
+  currentSegment = segment;
+  ObjectMemory_headOfFreeChunkList_inSegment_put(size, segment, NonPointer);
+
+  removed = ObjectMemory_removeFromFreeChunkList(size);
+  Expect(removed == NilPointer);
+}
+
+Test(ResetAFreeChunkListByWritingANonPointerToItsHead) {
+  Word segment = 2, size = 4;
+
+  ObjectMemory_resetFreeChunkList_inSegment(size, segment);
+
+  Expect(ObjectMemory_headOfFreeChunkList_inSegment(size, segment) == NonPointer);
+}
+
 void FreeListTests(struct TestResult *tr) {
   RunTest(RetrieveHeadOfFreePointerListFromObjectTable);
   RunTest(SetHeadOfFreePointerListInObjectTable);
@@ -72,4 +118,8 @@ void FreeListTests(struct TestResult *tr) {
   RunTest(GettingNilWhenTryingToRemoveFromEmptyFreePointerList);
   RunTest(RetrieveHeadOfFreeChunkListFromRealWordMemory);
   RunTest(SetHeadOfFreeChunkListInRealWordMemory);
+  RunTest(AddObjectToFreeChunkListInItsSegment);
+  RunTest(RemoveEntryFromCurrentSegmentFreeChunkList);
+  RunTest(GetNilWhenTryingToRemoveFromEmptyFreeChunkList);
+  RunTest(ResetAFreeChunkListByWritingANonPointerToItsHead);
 }

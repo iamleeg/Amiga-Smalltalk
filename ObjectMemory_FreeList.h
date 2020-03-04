@@ -23,6 +23,11 @@
 #define NonPointer 0xffff
 
 /**
+ * The segment that is currently in use.
+ */
+extern Word currentSegment;
+
+/**
  * Return the head of the free pointer list.
  */
 ObjectPointer ObjectMemory_headOfFreePointerList(void);
@@ -52,5 +57,21 @@ ObjectPointer ObjectMemory_headOfFreeChunkList_inSegment(Word size, Word segment
  * Set the head of the free chunk list of given size in the specified segment.
  */
 void ObjectMemory_headOfFreeChunkList_inSegment_put(Word size, Word segment, ObjectPointer objectPointer);
+
+/**
+ * Add the supplied object to the free chunk list of given size in the object's segment.
+ */
+void ObjectMemory_toFreeChunkList_add(Word size, ObjectPointer objectPointer);
+
+/**
+ * Remove an object from the free chunk list of given size in the current segment and return it.
+ * The "current segment" is the value of the currentSegment register.
+ */
+ObjectPointer ObjectMemory_removeFromFreeChunkList(Word size);
+
+/**
+ * Reset (i.e. empty out) the free chunk list of given size in a specific segment.
+ */
+void ObjectMemory_resetFreeChunkList_inSegment(Word size, Word segment);
 
 #endif

@@ -1,6 +1,8 @@
 #include "ObjectMemory.h"
 #include "RealWordMemory.h"
 
+Word currentSegment = 0;
+
 ObjectPointer ObjectMemory_headOfFreePointerList(void) {
   return RealWordMemory_segment_word(ObjectTableSegment,
     FreePointerList);
@@ -32,4 +34,24 @@ ObjectPointer ObjectMemory_headOfFreeChunkList_inSegment(Word size, Word segment
 
 void ObjectMemory_headOfFreeChunkList_inSegment_put(Word size, Word segment, ObjectPointer objectPointer) {
   RealWordMemory_segment_word_put(segment, FirstFreeChunkList + size, objectPointer);
+}
+
+void ObjectMemory_toFreeChunkList_add(Word size, ObjectPointer objectPointer) {
+  Word segment = ObjectMemory_segmentBitsOf(objectPointer);
+  ObjectMemory_classBitsOf_put(objectPointer, ObjectMemory_headOfFreeChunkList_inSegment(size, segment));
+  ObjectMemory_headOfFreeChunkList_inSegment_put(size, segment, objectPointer);
+}
+
+ObjectPointer ObjectMemory_removeFromFreeChunkList(Word size) {
+  ObjectPointer objectPointer = ObjectMemory_headOfFreeChunkList_inSegment(size, currentSegment);
+  if (objectPointer == NonPointer) {
+    return NilPointer;
+  }
+  ObjectPointer secondChunk = ObjectMemory_classBitsOf(objectPointer);
+  ObjectMemory_headOfFreeChunkList_inSegment_put(size, currentSegment, secondChunk);
+  return objectPointer;
+}
+
+void ObjectMemory_resetFreeChunkList_inSegment(Word size, Word segment) {
+  ObjectMemory_headOfFreeChunkList_inSegment_put(size, segment, NonPointer);
 }
