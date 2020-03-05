@@ -7,7 +7,15 @@
 #define ObjectTableStart 0
 #define ObjectTableSize 0x7FFF
 #define HugeSize 0x0100
+
+/**
+ * The entry in the object table for the nil object.
+ */
 #define NilPointer 2
+/**
+ * The number of words in an object header.
+ */
+#define HeaderSize 2
 
 /**
  * Test whether a pointer is a tagged integer.
@@ -153,6 +161,8 @@ Word ObjectMemory_lastPointerOf(ObjectPointer objectPointer);
  */
 Word ObjectMemory_spaceOccupiedBy(ObjectPointer objectPointer);
 
+// Include routines from other categories
 #include "ObjectMemory_FreeList.h"
+#include "ObjectMemory_Allocation.h"
 
 #endif
