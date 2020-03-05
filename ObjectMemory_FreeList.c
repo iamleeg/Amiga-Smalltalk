@@ -1,4 +1,6 @@
-#include "ObjectMemory.h"
+#include "ObjectMemory_Constants.h"
+#include "ObjectMemory_FreeList.h"
+#include "ObjectMemory_Storage.h"
 #include "RealWordMemory.h"
 
 Word currentSegment = 0;

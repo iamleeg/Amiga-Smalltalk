@@ -1,5 +1,6 @@
 #include "ObjectMemory_Allocation.h"
-#include "ObjectMemory.h"
+#include "ObjectMemory_Constants.h"
+#include "ObjectMemory_Storage.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,4 +24,8 @@ ObjectPointer ObjectMemory_allocateChunk(Word size) {
   }
   fprintf(stderr, "VM ran out of heap space\n");
   abort();
+}
+
+ObjectPointer ObjectMemory_attemptToAllocateChunk(Word size) {
+  return NilPointer;
 }

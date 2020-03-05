@@ -11,7 +11,13 @@ ObjectPointer ObjectMemory_allocate_class(Word size, ObjectPointer classPointer)
 
 /**
  * A preliminary algorithm to allocate the memory needed to store an object of given size.
+ * As this will get replaced, this algorithm (from p668) is not tested.
  */
 ObjectPointer ObjectMemory_allocateChunk(Word size);
+
+/**
+ *  To-be-implemented algorith for finding a free chunk of a given size.
+ */
+ObjectPointer ObjectMemory_attemptToAllocateChunk(Word size);
 
 #endif
