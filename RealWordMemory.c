@@ -4,11 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define HeapSegmentCount 16
-#define FirstHeapSegment 0
-#define LastHeapSegment 15
 #define HeapSpaceStop 0xFFFF
-#define HeaderSize 2 /* * sizeof(unsigned short) */
 
 static Word *segmentPointers[HeapSegmentCount];
 

@@ -4,6 +4,19 @@
 #include "Types.h"
 
 /**
+ * The number of memory segments comprising the heap.
+ */
+#define HeapSegmentCount 16
+/**
+ * The index of the first heap segment.
+*/
+#define FirstHeapSegment 0
+/**
+ * The index of the last heap segment.
+ */
+#define LastHeapSegment 15
+
+/**
  * Initialize the VM's Memory. This MUST be done once before
  * using the VM.
  */

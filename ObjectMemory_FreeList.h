@@ -11,11 +11,18 @@
 /**
  * The location in each segment of the first free chunk list.
  */
-#define FirstFreeChunkList 0xff00
+#define FirstFreeChunkList 0xffd0
 /**
  * The location in each segment of the last free chunk list.
+ * @note The last free chunk list contains big chunks. All other free chunk lists
+ *       contain chunks of a small size, given by
+ *       size = (location of list head) - (FirstFreeChunkList).
  */
 #define LastFreeChunkList 0xfffe
+/**
+ * A size that is too big to appear in one of the small free chunk lists.
+ */
+#define BigSize 0x2e
 
 /**
  * A pointer value that cannot be an object pointer.

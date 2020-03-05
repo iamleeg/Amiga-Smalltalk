@@ -1,6 +1,14 @@
 # Amiga-Smalltalk
 
-It's Smalltalk. For Amiga.
+It's Smalltalk. For Amiga. It was made by following the instructions in the Blue Book:
+Smalltalk-80: The Language and Its Implementation.
+
+## A note on comments
+
+Doxygen comments were added by the Amiga-Smalltalk authors, as were all /* block comments */.
+// line comments are transcribed from the Blue Book.
+
+Page numbers, if not otherwise clarified, refer to pages in the single printed edition of the Blue Book.
 
 ## Building the tests
 
