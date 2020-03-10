@@ -189,14 +189,14 @@ Test(GetHeapChunkOfObjectMemoryByByte) {
 
 Test(StoreHeapChunkOfObjectMemoryByByte) {
   ObjectPointer objectPointer = 0x3434;
-  short segment = 2, location = 0x099a, wordOffset = 0x72, byteOffset = (wordOffset * 2), retrieved = 0;
+  short segment = 2, location = 0x099a, wordOffset = 0x72, byteOffset = (wordOffset * 2), retrieved = 0, expected = 0xb400;
   char byteValue = 0xb4;
   ObjectMemory_locationBitsOf_put(objectPointer, location);
   ObjectMemory_segmentBitsOf_put(objectPointer, segment);
   ObjectMemory_heapChunkOf_word_put(objectPointer, wordOffset, 0x0);
   ObjectMemory_heapChunkOf_byte_put(objectPointer, byteOffset, byteValue);
   retrieved = ObjectMemory_heapChunkOf_word(objectPointer, wordOffset);
-  Expect(retrieved == ((short)byteValue) << 8);
+  Expect(retrieved == expected);
 }
 
 Test(SizeBitsOfObjectAreInFirstWordOfHeap) {
