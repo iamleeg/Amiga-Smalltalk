@@ -143,3 +143,62 @@ void ObjectMemory_releasePointer(ObjectPointer objectPointer) {
   ObjectMemory_freeBitOf_put(objectPointer, 1);
   ObjectMemory_toFreePointerListAdd(objectPointer);
 }
+
+void ObjectMemory_reverseHeapPointersAbove(ObjectPointer lowWaterMark) {
+  Word size;
+  ObjectPointer objectPointer;
+  for (objectPointer = 0; objectPointer < ObjectTableSize; objectPointer += 2) {
+    if (ObjectMemory_freeBitOf(objectPointer) == 0) { // the object table entry is in use
+      if (ObjectMemory_segmentBitsOf(objectPointer) == currentSegment) {
+        // the object is in this segment
+        if (ObjectMemory_locationBitsOf(objectPointer) >= lowWaterMark) {
+          // the object will be swept
+          size = ObjectMemory_sizeBitsOf(objectPointer); // rescue the size
+          ObjectMemory_sizeBitsOf_put(objectPointer, objectPointer); // reverse the pointer
+          ObjectMemory_locationBitsOf_put(objectPointer, size); // save the size
+        }
+      }
+    }
+  }
+}
+
+ObjectPointer ObjectMemory_sweepCurrentSegmentFrom(ObjectPointer lowWaterMark) {
+  ObjectPointer si = lowWaterMark, di = lowWaterMark, objectPointer;
+  Word size, i;
+  while (si < HeapSpaceStop) { // for each object, si
+    if (RealWordMemory_segment_word(currentSegment, si+1) == NonPointer) {
+      // unallocated, so skip it
+      size = RealWordMemory_segment_word(currentSegment, si);
+      si += size;
+    } else {
+      // uallocated, so keep it, but move it to compact storage
+      objectPointer = RealWordMemory_segment_word(currentSegment, si);
+      size = ObjectMemory_locationBitsOf(objectPointer); // the reversed size
+      ObjectMemory_locationBitsOf_put(objectPointer, di); // point object table at new location
+      ObjectMemory_sizeBitsOf_put(objectPointer, size); // restore the size to its proper place
+      si++; // skip the size
+      di++; // skip the size
+      for(i = 2; i <= ObjectMemory_spaceOccupiedBy(objectPointer); i++) {
+        // move the rest of the object
+        RealWordMemory_segment_word_put(currentSegment,
+          di,
+          RealWordMemory_segment_word(currentSegment,
+            si));
+        si++;
+        di++;
+      }
+    }
+  }
+  return di;
+}
+
+void ObjectMemory_compactCurrentSegment() {
+  ObjectPointer lowWaterMark, bigSpace;
+  lowWaterMark = ObjectMemory_abandonFreeChunksInSegment(currentSegment);
+  if (lowWaterMark < HeapSpaceStop) {
+    ObjectMemory_reverseHeapPointersAbove(lowWaterMark);
+    bigSpace = ObjectMemory_sweepCurrentSegmentFrom(lowWaterMark);
+    ObjectMemory_deallocate(ObjectMemory_obtainPointer_location(HeapSpaceStop - bigSpace + 1,
+      bigSpace));
+  }
+}

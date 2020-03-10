@@ -53,4 +53,26 @@ ObjectPointer ObjectMemory_abandonFreeChunksInSegment(Word segment);
  */
 void ObjectMemory_releasePointer(ObjectPointer objectPointer);
 
+/**
+ * Prepare to compact the heap memory by reversing the association between the object table
+ * and the heap. After this operation, heap entries will point to their object table
+ * references rather than the other way around. Then, once the compaction process has moved
+ * all of the objects, the object table can be fixed up.
+ */
+void ObjectMemory_reverseHeapPointersAbove(ObjectPointer lowWaterMark);
+
+/**
+ * Sweep objects in the current segment, putting in-use objects as low into the memory
+ * as possible so that the segment contains a single, contiguous, block of unallocated space.
+ * Return a pointer to the unused space.
+ */
+ObjectPointer ObjectMemory_sweepCurrentSegmentFrom(ObjectPointer lowWaterMark);
+
+/**
+ * Move all objects above the current segment's low water mark into a single contiguous
+ * region, then mark all the remaining memory as free. If there are no free chunks in
+ * the current segment, then this routine does nothing.
+ */
+void ObjectMemory_compactCurrentSegment(void);
+
 #endif
