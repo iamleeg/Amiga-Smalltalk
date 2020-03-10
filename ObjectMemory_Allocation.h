@@ -42,4 +42,15 @@ void ObjectMemory_compactCurrentSegment(void);
  */
 void ObjectMemory_deallocate(ObjectPointer objectPointer);
 
+/**
+ * Find the first free chunk in a segment, and recycle deallocated object table entries.
+ * Return the "low water mark", the lowest free chunk in the segment.
+ */
+ObjectPointer ObjectMemory_abandonFreeChunksInSegment(Word segment);
+
+/**
+ * Put an object back on the free-pointer list.
+ */
+void ObjectMemory_releasePointer(ObjectPointer objectPointer);
+
 #endif

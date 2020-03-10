@@ -6,7 +6,7 @@
 /**
  * The location in the object table of the head of the free pointer list.
  */
-#define FreePointerList 0xfefe
+#define FreePointerList 0xffce
 
 /**
  * The location in each segment of the first free chunk list.

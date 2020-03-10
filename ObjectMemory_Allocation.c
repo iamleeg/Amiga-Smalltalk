@@ -119,3 +119,27 @@ void ObjectMemory_deallocate(ObjectPointer objectPointer) {
   Word listSize = (space < BigSize) ? space : BigSize;
   ObjectMemory_toFreeChunkList_add(listSize, objectPointer);
 }
+
+ObjectPointer ObjectMemory_abandonFreeChunksInSegment(Word segment) {
+  ObjectPointer lowWaterMark, objectPointer, nextPointer, location;
+  Word size;
+  lowWaterMark = HeapSpaceStop; // first assume that no chunk is free
+  for (size = HeaderSize; size < BigSize; size ++) { // for each free-chunk list
+    objectPointer = ObjectMemory_headOfFreeChunkList_inSegment(size, segment);
+    while (objectPointer != NonPointer) {
+      location = ObjectMemory_locationBitsOf(objectPointer);
+      lowWaterMark = (lowWaterMark < location) ? lowWaterMark : location;
+      nextPointer = ObjectMemory_classBitsOf(objectPointer); // link to next free chunk
+      ObjectMemory_classBitsOf_put(objectPointer, NonPointer); // distinguish for sweep
+      ObjectMemory_releasePointer(objectPointer); // add entry to free-pointer list
+      objectPointer = nextPointer;
+    }
+    ObjectMemory_resetFreeChunkList_inSegment(size, segment);
+  }
+  return lowWaterMark;
+}
+
+void ObjectMemory_releasePointer(ObjectPointer objectPointer) {
+  ObjectMemory_freeBitOf_put(objectPointer, 1);
+  ObjectMemory_toFreePointerListAdd(objectPointer);
+}

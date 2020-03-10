@@ -15,6 +15,10 @@
  * The index of the last heap segment.
  */
 #define LastHeapSegment 15
+/**
+ * The last address used in any heap segment.
+ */
+#define HeapSpaceStop 0xffca
 
 /**
  * Initialize the VM's Memory. This MUST be done once before

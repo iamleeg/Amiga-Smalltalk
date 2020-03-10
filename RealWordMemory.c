@@ -4,14 +4,14 @@
 #include <stdio.h>
 #include <string.h>
 
-#define HeapSpaceStop 0xFFFF
+#define SegmentSize 0xFFFF
 
 static Word *segmentPointers[HeapSegmentCount];
 
 void RealWordMemory_new() {
   short i;
   for(i = FirstHeapSegment; i <= LastHeapSegment; i++) {
-    size_t size = HeapSpaceStop*sizeof(Word);
+    size_t size = SegmentSize*sizeof(Word);
     segmentPointers[i] = malloc(size);
     memset(segmentPointers[i], 0, size);
   }
