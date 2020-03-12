@@ -1,5 +1,6 @@
 #include "AllocationTests.h"
 #include "ObjectMemory.h"
+#include "RealWordMemory.h"
 
 Test(ReleasePointer) {
   ObjectPointer objectPointer = 0x3580, freeHead = NonPointer;
@@ -43,13 +44,75 @@ Test(ReverseHeapPointerAboveLowWaterMark) {
 
   ObjectMemory_reverseHeapPointersAbove(lowWaterMark);
 
+  /*
+   * Don't use ObjectMemory_sizeBitsOf() here. If the pointer was
+   * reversed, then the location bits point to the wrong place on
+   * the heap.
+   */
   retrievedSize = RealWordMemory_segment_word(segment, location);
   Expect(ObjectMemory_locationBitsOf(objectPointer) == size);
   Expect(retrievedSize == objectPointer);
+}
+
+Test(DoNotReverseHeapPointerBelowLowWaterMark) {
+  Word segment = 2, size = 0x0a, retrievedSize = 0x0;
+  ObjectPointer lowWaterMark = 0x3000,
+    location = 0x2000,
+    objectPointer = 0x1010;
+  currentSegment = segment;
+  ObjectMemory_segmentBitsOf_put(objectPointer, segment);
+  ObjectMemory_freeBitOf_put(objectPointer, 0);
+  ObjectMemory_locationBitsOf_put(objectPointer, location);
+  ObjectMemory_sizeBitsOf_put(objectPointer, size);
+
+  ObjectMemory_reverseHeapPointersAbove(lowWaterMark);
+
+  retrievedSize = RealWordMemory_segment_word(segment, location);
+  Expect(ObjectMemory_locationBitsOf(objectPointer) == location);
+  Expect(retrievedSize == size);
+}
+
+Test(DoNotReverseHeapPointerInWrongSegment) {
+  Word segment = 2, size = 0x0a, retrievedSize = 0x0;
+  ObjectPointer lowWaterMark = 0x1000,
+    location = 0x2000,
+    objectPointer = 0x1010;
+  currentSegment = segment + 1;
+  ObjectMemory_segmentBitsOf_put(objectPointer, segment);
+  ObjectMemory_freeBitOf_put(objectPointer, 0);
+  ObjectMemory_locationBitsOf_put(objectPointer, location);
+  ObjectMemory_sizeBitsOf_put(objectPointer, size);
+
+  ObjectMemory_reverseHeapPointersAbove(lowWaterMark);
+
+  retrievedSize = RealWordMemory_segment_word(segment, location);
+  Expect(ObjectMemory_locationBitsOf(objectPointer) == location);
+  Expect(retrievedSize == size);
+}
+
+Test(DoNotReverseHeapPointerOfUnusedSpace) {
+  Word segment = 2, size = 0x0a, retrievedSize = 0x0;
+  ObjectPointer lowWaterMark = 0x1000,
+    location = 0x2000,
+    objectPointer = 0x1010;
+  currentSegment = segment;
+  ObjectMemory_segmentBitsOf_put(objectPointer, segment);
+  ObjectMemory_freeBitOf_put(objectPointer, 1);
+  ObjectMemory_locationBitsOf_put(objectPointer, location);
+  ObjectMemory_sizeBitsOf_put(objectPointer, size);
+
+  ObjectMemory_reverseHeapPointersAbove(lowWaterMark);
+
+  retrievedSize = RealWordMemory_segment_word(segment, location);
+  Expect(ObjectMemory_locationBitsOf(objectPointer) == location);
+  Expect(retrievedSize == size);
 }
 
 void AllocationTests(struct TestResult *tr) {
   RunTest(ReleasePointer);
   RunTest(LowWaterMarkCalculation);
   RunTest(ReverseHeapPointerAboveLowWaterMark);
+  RunTest(DoNotReverseHeapPointerBelowLowWaterMark);
+  RunTest(DoNotReverseHeapPointerInWrongSegment);
+  RunTest(DoNotReverseHeapPointerOfUnusedSpace);
 }
