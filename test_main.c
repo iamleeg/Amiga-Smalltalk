@@ -4,6 +4,7 @@
 #include "FreeListTests.h"
 #include "ObjectMemoryTests.h"
 #include "RealWordMemoryTests.h"
+#include "RefCountingTests.h"
 #include "tests.h"
 
 int main(int argc, const char *argv[]) {
@@ -17,7 +18,8 @@ int main(int argc, const char *argv[]) {
   AllocationTests(&result);
   FreeListTests(&result);
   ObjectMemoryTests(&result);
-  RealWordMemoryTests(&result);  
+  RealWordMemoryTests(&result);
+  RefCountingTests(&result);
   
   printf("Tests completed.\n");
   printf("%d tests ran.\n", result.ran);

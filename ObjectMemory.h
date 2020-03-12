@@ -7,5 +7,6 @@
 #include "ObjectMemory_Storage.h"
 #include "ObjectMemory_FreeList.h"
 #include "ObjectMemory_Allocation.h"
+#include "ObjectMemory_RefCounting.h"
 
 #endif
