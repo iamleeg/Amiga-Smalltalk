@@ -13,4 +13,25 @@
  */
 ObjectPointer ObjectMemory_countUp(ObjectPointer objectPointer);
 
+/**
+ * Decrement the reference count for an object and return that object.
+ * If the object's count reaches zero, then deallocate it, after decreasing
+ * the count of all of the objects it refers to (recursively if necessary).
+ */
+ObjectPointer ObjectMemory_countDown(ObjectPointer rootObjectPointer);
+
+/**
+ * Perform the specified action on the object if the predicate is true.
+ */
+ObjectPointer ObjectMemory_forAllObjectsAccessibleFrom_suchThat_do(ObjectPointer objectPointer,
+  Word(*predicate)(ObjectPointer),
+  void(*action)(ObjectPointer));
+
+/**
+ * The recursive helper for the above routine.
+ */
+ObjectPointer ObjectMemory_forAllOtherObjectsAccessibleFrom_suchThat_do(ObjectPointer objectPointer,
+  Word(*predicate)(ObjectPointer),
+  void(*action)(ObjectPointer));
+
 #endif
