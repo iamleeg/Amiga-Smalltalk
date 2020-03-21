@@ -16,7 +16,7 @@ ObjectPointer ObjectMemory_countUp(ObjectPointer objectPointer) {
   return objectPointer;
 }
 
-Word HELPER_decrementCountAndTestForZero(ObjectPointer objectPointer) {
+Bool HELPER_decrementCountAndTestForZero(ObjectPointer objectPointer) {
   Word count = ObjectMemory_countBitsOf(objectPointer) - 1;
   if (count < 127) {
     ObjectMemory_countBitsOf_put(objectPointer, count);
@@ -42,7 +42,7 @@ ObjectPointer ObjectMemory_countDown(ObjectPointer rootObjectPointer) {
 }
 
 ObjectPointer ObjectMemory_forAllObjectsAccessibleFrom_suchThat_do(ObjectPointer objectPointer,
-  Word(*predicate)(ObjectPointer),
+  Bool(*predicate)(ObjectPointer),
   void(*action)(ObjectPointer)) {
   if (predicate(objectPointer)) {
     return ObjectMemory_forAllOtherObjectsAccessibleFrom_suchThat_do(objectPointer,
@@ -61,7 +61,7 @@ ObjectPointer ObjectMemory_forAllObjectsAccessibleFrom_suchThat_do(ObjectPointer
  * which should explain differences in conditions and storage locations
  */
 ObjectPointer ObjectMemory_forAllOtherObjectsAccessibleFrom_suchThat_do(ObjectPointer objectPointer,
-  Word(*predicate)(ObjectPointer),
+  Bool(*predicate)(ObjectPointer),
   void(*action)(ObjectPointer)) {
   ObjectPointer prior, current, next;
   Word offset, size;

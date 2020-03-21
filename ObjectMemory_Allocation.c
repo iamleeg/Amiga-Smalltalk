@@ -1,6 +1,7 @@
 #include "ObjectMemory_Allocation.h"
 #include "ObjectMemory_Constants.h"
 #include "ObjectMemory_FreeList.h"
+#include "ObjectMemory_MarkingCollector.h"
 #include "ObjectMemory_RefCounting.h"
 #include "ObjectMemory_Storage.h"
 #include "RealWordMemory.h"
@@ -28,8 +29,13 @@ ObjectPointer ObjectMemory_allocateChunk(Word size) {
   if (objectPointer != NilPointer) {
     return objectPointer;
   }
+  ObjectMemory_reclaimInaccessibleObjects(); // garbage collect and try again
+  objectPointer = ObjectMemory_attemptToAllocateChunk(size);
+  if (objectPointer != NilPointer) {
+    return objectPointer;
+  }
   fprintf(stderr, "VM ran out of heap space\n");
-  abort();
+  abort(); //give up
 }
 
 ObjectPointer ObjectMemory_attemptToAllocateChunk(Word size) {

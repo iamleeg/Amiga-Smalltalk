@@ -26,5 +26,9 @@
  * The number of words in an object header.
  */
 #define HeaderSize 2
+/**
+ * A size that is too big to appear in one of the small free chunk lists.
+ */
+#define BigSize 0x2e
 
 #endif

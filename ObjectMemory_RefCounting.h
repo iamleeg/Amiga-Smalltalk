@@ -24,7 +24,7 @@ ObjectPointer ObjectMemory_countDown(ObjectPointer rootObjectPointer);
  * Perform the specified action on the object if the predicate is true.
  */
 ObjectPointer ObjectMemory_forAllObjectsAccessibleFrom_suchThat_do(ObjectPointer objectPointer,
-  Word(*predicate)(ObjectPointer),
+  Bool(*predicate)(ObjectPointer),
   void(*action)(ObjectPointer));
 
 /**
@@ -33,7 +33,7 @@ ObjectPointer ObjectMemory_forAllObjectsAccessibleFrom_suchThat_do(ObjectPointer
  * avoiding potentially unbounded call stack usage.
  */
 ObjectPointer ObjectMemory_forAllOtherObjectsAccessibleFrom_suchThat_do(ObjectPointer objectPointer,
-  Word(*predicate)(ObjectPointer),
+  Bool(*predicate)(ObjectPointer),
   void(*action)(ObjectPointer));
 
 #endif

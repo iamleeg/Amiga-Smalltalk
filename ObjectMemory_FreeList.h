@@ -19,10 +19,6 @@
  *       size = (location of list head) - (FirstFreeChunkList).
  */
 #define LastFreeChunkList 0xfffe
-/**
- * A size that is too big to appear in one of the small free chunk lists.
- */
-#define BigSize 0x2e
 
 /**
  * A pointer value that cannot be an object pointer.
