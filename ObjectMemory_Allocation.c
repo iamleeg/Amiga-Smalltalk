@@ -1,20 +1,24 @@
 #include "ObjectMemory_Allocation.h"
 #include "ObjectMemory_Constants.h"
 #include "ObjectMemory_FreeList.h"
+#include "ObjectMemory_RefCounting.h"
 #include "ObjectMemory_Storage.h"
 #include "RealWordMemory.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 
-ObjectPointer ObjectMemory_allocate_class(Word size, ObjectPointer classPointer) {
+ObjectPointer ObjectMemory_allocate_extra_class(Word size, Bool extraWord, ObjectPointer classPointer) {
   Word i;
-  ObjectPointer objectPointer = ObjectMemory_allocateChunk(size); // Actually allocate
-  ObjectMemory_classBitsOf_put(objectPointer, classPointer); // fill in class
-  // initialize all fields to the object table index of the object nil
+  ObjectPointer objectPointer;
+  ObjectMemory_countUp(classPointer); // increment the reference count of the class
+  objectPointer = ObjectMemory_allocateChunk(size + extraWord); // allocate enough
+  ObjectMemory_classBitsOf_put(objectPointer, classPointer);
+  // initialize all fields to the object table index of the object nil /* p668 */
   for (i = HeaderSize; i < size; i++) {
     ObjectMemory_heapChunkOf_word_put(objectPointer, i, NilPointer);
   }
+  // the next statement to correct the SIZE need only be executed if extraWord>0
   ObjectMemory_sizeBitsOf_put(objectPointer, size);
   return objectPointer;
 }
@@ -117,6 +121,7 @@ ObjectPointer ObjectMemory_obtainPointer_location(Word size, ObjectPointer locat
 void ObjectMemory_deallocate(ObjectPointer objectPointer) {
   Word space = ObjectMemory_spaceOccupiedBy(objectPointer);
   Word listSize = (space < BigSize) ? space : BigSize;
+  ObjectMemory_sizeBitsOf_put(objectPointer, space);
   ObjectMemory_toFreeChunkList_add(listSize, objectPointer);
 }
 

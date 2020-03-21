@@ -28,7 +28,9 @@ ObjectPointer ObjectMemory_forAllObjectsAccessibleFrom_suchThat_do(ObjectPointer
   void(*action)(ObjectPointer));
 
 /**
- * The recursive helper for the above routine.
+ * The recursive helper for the above routine. This is the implementation from p680
+ * that reverses the object->object pointer references to use as an in-place stack,
+ * avoiding potentially unbounded call stack usage.
  */
 ObjectPointer ObjectMemory_forAllOtherObjectsAccessibleFrom_suchThat_do(ObjectPointer objectPointer,
   Word(*predicate)(ObjectPointer),

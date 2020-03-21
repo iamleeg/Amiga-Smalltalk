@@ -5,9 +5,13 @@
 
 /**
  * A preliminary algorithm for allocating an object of a given size and class.
- * As this will get replaced, this algorithm (from p668) is not tested.
+ * As this will get replaced, this algorithm (from p679) is not tested.
+ * 
+ * @param size The space needed for the object, in words.
+ * @param extraWord Whether to reserve extra space that can be used by the GC.
+ * @param classPointer The new object's class.
  */
-ObjectPointer ObjectMemory_allocate_class(Word size, ObjectPointer classPointer);
+ObjectPointer ObjectMemory_allocate_extra_class(Word size, Bool extraWord, ObjectPointer classPointer);
 
 /**
  * A preliminary algorithm to allocate the memory needed to store an object of given size.

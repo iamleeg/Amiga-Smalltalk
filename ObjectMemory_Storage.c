@@ -142,5 +142,11 @@ Word ObjectMemory_lastPointerOf(ObjectPointer objectPointer) {
 }
 
 Word ObjectMemory_spaceOccupiedBy(ObjectPointer objectPointer) {
-  return ObjectMemory_sizeBitsOf(objectPointer);
+  Word size;
+  size = ObjectMemory_sizeBitsOf(objectPointer);
+  if (size < HugeSize) {
+    return size;
+  } else {
+    return size + 1;
+  }
 }
