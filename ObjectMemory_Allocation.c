@@ -9,17 +9,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-ObjectPointer ObjectMemory_allocate_extra_class(Word size, Bool extraWord, ObjectPointer classPointer) {
-  Word i;
+ObjectPointer ObjectMemory_allocate_odd_pointer_extra_class(Word size,
+  Bool oddBit,
+  Bool pointerBit,
+  Bool extraWord,
+  ObjectPointer classPointer) {
+  Word i, default_;
   ObjectPointer objectPointer;
-  ObjectMemory_countUp(classPointer); // increment the reference count of the class
-  objectPointer = ObjectMemory_allocateChunk(size + extraWord); // allocate enough
+  ObjectMemory_countUp(classPointer);
+  objectPointer = ObjectMemory_allocateChunk(size + extraWord);
+  ObjectMemory_oddBitOf_put(objectPointer, oddBit);
+  ObjectMemory_pointerBitOf_put(objectPointer, pointerBit);
   ObjectMemory_classBitsOf_put(objectPointer, classPointer);
-  // initialize all fields to the object table index of the object nil /* p668 */
+  default_ = (pointerBit == NO) ? 0 : NilPointer;
   for (i = HeaderSize; i < size; i++) {
-    ObjectMemory_heapChunkOf_word_put(objectPointer, i, NilPointer);
+    ObjectMemory_heapChunkOf_word_put(objectPointer, i, default_);
   }
-  // the next statement to correct the SIZE need only be executed if extraWord>0
   ObjectMemory_sizeBitsOf_put(objectPointer, size);
   return objectPointer;
 }

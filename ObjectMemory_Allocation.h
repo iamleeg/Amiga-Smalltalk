@@ -4,14 +4,23 @@
 #include "Types.h"
 
 /**
- * A preliminary algorithm for allocating an object of a given size and class.
- * As this will get replaced, this algorithm (from p679) is not tested.
+ * Allocate an object of a given size and class.
+ * This is the final version, from p685.
  * 
  * @param size The space needed for the object, in words.
+ * @param oddBit Whether a non-pointer object contains an odd number of bytes.
+ *        If true, then the last byte of the last word in the returned object is always ignored.
+ * @param pointerBit True in the usual case, where the object's memory stores object pointers.
+ *        For space-efficiency, Strings and CompiledMethods store unsigned byte and word values
+ *        instead, and their pointerBit is false.
  * @param extraWord Whether to reserve extra space that can be used by the GC.
  * @param classPointer The new object's class.
  */
-ObjectPointer ObjectMemory_allocate_extra_class(Word size, Bool extraWord, ObjectPointer classPointer);
+ObjectPointer ObjectMemory_allocate_odd_pointer_extra_class(Word size,
+  Bool oddBit,
+  Bool pointerBit,
+  Bool extraWord,
+  ObjectPointer classPointer);
 
 /**
  * A preliminary algorithm to allocate the memory needed to store an object of given size.

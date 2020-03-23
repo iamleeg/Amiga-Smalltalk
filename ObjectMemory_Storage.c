@@ -138,13 +138,23 @@ void ObjectMemory_classBitsOf_put(ObjectPointer objectPointer, Word value) {
 }
 
 Word ObjectMemory_lastPointerOf(ObjectPointer objectPointer) {
-  return ObjectMemory_sizeBitsOf(objectPointer);
+  Word methodHeader;
+  if (ObjectMemory_pointerBitOf(objectPointer) == NO) {
+    if (ObjectMemory_classBitsOf(objectPointer) == MethodClass) { /* see note in ObjectMemory_Constants.h */
+      methodHeader = ObjectMemory_heapChunkOf_word(objectPointer, HeaderSize);
+      return HeaderSize + 1 + ((methodHeader & 126) >> 1);
+    } else {
+      return HeaderSize;
+    }
+  } else {
+    return ObjectMemory_sizeBitsOf(objectPointer);
+  }
 }
 
 Word ObjectMemory_spaceOccupiedBy(ObjectPointer objectPointer) {
   Word size;
   size = ObjectMemory_sizeBitsOf(objectPointer);
-  if (size < HugeSize) {
+  if ((size < HugeSize) || (ObjectMemory_pointerBitOf(objectPointer) == NO)) {
     return size;
   } else {
     return size + 1;
