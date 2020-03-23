@@ -3,7 +3,7 @@ check: ast_tests
 
 .PHONY: check
 
-SOURCE_FILES = ObjectMemory_Storage.c ObjectMemory_FreeList.c ObjectMemory_Allocation.c ObjectMemory_RefCounting.c ObjectMemory_MarkingCollector.c RealWordMemory.c
+SOURCE_FILES = ObjectMemory.c ObjectMemory_Storage.c ObjectMemory_FreeList.c ObjectMemory_Allocation.c ObjectMemory_RefCounting.c ObjectMemory_MarkingCollector.c RealWordMemory.c
 HEADER_FILES = ObjectMemory.h ObjectMemory_Constants.h ObjectMemory_Storage.h ObjectMemory_FreeList.h ObjectMemory_Allocation.h ObjectMemory_RefCounting.h ObjectMemory_MarkingCollector.h RealWordMemory.h Types.h
 
 TEST_SOURCES = test_main.c FreeListTests.c ObjectMemoryTests.c RealWordMemoryTests.c AllocationTests.c RefCountingTests.c

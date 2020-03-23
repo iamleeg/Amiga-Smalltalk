@@ -239,6 +239,18 @@ Test(StoreClassBitsOfObjectInSecondWordOfItsHeap) {
   Expect(size == word);
 }
 
+Test(FetchPointerByRetrievingAppropriateWordInMemory) {
+  ObjectPointer objectPointer = 0x1234, retrievedPointer;
+  short segment = 3, offset = 4, location = 0x2468, fieldIndex = 2;
+  ObjectMemory_segmentBitsOf_put(objectPointer, segment);
+  ObjectMemory_locationBitsOf_put(objectPointer, location);
+  ObjectMemory_heapChunkOf_word_put(objectPointer, offset, NilPointer);
+
+  retrievedPointer = ObjectMemory_fetchPointer_ofObject(fieldIndex, objectPointer);
+
+  Expect(retrievedPointer == NilPointer);
+}
+
 void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(NonIntegerObjectIsNotIntegerObject);
   RunTest(IntegerObjectIsIntegerObject);
@@ -266,4 +278,5 @@ void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(StoreSizeBitsOfObjectInFirstWordOfItsHeap);
   RunTest(ClassBitsOfObjectAreInSecondWordOfHeap);
   RunTest(StoreClassBitsOfObjectInSecondWordOfItsHeap);
+  RunTest(FetchPointerByRetrievingAppropriateWordInMemory);
 }

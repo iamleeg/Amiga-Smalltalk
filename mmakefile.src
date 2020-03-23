@@ -1,3 +1,3 @@
 include $(TOP)/config/make.cfg
 
-%build_prog mmake=local-amigasmalltalktests files="ObjectMemory_FreeList ObjectMemory_Allocation ObjectMemory_Storage ObjectMemory_RefCounting ObjectMemory_MarkingCollector RealWordMemory ObjectMemoryTests RealWordMemoryTests FreeListTests AllocationTests RefCountingTests test_main" progname=AmigaSmalltalkTests
+%build_prog mmake=local-amigasmalltalktests files="ObjectMemory ObjectMemory_FreeList ObjectMemory_Allocation ObjectMemory_Storage ObjectMemory_RefCounting ObjectMemory_MarkingCollector RealWordMemory ObjectMemoryTests RealWordMemoryTests FreeListTests AllocationTests RefCountingTests test_main" progname=AmigaSmalltalkTests
