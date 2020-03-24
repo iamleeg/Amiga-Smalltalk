@@ -12,6 +12,12 @@
  */
 ObjectPointer ObjectMemory_fetchPointer_ofObject(Word fieldIndex, ObjectPointer objectPointer);
 
+/**
+ * Set the object in this object's fields at the given index.
+ * This method adjusts the reference counts for each object.
+ */
+void ObjectMemory_storePointer_ofObject_withValue(Word fieldIndex, ObjectPointer objectPointer, ObjectPointer valuePointer);
+
 /* Include routines from other categories */
 #include "ObjectMemory_Storage.h"
 #include "ObjectMemory_FreeList.h"

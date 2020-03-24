@@ -251,6 +251,23 @@ Test(FetchPointerByRetrievingAppropriateWordInMemory) {
   Expect(retrievedPointer == NilPointer);
 }
 
+Test(StorePointerSavesInCorrectLocationAndAdjustsCounts) {
+  ObjectPointer objectPointer = 0x1234, otherPointer = 0x1236, thirdPointer = 0x1238, retrievedPointer;
+  short segment = 3, offset = 4, location = 0x2468, fieldIndex = 2, otherCount = 4, thirdCount = 7;
+  ObjectMemory_segmentBitsOf_put(objectPointer, segment);
+  ObjectMemory_locationBitsOf_put(objectPointer, location);
+  ObjectMemory_heapChunkOf_word_put(objectPointer, offset, otherPointer);
+  ObjectMemory_countBitsOf_put(otherPointer, otherCount);
+  ObjectMemory_countBitsOf_put(thirdPointer, thirdCount);
+
+  ObjectMemory_storePointer_ofObject_withValue(fieldIndex, objectPointer, thirdPointer);
+
+  retrievedPointer = ObjectMemory_fetchPointer_ofObject(fieldIndex, objectPointer);
+  Expect(retrievedPointer == thirdPointer);
+  Expect(ObjectMemory_countBitsOf(otherPointer) == (otherCount - 1));
+  Expect(ObjectMemory_countBitsOf(thirdPointer) == (thirdCount + 1));
+}
+
 void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(NonIntegerObjectIsNotIntegerObject);
   RunTest(IntegerObjectIsIntegerObject);
@@ -279,4 +296,5 @@ void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(ClassBitsOfObjectAreInSecondWordOfHeap);
   RunTest(StoreClassBitsOfObjectInSecondWordOfItsHeap);
   RunTest(FetchPointerByRetrievingAppropriateWordInMemory);
+  RunTest(StorePointerSavesInCorrectLocationAndAdjustsCounts);
 }
