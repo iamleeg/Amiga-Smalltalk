@@ -318,6 +318,20 @@ Test(FetchHighByteOfWord) {
   Expect(retrievedByte == expectedByte);
 }
 
+Test(StoreBytesOfWord) {
+  ObjectPointer objectPointer = 0x1234;
+  short segment = 3, offset = 4, location = 0x2468, wordIndex = 2, lowByteIndex = 5, highByteIndex = 4, expectedWord = 0x3579, retrievedWord;
+  char lowValue = 0x79, highValue = 0x35;
+  ObjectMemory_segmentBitsOf_put(objectPointer, segment);
+  ObjectMemory_locationBitsOf_put(objectPointer, location);
+
+  ObjectMemory_storeByte_ofObject_withValue(lowByteIndex, objectPointer, lowValue);
+  ObjectMemory_storeByte_ofObject_withValue(highByteIndex, objectPointer, highValue);
+
+  retrievedWord = ObjectMemory_fetchWord_ofObject(wordIndex, objectPointer);
+  Expect(retrievedWord == expectedWord);
+}
+
 void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(NonIntegerObjectIsNotIntegerObject);
   RunTest(IntegerObjectIsIntegerObject);
@@ -351,4 +365,5 @@ void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(StoreWordInObjectField);
   RunTest(FetchLowByteOfWord);
   RunTest(FetchHighByteOfWord);
+  RunTest(StoreBytesOfWord);
 }
