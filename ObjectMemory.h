@@ -31,6 +31,11 @@ Word ObjectMemory_fetchWord_ofObject(Word wordIndex, ObjectPointer objectPointer
  */
 void ObjectMemory_storeWord_ofObject_withValue(Word wordIndex, ObjectPointer objectPointer, Word valueWord);
 
+/**
+ * Get the byte in this object's fields at the given index.
+ */
+Byte ObjectMemory_fetchByte_ofObject(Word byteIndex, ObjectPointer objectPointer);
+
 /* Include routines from other categories */
 #include "ObjectMemory_Storage.h"
 #include "ObjectMemory_FreeList.h"

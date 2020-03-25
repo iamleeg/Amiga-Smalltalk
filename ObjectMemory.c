@@ -18,3 +18,7 @@ Word ObjectMemory_fetchWord_ofObject(Word wordIndex, ObjectPointer objectPointer
 void ObjectMemory_storeWord_ofObject_withValue(Word wordIndex, ObjectPointer objectPointer, Word valueWord) {
   ObjectMemory_heapChunkOf_word_put(objectPointer, HeaderSize + wordIndex, valueWord);
 }
+
+Byte ObjectMemory_fetchByte_ofObject(Word byteIndex, ObjectPointer objectPointer) {
+  return ObjectMemory_heapChunkOf_byte(objectPointer, (HeaderSize * 2) + byteIndex);
+}
