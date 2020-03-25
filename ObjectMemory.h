@@ -18,6 +18,11 @@ ObjectPointer ObjectMemory_fetchPointer_ofObject(Word fieldIndex, ObjectPointer 
  */
 void ObjectMemory_storePointer_ofObject_withValue(Word fieldIndex, ObjectPointer objectPointer, ObjectPointer valuePointer);
 
+/**
+ * Get the word in this object's fields at the given index.
+ */
+Word ObjectMemory_fetchWord_ofObject(Word wordIndex, ObjectPointer objectPointer);
+
 /* Include routines from other categories */
 #include "ObjectMemory_Storage.h"
 #include "ObjectMemory_FreeList.h"
