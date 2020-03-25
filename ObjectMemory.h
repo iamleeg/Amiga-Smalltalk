@@ -23,6 +23,14 @@ void ObjectMemory_storePointer_ofObject_withValue(Word fieldIndex, ObjectPointer
  */
 Word ObjectMemory_fetchWord_ofObject(Word wordIndex, ObjectPointer objectPointer);
 
+/**
+ * Set the word in this object's fields at the given index.
+ * Unlike ObjectMemory_storePointer_ofObject_withValue(), this method
+ * doesn't adjust reference counts as the value is taken to be a bare value,
+ * not an object pointer.
+ */
+void ObjectMemory_storeWord_ofObject_withValue(Word wordIndex, ObjectPointer objectPointer, Word valueWord);
+
 /* Include routines from other categories */
 #include "ObjectMemory_Storage.h"
 #include "ObjectMemory_FreeList.h"

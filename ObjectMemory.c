@@ -14,3 +14,7 @@ void ObjectMemory_storePointer_ofObject_withValue(Word fieldIndex, ObjectPointer
 Word ObjectMemory_fetchWord_ofObject(Word wordIndex, ObjectPointer objectPointer) {
   return ObjectMemory_heapChunkOf_word(objectPointer, HeaderSize + wordIndex);
 }
+
+void ObjectMemory_storeWord_ofObject_withValue(Word wordIndex, ObjectPointer objectPointer, Word valueWord) {
+  ObjectMemory_heapChunkOf_word_put(objectPointer, HeaderSize + wordIndex, valueWord);
+}

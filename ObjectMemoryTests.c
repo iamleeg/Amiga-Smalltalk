@@ -270,13 +270,25 @@ Test(StorePointerSavesInCorrectLocationAndAdjustsCounts) {
 
 Test(FetchWordFromAppropriateLocationInMemory) {
   ObjectPointer objectPointer = 0x1234;
-  short segment = 3, offset = 4, location = 0x2468, fieldIndex = 2, value = 0x3579, retrievedWord;
+  short segment = 3, offset = 4, location = 0x2468, wordIndex = 2, value = 0x3579, retrievedWord;
   ObjectMemory_segmentBitsOf_put(objectPointer, segment);
   ObjectMemory_locationBitsOf_put(objectPointer, location);
   ObjectMemory_heapChunkOf_word_put(objectPointer, offset, value);
 
-  retrievedWord = ObjectMemory_fetchWord_ofObject(fieldIndex, objectPointer);
+  retrievedWord = ObjectMemory_fetchWord_ofObject(wordIndex, objectPointer);
 
+  Expect(retrievedWord == value);
+}
+
+Test(StoreWordInObjectField) {
+  ObjectPointer objectPointer = 0x1234;
+  short segment = 3, offset = 4, location = 0x2468, wordIndex = 2, value = 0x3579, retrievedWord;
+  ObjectMemory_segmentBitsOf_put(objectPointer, segment);
+  ObjectMemory_locationBitsOf_put(objectPointer, location);
+
+  ObjectMemory_storeWord_ofObject_withValue(wordIndex, objectPointer, value);
+
+  retrievedWord = ObjectMemory_fetchWord_ofObject(wordIndex, objectPointer);
   Expect(retrievedWord == value);
 }
 
@@ -310,4 +322,5 @@ void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(FetchPointerByRetrievingAppropriateWordInMemory);
   RunTest(StorePointerSavesInCorrectLocationAndAdjustsCounts);
   RunTest(FetchWordFromAppropriateLocationInMemory);
+  RunTest(StoreWordInObjectField);
 }
