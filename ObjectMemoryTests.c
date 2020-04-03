@@ -332,6 +332,65 @@ Test(StoreBytesOfWord) {
   Expect(retrievedWord == expectedWord);
 }
 
+Test(IncrementRefCount) {
+  ObjectPointer objectPointer = 0x1234;
+  short count = 12, newCount;
+  ObjectMemory_countBitsOf_put(objectPointer, count);
+  
+  ObjectMemory_increaseReferencesTo(objectPointer);
+
+  newCount = ObjectMemory_countBitsOf(objectPointer);
+  Expect(newCount == count + 1);
+}
+
+Test(UpperBoundOfRefCount) {
+  ObjectPointer objectPointer = 0x1234;
+  short count = 129, newCount;
+  ObjectMemory_countBitsOf_put(objectPointer, count);
+  
+  ObjectMemory_increaseReferencesTo(objectPointer);
+
+  newCount = ObjectMemory_countBitsOf(objectPointer);
+  Expect(newCount == count);
+}
+
+Test(DecrementRefCount) {
+  ObjectPointer objectPointer = 0x1234;
+  short count = 12, newCount;
+  ObjectMemory_countBitsOf_put(objectPointer, count);
+  
+  ObjectMemory_decreaseReferencesTo(objectPointer);
+
+  newCount = ObjectMemory_countBitsOf(objectPointer);
+  Expect(newCount == count - 1);
+}
+
+Test(DoNotDecrementCountForMaximallyReferencedObject) {
+  ObjectPointer objectPointer = 0x1234;
+  short count = 128, newCount;
+  ObjectMemory_countBitsOf_put(objectPointer, count);
+  
+  ObjectMemory_decreaseReferencesTo(objectPointer);
+
+  newCount = ObjectMemory_countBitsOf(objectPointer);
+  Expect(newCount == count);
+}
+
+Test(DeallocateObjectWhenFinalReferenceRemoved) {
+  ObjectPointer objectPointer = 0x1234, freeHead;
+  short count = 1, newCount, segment = 6, size = 2;
+  ObjectMemory_countBitsOf_put(objectPointer, count);
+  ObjectMemory_segmentBitsOf_put(objectPointer, segment);
+  ObjectMemory_headOfFreeChunkList_inSegment_put(size, segment, NonPointer);
+  ObjectMemory_sizeBitsOf_put(objectPointer, size);
+  ObjectMemory_decreaseReferencesTo(objectPointer);
+
+  newCount = ObjectMemory_countBitsOf(objectPointer);
+  Expect(newCount == 0);
+  freeHead = ObjectMemory_headOfFreeChunkList_inSegment(size, segment);
+  Expect(freeHead == objectPointer);
+}
+
 void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(NonIntegerObjectIsNotIntegerObject);
   RunTest(IntegerObjectIsIntegerObject);
@@ -366,4 +425,9 @@ void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(FetchLowByteOfWord);
   RunTest(FetchHighByteOfWord);
   RunTest(StoreBytesOfWord);
+  RunTest(IncrementRefCount);
+  RunTest(UpperBoundOfRefCount);
+  RunTest(DecrementRefCount);
+  RunTest(DoNotDecrementCountForMaximallyReferencedObject);
+  RunTest(DeallocateObjectWhenFinalReferenceRemoved);
 }

@@ -26,3 +26,11 @@ Byte ObjectMemory_fetchByte_ofObject(Word byteIndex, ObjectPointer objectPointer
 void ObjectMemory_storeByte_ofObject_withValue(Word byteIndex, ObjectPointer objectPointer, Byte valueByte) {
   ObjectMemory_heapChunkOf_byte_put(objectPointer, (HeaderSize * 2 + byteIndex), valueByte);
 }
+
+void ObjectMemory_increaseReferencesTo(ObjectPointer objectPointer) {
+  ObjectMemory_countUp(objectPointer);
+}
+
+void ObjectMemory_decreaseReferencesTo(ObjectPointer objectPointer) {
+  ObjectMemory_countDown(objectPointer);
+}

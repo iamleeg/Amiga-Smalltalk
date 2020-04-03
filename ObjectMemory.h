@@ -41,6 +41,16 @@ Byte ObjectMemory_fetchByte_ofObject(Word byteIndex, ObjectPointer objectPointer
  */
 void ObjectMemory_storeByte_ofObject_withValue(Word byteIndex, ObjectPointer objectPointer, Byte valueByte);
 
+/**
+ * Add a reference to this object.
+ */
+void ObjectMemory_increaseReferencesTo(ObjectPointer objectPointer);
+
+/**
+ * Remove a reference to this object.
+ */
+void ObjectMemory_decreaseReferencesTo(ObjectPointer objectPointer);
+
 /* Include routines from other categories */
 #include "ObjectMemory_Storage.h"
 #include "ObjectMemory_FreeList.h"
