@@ -42,3 +42,11 @@ ObjectPointer ObjectMemory_fetchClassOf(ObjectPointer objectPointer) {
     return ObjectMemory_classBitsOf(objectPointer);
   }
 }
+
+Word ObjectMemory_fetchWordLengthOf(ObjectPointer objectPointer) {
+  return ObjectMemory_sizeBitsOf(objectPointer) - HeaderSize;
+}
+
+Word ObjectMemory_fetchByteLengthOf(ObjectPointer objectPointer) {
+  return (ObjectMemory_fetchWordLengthOf(objectPointer) * 2 - ObjectMemory_oddBitOf(objectPointer));
+}

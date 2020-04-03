@@ -406,6 +406,35 @@ Test(FetchClassOfImmediateInteger) {
   Expect(reportedClass == IntegerClass);
 }
 
+Test(DiscoverWordLengthOfObject) {
+  ObjectPointer objectPointer = 0x1234;
+  Word size = 12, wordLength;
+  ObjectMemory_sizeBitsOf_put(objectPointer, size);
+
+  wordLength = ObjectMemory_fetchWordLengthOf(objectPointer);
+  Expect(wordLength == size - 2);
+}
+
+Test(DiscoverByteLengthOfObjectWithEvenSize) {
+  ObjectPointer objectPointer = 0x1234;
+  Word size = 12, byteLength;
+  ObjectMemory_sizeBitsOf_put(objectPointer, size);
+  ObjectMemory_oddBitOf_put(objectPointer, NO);
+
+  byteLength = ObjectMemory_fetchByteLengthOf(objectPointer);
+  Expect(byteLength == (size - 2)*2);
+}
+
+Test(DiscoverByteLengthOfObjectWithOddSize) {
+  ObjectPointer objectPointer = 0x1234;
+  Word size = 12, byteLength;
+  ObjectMemory_sizeBitsOf_put(objectPointer, size);
+  ObjectMemory_oddBitOf_put(objectPointer, YES);
+
+  byteLength = ObjectMemory_fetchByteLengthOf(objectPointer);
+  Expect(byteLength == (size - 2)*2 - 1);
+}
+
 void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(NonIntegerObjectIsNotIntegerObject);
   RunTest(IntegerObjectIsIntegerObject);
@@ -447,4 +476,7 @@ void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(DeallocateObjectWhenFinalReferenceRemoved);
   RunTest(FetchClassOfRegularObject);
   RunTest(FetchClassOfImmediateInteger);
+  RunTest(DiscoverWordLengthOfObject);
+  RunTest(DiscoverByteLengthOfObjectWithEvenSize);
+  RunTest(DiscoverByteLengthOfObjectWithOddSize);
 }

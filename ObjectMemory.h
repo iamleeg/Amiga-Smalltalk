@@ -56,6 +56,16 @@ void ObjectMemory_decreaseReferencesTo(ObjectPointer objectPointer);
  */
 ObjectPointer ObjectMemory_fetchClassOf(ObjectPointer objectPointer);
 
+/**
+ * Get the length of this object's field storage in words.
+ */
+Word ObjectMemory_fetchWordLengthOf(ObjectPointer objectPointer);
+
+/**
+ * Get the length of this object's field storage in bytes.
+ */
+Word ObjectMemory_fetchByteLengthOf(ObjectPointer objectPointer);
+
 /* Include routines from other categories */
 #include "ObjectMemory_Storage.h"
 #include "ObjectMemory_FreeList.h"
