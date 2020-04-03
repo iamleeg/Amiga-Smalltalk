@@ -36,6 +36,12 @@
 #define MethodClass 10
 
 /**
+ * The entry in the object table for the SmallInteger class.
+ * Again, I've inferred the necessity of this constnat.
+ */
+#define IntegerClass 12
+
+/**
  * The number of words in an object header.
  */
 #define HeaderSize 2

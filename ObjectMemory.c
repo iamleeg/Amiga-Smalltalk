@@ -34,3 +34,11 @@ void ObjectMemory_increaseReferencesTo(ObjectPointer objectPointer) {
 void ObjectMemory_decreaseReferencesTo(ObjectPointer objectPointer) {
   ObjectMemory_countDown(objectPointer);
 }
+
+ObjectPointer ObjectMemory_fetchClassOf(ObjectPointer objectPointer) {
+  if (ObjectMemory_isIntegerObject(objectPointer)) {
+    return IntegerClass;
+  } else {
+    return ObjectMemory_classBitsOf(objectPointer);
+  }
+}

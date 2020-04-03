@@ -51,6 +51,11 @@ void ObjectMemory_increaseReferencesTo(ObjectPointer objectPointer);
  */
 void ObjectMemory_decreaseReferencesTo(ObjectPointer objectPointer);
 
+/**
+ * Find this object's class.
+ */
+ObjectPointer ObjectMemory_fetchClassOf(ObjectPointer objectPointer);
+
 /* Include routines from other categories */
 #include "ObjectMemory_Storage.h"
 #include "ObjectMemory_FreeList.h"

@@ -391,6 +391,21 @@ Test(DeallocateObjectWhenFinalReferenceRemoved) {
   Expect(freeHead == objectPointer);
 }
 
+Test(FetchClassOfRegularObject) {
+  ObjectPointer objectPointer = 0x1234, classPointer = 0x1230, reportedClass;
+  ObjectMemory_classBitsOf_put(objectPointer, classPointer);
+
+  reportedClass = ObjectMemory_fetchClassOf(objectPointer);
+  Expect(reportedClass == classPointer);
+}
+
+Test(FetchClassOfImmediateInteger) {
+  ObjectPointer zeroPointer = 0x1, reportedClass;
+
+  reportedClass = ObjectMemory_fetchClassOf(zeroPointer);
+  Expect(reportedClass == IntegerClass);
+}
+
 void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(NonIntegerObjectIsNotIntegerObject);
   RunTest(IntegerObjectIsIntegerObject);
@@ -430,4 +445,6 @@ void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(DecrementRefCount);
   RunTest(DoNotDecrementCountForMaximallyReferencedObject);
   RunTest(DeallocateObjectWhenFinalReferenceRemoved);
+  RunTest(FetchClassOfRegularObject);
+  RunTest(FetchClassOfImmediateInteger);
 }
