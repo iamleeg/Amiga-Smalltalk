@@ -113,3 +113,15 @@ void ObjectMemory_swapPointersOf_and(ObjectPointer firstPointer, ObjectPointer s
   ObjectMemory_pointerBitOf_put(secondPointer, firstPointerBit);
   ObjectMemory_oddBitOf_put(secondPointer, firstOddBit);
 }
+
+short ObjectMemory_integerValueOf(ObjectPointer objectPointer) {
+  return objectPointer/2;
+}
+
+ObjectPointer ObjectMemory_integerObjectOf(short value) {
+  return (value << 1) + 1;
+}
+
+Bool ObjectMemory_isIntegerValue(short valueWord) {
+  return ((valueWord < 16384) && (valueWord >= -16384)) ? YES : NO;
+}

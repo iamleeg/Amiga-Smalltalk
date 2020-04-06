@@ -615,6 +615,36 @@ Test(SwapPointers) {
   Expect(ObjectMemory_pointerBitOf(object2) == pointer1);
 }
 
+Test(GetIntegerValueOfObject) {
+  ObjectPointer seven = 0b1111;
+  short value = ObjectMemory_integerValueOf(seven);
+  Expect(value == 7);
+}
+
+Test(GetObjectForIntegerValue) {
+  ObjectPointer six = 0b1101, objectPointer;
+  objectPointer = ObjectMemory_integerObjectOf(6);
+  Expect(objectPointer == six);
+}
+
+Test(IntegerValueBelowRange) {
+  short value = -16385;
+  Bool isIntegerValue = ObjectMemory_isIntegerValue(value);
+  Expect(isIntegerValue == NO);
+}
+
+Test(IntegerValueAboveRange) {
+  short value = 16385;
+  Bool isIntegerValue = ObjectMemory_isIntegerValue(value);
+  Expect(isIntegerValue == NO);
+}
+
+Test(IntegerValueWithinRange) {
+  short value = 0;
+  Bool isIntegerValue = ObjectMemory_isIntegerValue(value);
+  Expect(isIntegerValue == YES);
+}
+
 void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(NonIntegerObjectIsNotIntegerObject);
   RunTest(IntegerObjectIsIntegerObject);
@@ -668,4 +698,9 @@ void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(FindNextInstanceOfClass);
   RunTest(DoNotFindAnyInstanceOfClassThatWasNeverInstantiated);
   RunTest(SwapPointers);
+  RunTest(GetIntegerValueOfObject);
+  RunTest(GetObjectForIntegerValue);
+  RunTest(IntegerValueBelowRange);
+  RunTest(IntegerValueAboveRange);
+  RunTest(IntegerValueWithinRange);
 }

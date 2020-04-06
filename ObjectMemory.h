@@ -100,6 +100,25 @@ ObjectPointer ObjectMemory_instanceAfter(ObjectPointer objectPointer);
  */
 void ObjectMemory_swapPointersOf_and(ObjectPointer firstPointer, ObjectPointer secondPointer);
 
+/**
+ * Return the integer value of an immediate integer.
+ * @note This method doesn't actually _check_ that you passed an immediate integer, but returns
+ *       a nonsensical result if you don't.
+ */
+short ObjectMemory_integerValueOf(ObjectPointer objectPointer);
+
+/**
+ * Return the Integer object for a given integer value.
+ */
+ObjectPointer ObjectMemory_integerObjectOf(short value);
+
+/**
+ * Return whether the integer value supplied can be represented as an immediate integer.
+ * @note I have implemented this routine based on the note on p573, and knowledge of how
+ *       immediate integers are represented, not the typo-laden example on p688.
+ */
+Bool ObjectMemory_isIntegerValue(short valueWord);
+
 /* Include routines from other categories */
 #include "ObjectMemory_Storage.h"
 #include "ObjectMemory_FreeList.h"
