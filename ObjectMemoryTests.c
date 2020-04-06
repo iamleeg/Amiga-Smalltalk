@@ -577,6 +577,14 @@ Test(FindNextInstanceOfClass) {
   Expect(objectPointer == expectedFoundInstance);
 }
 
+Test(DoNotFindAnyInstanceOfClassThatWasNeverInstantiated) {
+  ObjectPointer classPointer = 0x888a, objectPointer;
+
+  objectPointer = ObjectMemory_initialInstanceOf(classPointer);
+
+  Expect(objectPointer == NilPointer);
+}
+
 void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(NonIntegerObjectIsNotIntegerObject);
   RunTest(IntegerObjectIsIntegerObject);
@@ -628,4 +636,5 @@ void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(FindFirstInstanceOfClass);
   RunTest(FindFirstLiveInstanceOfClass);
   RunTest(FindNextInstanceOfClass);
+  RunTest(DoNotFindAnyInstanceOfClassThatWasNeverInstantiated);
 }
