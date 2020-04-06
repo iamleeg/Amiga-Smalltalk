@@ -80,3 +80,15 @@ ObjectPointer ObjectMemory_initialInstanceOf(ObjectPointer classPointer) {
   }
   return NilPointer;
 }
+
+ObjectPointer ObjectMemory_instanceAfter(ObjectPointer objectPointer) {
+  ObjectPointer classPointer = ObjectMemory_fetchClassOf(objectPointer), pointer;
+  for(pointer = objectPointer + 2; pointer < ObjectTableSize; pointer += 2) {
+    if (ObjectMemory_freeBitOf(pointer) == NO) {
+      if (ObjectMemory_fetchClassOf(pointer) == classPointer) {
+        return pointer;
+      }
+    }
+  }
+  return NilPointer;
+}

@@ -550,10 +550,31 @@ Test(FindFirstLiveInstanceOfClass) {
   ObjectMemory_locationBitsOf_put(freedEarlierInstance, otherLocation);
   ObjectMemory_classBitsOf_put(freedEarlierInstance, classPointer);
   ObjectMemory_freeBitOf_put(freedEarlierInstance, YES);
-  
+
   objectPointer = ObjectMemory_initialInstanceOf(classPointer);
 
   Expect(objectPointer == expectedFirstInstance);
+}
+
+Test(FindNextInstanceOfClass) {
+  ObjectPointer classPointer = 0x1234, objectPointer, expectedFoundInstance = 0xa, firstInstance = 0x8;
+  Word segment = 3, location = 0x1000;
+  Word otherSegment = 3, otherLocation = 0x1004;
+
+  ObjectMemory_segmentBitsOf_put(expectedFoundInstance, segment);
+  ObjectMemory_locationBitsOf_put(expectedFoundInstance, location);
+  ObjectMemory_classBitsOf_put(expectedFoundInstance, classPointer);
+  ObjectMemory_freeBitOf_put(expectedFoundInstance, NO);
+
+  ObjectMemory_segmentBitsOf_put(firstInstance, otherSegment);
+  ObjectMemory_locationBitsOf_put(firstInstance, otherLocation);
+  ObjectMemory_classBitsOf_put(firstInstance, classPointer);
+  ObjectMemory_freeBitOf_put(firstInstance, NO);
+
+  objectPointer = ObjectMemory_initialInstanceOf(classPointer);
+  objectPointer = ObjectMemory_instanceAfter(objectPointer);
+
+  Expect(objectPointer == expectedFoundInstance);
 }
 
 void ObjectMemoryTests(struct TestResult *tr) {
@@ -606,4 +627,5 @@ void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(AllocateSmallObjectWithByteStorage);
   RunTest(FindFirstInstanceOfClass);
   RunTest(FindFirstLiveInstanceOfClass);
+  RunTest(FindNextInstanceOfClass);
 }

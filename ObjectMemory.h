@@ -86,6 +86,12 @@ ObjectPointer ObjectMemory_instantiateClass_withBytes(ObjectPointer classPointer
  */
 ObjectPointer ObjectMemory_initialInstanceOf(ObjectPointer classPointer);
 
+/**
+ * Find the next object in the object table that is an instance of the same class as this object.
+ * @note the class test is strict equality, so objects that are instances of subclasses will be skipped.
+ */
+ObjectPointer ObjectMemory_instanceAfter(ObjectPointer objectPointer);
+
 /* Include routines from other categories */
 #include "ObjectMemory_Storage.h"
 #include "ObjectMemory_FreeList.h"
