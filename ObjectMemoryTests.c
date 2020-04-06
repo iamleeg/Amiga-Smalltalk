@@ -438,6 +438,7 @@ Test(DiscoverByteLengthOfObjectWithOddSize) {
 Test(AllocateSmallObject) {
   ObjectPointer objectPointer, classPointer = 0x2468, reportedClass;
   Word size, wordLength = 10;
+  Bool pointerBit;
   /* this test actually allocates an object, so let's ensure there's a free space */
   Word segment = 1;
   currentSegment = segment;
@@ -453,6 +454,37 @@ Test(AllocateSmallObject) {
 
   reportedClass = ObjectMemory_fetchClassOf(objectPointer);
   Expect(reportedClass == classPointer);
+
+  pointerBit = ObjectMemory_pointerBitOf(objectPointer);
+  Expect(pointerBit == YES);
+}
+
+Test(AllocateHugeObject) {
+  ObjectPointer objectPointer, classPointer = 0x2468, reportedClass, allocatedPointer = 0x2300;
+  Word size, wordLength = HugeSize;
+  Bool pointerBit;
+  /* this test actually allocates an object, so let's ensure there's a free space */
+  Word segment = 1;
+  currentSegment = segment;
+  /* add a valid pointer to the free chunk list */
+
+  ObjectMemory_headOfFreeChunkList_inSegment_put(LastFreeChunkList, currentSegment, allocatedPointer);
+  /* +1 because an extra word is needed to handle the spilled size */
+  ObjectMemory_sizeBitsOf_put(allocatedPointer, wordLength + HeaderSize + 1);
+
+  objectPointer = ObjectMemory_instantiateClass_withPointers(classPointer, wordLength);
+
+  Expect(objectPointer != NilPointer);
+
+  /* The extra word is not reported here */
+  size = ObjectMemory_sizeBitsOf(objectPointer);
+  Expect(size == wordLength + HeaderSize );
+
+  reportedClass = ObjectMemory_fetchClassOf(objectPointer);
+  Expect(reportedClass == classPointer);
+
+  pointerBit = ObjectMemory_pointerBitOf(objectPointer);
+  Expect(pointerBit == YES);
 }
 
 void ObjectMemoryTests(struct TestResult *tr) {
@@ -500,4 +532,5 @@ void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(DiscoverByteLengthOfObjectWithEvenSize);
   RunTest(DiscoverByteLengthOfObjectWithOddSize);
   RunTest(AllocateSmallObject);
+  RunTest(AllocateHugeObject);
 }
