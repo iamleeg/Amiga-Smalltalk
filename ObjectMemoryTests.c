@@ -435,6 +435,26 @@ Test(DiscoverByteLengthOfObjectWithOddSize) {
   Expect(byteLength == (size - 2)*2 - 1);
 }
 
+Test(AllocateSmallObject) {
+  ObjectPointer objectPointer, classPointer = 0x2468, reportedClass;
+  Word size, wordLength = 10;
+  /* this test actually allocates an object, so let's ensure there's a free space */
+  Word segment = 1;
+  currentSegment = segment;
+  /* add a valid pointer to the free chunk list */
+  ObjectMemory_headOfFreeChunkList_inSegment_put(wordLength + HeaderSize, currentSegment, 0x2300);
+
+  objectPointer = ObjectMemory_instantiateClass_withPointers(classPointer, wordLength);
+
+  Expect(objectPointer != NilPointer);
+
+  size = ObjectMemory_sizeBitsOf(objectPointer);
+  Expect(size == wordLength + HeaderSize);
+
+  reportedClass = ObjectMemory_fetchClassOf(objectPointer);
+  Expect(reportedClass == classPointer);
+}
+
 void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(NonIntegerObjectIsNotIntegerObject);
   RunTest(IntegerObjectIsIntegerObject);
@@ -479,4 +499,5 @@ void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(DiscoverWordLengthOfObject);
   RunTest(DiscoverByteLengthOfObjectWithEvenSize);
   RunTest(DiscoverByteLengthOfObjectWithOddSize);
+  RunTest(AllocateSmallObject);
 }

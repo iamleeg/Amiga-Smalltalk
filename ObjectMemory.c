@@ -50,3 +50,11 @@ Word ObjectMemory_fetchWordLengthOf(ObjectPointer objectPointer) {
 Word ObjectMemory_fetchByteLengthOf(ObjectPointer objectPointer) {
   return (ObjectMemory_fetchWordLengthOf(objectPointer) * 2 - ObjectMemory_oddBitOf(objectPointer));
 }
+
+ObjectPointer ObjectMemory_instantiateClass_withPointers(ObjectPointer classPointer, Word length) {
+  Word size;
+  Bool extra;
+  size = HeaderSize + length;
+  extra = size >= HugeSize;
+  return ObjectMemory_allocate_odd_pointer_extra_class(size, 0, 1, extra, classPointer);
+}
