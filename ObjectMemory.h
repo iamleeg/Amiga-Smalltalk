@@ -92,6 +92,14 @@ ObjectPointer ObjectMemory_initialInstanceOf(ObjectPointer classPointer);
  */
 ObjectPointer ObjectMemory_instanceAfter(ObjectPointer objectPointer);
 
+/**
+ * Swap two references in the object table. After this operation, references to firstPointer will find fields
+ * that were previously in secondPointer and vice versa.
+ * @note this seems dangerous, in that the sizes of the objects and the classes are not patched up. It seems
+ *       that you should only use this for two instances of the same class, with the same number of indexed variables.
+ */
+void ObjectMemory_swapPointersOf_and(ObjectPointer firstPointer, ObjectPointer secondPointer);
+
 /* Include routines from other categories */
 #include "ObjectMemory_Storage.h"
 #include "ObjectMemory_FreeList.h"

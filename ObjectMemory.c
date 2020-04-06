@@ -92,3 +92,24 @@ ObjectPointer ObjectMemory_instanceAfter(ObjectPointer objectPointer) {
   }
   return NilPointer;
 }
+
+void ObjectMemory_swapPointersOf_and(ObjectPointer firstPointer, ObjectPointer secondPointer) {
+  Word firstSegment;
+  ObjectPointer firstLocation;
+  Bool firstPointerBit, firstOddBit; /* firstPointerBit is called firstPointer on p688 */
+
+  firstSegment = ObjectMemory_segmentBitsOf(firstPointer);
+  firstLocation = ObjectMemory_locationBitsOf(firstPointer);
+  firstPointerBit = ObjectMemory_pointerBitOf(firstPointer);
+  firstOddBit = ObjectMemory_oddBitOf(firstPointer);
+
+  ObjectMemory_segmentBitsOf_put(firstPointer, ObjectMemory_segmentBitsOf(secondPointer));
+  ObjectMemory_locationBitsOf_put(firstPointer, ObjectMemory_locationBitsOf(secondPointer));
+  ObjectMemory_pointerBitOf_put(firstPointer, ObjectMemory_pointerBitOf(secondPointer));
+  ObjectMemory_oddBitOf_put(firstPointer, ObjectMemory_oddBitOf(secondPointer));
+
+  ObjectMemory_segmentBitsOf_put(secondPointer, firstSegment);
+  ObjectMemory_locationBitsOf_put(secondPointer, firstLocation);
+  ObjectMemory_pointerBitOf_put(secondPointer, firstPointerBit);
+  ObjectMemory_oddBitOf_put(secondPointer, firstOddBit);
+}

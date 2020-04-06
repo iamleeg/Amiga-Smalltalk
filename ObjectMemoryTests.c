@@ -585,6 +585,36 @@ Test(DoNotFindAnyInstanceOfClassThatWasNeverInstantiated) {
   Expect(objectPointer == NilPointer);
 }
 
+Test(SwapPointers) {
+  ObjectPointer object1 = 0x1234, object2 = 0x1236, location1 = 0x1238, location2 = 0x123a;
+  Word segment1 = 1, segment2 = 2;
+  Bool odd1 = YES, odd2 = NO, pointer1 = NO, pointer2 = YES;
+
+  ObjectMemory_segmentBitsOf_put(object1, segment1);
+  ObjectMemory_locationBitsOf_put(object1, location1);
+  ObjectMemory_oddBitOf_put(object1, odd1);
+  ObjectMemory_pointerBitOf_put(object1, pointer1);
+
+  ObjectMemory_segmentBitsOf_put(object2, segment2);
+  ObjectMemory_locationBitsOf_put(object2, location2);
+  ObjectMemory_oddBitOf_put(object2, odd2);
+  ObjectMemory_pointerBitOf_put(object2, pointer2);
+
+  ObjectMemory_swapPointersOf_and(object1, object2);
+
+  Expect(ObjectMemory_segmentBitsOf(object1) == segment2);
+  Expect(ObjectMemory_segmentBitsOf(object2) == segment1);
+
+  Expect(ObjectMemory_locationBitsOf(object1) == location2);
+  Expect(ObjectMemory_locationBitsOf(object2) == location1);
+
+  Expect(ObjectMemory_oddBitOf(object1) == odd2);
+  Expect(ObjectMemory_oddBitOf(object2) == odd1);
+
+  Expect(ObjectMemory_pointerBitOf(object1) == pointer2);
+  Expect(ObjectMemory_pointerBitOf(object2) == pointer1);
+}
+
 void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(NonIntegerObjectIsNotIntegerObject);
   RunTest(IntegerObjectIsIntegerObject);
@@ -637,4 +667,5 @@ void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(FindFirstLiveInstanceOfClass);
   RunTest(FindNextInstanceOfClass);
   RunTest(DoNotFindAnyInstanceOfClassThatWasNeverInstantiated);
+  RunTest(SwapPointers);
 }
