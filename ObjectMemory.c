@@ -68,3 +68,15 @@ ObjectPointer ObjectMemory_instantiateClass_withBytes(ObjectPointer classPointer
   Word size = HeaderSize + ((length + 1) / 2);
   return ObjectMemory_allocate_odd_pointer_extra_class(size, length % 2, 0, 0, classPointer);
 }
+
+ObjectPointer ObjectMemory_initialInstanceOf(ObjectPointer classPointer) {
+  ObjectPointer pointer;
+  for(pointer = 0; pointer < ObjectTableSize; pointer += 2) {
+    if (ObjectMemory_freeBitOf(pointer) == NO) {
+      if (ObjectMemory_fetchClassOf(pointer) == classPointer) {
+        return pointer;
+      }
+    }
+  }
+  return NilPointer;
+}

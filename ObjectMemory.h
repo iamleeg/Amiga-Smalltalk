@@ -81,6 +81,11 @@ ObjectPointer ObjectMemory_instantiateClass_withWords(ObjectPointer classPointer
  */
 ObjectPointer ObjectMemory_instantiateClass_withBytes(ObjectPointer classPointer, Word length);
 
+/**
+ * Find the first live instance of a class in the object table.
+ */
+ObjectPointer ObjectMemory_initialInstanceOf(ObjectPointer classPointer);
+
 /* Include routines from other categories */
 #include "ObjectMemory_Storage.h"
 #include "ObjectMemory_FreeList.h"

@@ -525,6 +525,37 @@ Test(AllocateSmallObjectWithByteStorage) {
   Expect(oddBit == NO);
 }
 
+Test(FindFirstInstanceOfClass) {
+  ObjectPointer classPointer = 0x1234, objectPointer, expectedFirstInstance = 0x8;
+  Word segment = 3, location = 0x1000;
+
+  ObjectMemory_segmentBitsOf_put(expectedFirstInstance, segment);
+  ObjectMemory_locationBitsOf_put(expectedFirstInstance, location);
+  ObjectMemory_classBitsOf_put(expectedFirstInstance, classPointer);
+  objectPointer = ObjectMemory_initialInstanceOf(classPointer);
+
+  Expect(objectPointer == expectedFirstInstance);
+}
+
+Test(FindFirstLiveInstanceOfClass) {
+  ObjectPointer classPointer = 0x1234, objectPointer, expectedFirstInstance = 0xa, freedEarlierInstance = 0x8;
+  Word segment = 3, location = 0x1000;
+  Word otherSegment = 3, otherLocation = 0x1004;
+
+  ObjectMemory_segmentBitsOf_put(expectedFirstInstance, segment);
+  ObjectMemory_locationBitsOf_put(expectedFirstInstance, location);
+  ObjectMemory_classBitsOf_put(expectedFirstInstance, classPointer);
+
+  ObjectMemory_segmentBitsOf_put(freedEarlierInstance, otherSegment);
+  ObjectMemory_locationBitsOf_put(freedEarlierInstance, otherLocation);
+  ObjectMemory_classBitsOf_put(freedEarlierInstance, classPointer);
+  ObjectMemory_freeBitOf_put(freedEarlierInstance, YES);
+  
+  objectPointer = ObjectMemory_initialInstanceOf(classPointer);
+
+  Expect(objectPointer == expectedFirstInstance);
+}
+
 void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(NonIntegerObjectIsNotIntegerObject);
   RunTest(IntegerObjectIsIntegerObject);
@@ -573,4 +604,6 @@ void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(AllocateHugeObject);
   RunTest(AllocateSmallObjectWithWordStorage);
   RunTest(AllocateSmallObjectWithByteStorage);
+  RunTest(FindFirstInstanceOfClass);
+  RunTest(FindFirstLiveInstanceOfClass);
 }
