@@ -487,6 +487,44 @@ Test(AllocateHugeObject) {
   Expect(pointerBit == YES);
 }
 
+Test(AllocateSmallObjectWithWordStorage) {
+  ObjectPointer objectPointer, classPointer = 0x2468;
+  Word wordLength = 10;
+  Bool pointerBit;
+  /* this test actually allocates an object, so let's ensure there's a free space */
+  Word segment = 1;
+  currentSegment = segment;
+  /* add a valid pointer to the free chunk list */
+  ObjectMemory_headOfFreeChunkList_inSegment_put(wordLength + HeaderSize, currentSegment, 0x2300);
+
+  objectPointer = ObjectMemory_instantiateClass_withWords(classPointer, wordLength);
+
+  pointerBit = ObjectMemory_pointerBitOf(objectPointer);
+  Expect(pointerBit == NO);
+}
+
+Test(AllocateSmallObjectWithByteStorage) {
+  ObjectPointer objectPointer, classPointer = 0x2468;
+  Word byteLength = 10, wordLength;
+  Bool pointerBit, oddBit;
+  /* this test actually allocates an object, so let's ensure there's a free space */
+  Word segment = 1;
+  currentSegment = segment;
+  /* add a valid pointer to the free chunk list */
+  ObjectMemory_headOfFreeChunkList_inSegment_put(byteLength/2 + HeaderSize, currentSegment, 0x2300);
+
+  objectPointer = ObjectMemory_instantiateClass_withBytes(classPointer, byteLength);
+
+  pointerBit = ObjectMemory_pointerBitOf(objectPointer);
+  Expect(pointerBit == NO);
+
+  wordLength = ObjectMemory_fetchWordLengthOf(objectPointer);
+  Expect(wordLength == (byteLength / 2));
+
+  oddBit = ObjectMemory_oddBitOf(objectPointer);
+  Expect(oddBit == NO);
+}
+
 void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(NonIntegerObjectIsNotIntegerObject);
   RunTest(IntegerObjectIsIntegerObject);
@@ -533,4 +571,6 @@ void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(DiscoverByteLengthOfObjectWithOddSize);
   RunTest(AllocateSmallObject);
   RunTest(AllocateHugeObject);
+  RunTest(AllocateSmallObjectWithWordStorage);
+  RunTest(AllocateSmallObjectWithByteStorage);
 }

@@ -58,3 +58,13 @@ ObjectPointer ObjectMemory_instantiateClass_withPointers(ObjectPointer classPoin
   extra = size >= HugeSize;
   return ObjectMemory_allocate_odd_pointer_extra_class(size, 0, 1, extra, classPointer);
 }
+
+ObjectPointer ObjectMemory_instantiateClass_withWords(ObjectPointer classPointer, Word length) {
+  Word size = HeaderSize + length;
+  return ObjectMemory_allocate_odd_pointer_extra_class(size, 0, 0, 0, classPointer);
+}
+
+ObjectPointer ObjectMemory_instantiateClass_withBytes(ObjectPointer classPointer, Word length) {
+  Word size = HeaderSize + ((length + 1) / 2);
+  return ObjectMemory_allocate_odd_pointer_extra_class(size, length % 2, 0, 0, classPointer);
+}

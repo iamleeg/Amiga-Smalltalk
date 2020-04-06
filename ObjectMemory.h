@@ -71,6 +71,16 @@ Word ObjectMemory_fetchByteLengthOf(ObjectPointer objectPointer);
  */
 ObjectPointer ObjectMemory_instantiateClass_withPointers(ObjectPointer classPointer, Word length);
 
+/**
+ * Allocate and return an instance of the specified class, with space for word storage.
+ */
+ObjectPointer ObjectMemory_instantiateClass_withWords(ObjectPointer classPointer, Word length);
+
+/**
+ * Allocate and return an instance of the specified class, with space for byte storage.
+ */
+ObjectPointer ObjectMemory_instantiateClass_withBytes(ObjectPointer classPointer, Word length);
+
 /* Include routines from other categories */
 #include "ObjectMemory_Storage.h"
 #include "ObjectMemory_FreeList.h"
