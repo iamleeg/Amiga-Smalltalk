@@ -13,10 +13,10 @@ Test(RoundTripIntegerThroughObjectMemory) {
 
   Interpreter_storeInteger_ofObject_withValue(fieldIndex, objectPointer, integerValue);
 
-  Expect(Interpreter_Success() == YES);
+  Expect(Interpreter_success() == YES);
 
   fetchedInteger = Interpreter_fetchInteger_ofObject(fieldIndex, objectPointer);
-  Expect(Interpreter_Success() == YES);
+  Expect(Interpreter_success() == YES);
   Expect(fetchedInteger == integerValue);
 }
 

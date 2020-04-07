@@ -21,12 +21,12 @@ extern Bool success;
  * Set the success register.
  * @note Actually ANDs the existing and new value, so if you previously failed, you will never un-fail.
  */
-void Interpreter_Success_(Bool successValue);
+void Interpreter_success_(Bool successValue);
 
 /**
  * Retrieve the success register.
  */
-Bool Interpreter_Success(void);
+Bool Interpreter_success(void);
 
 /**
  * Get ready to enter a primitive method.
@@ -36,7 +36,7 @@ void Interpreter_initPrimitive(void);
 /**
  * Indicate that execution of a primitive method failed.
  */
-void Interpreter_failPrimitive(void);
+void Interpreter_primitiveFail(void);
 
 /**
  * Convert the supplied integer into a SmallInteger object and store it in the object's field.

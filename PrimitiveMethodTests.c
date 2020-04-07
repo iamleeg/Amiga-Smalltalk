@@ -3,32 +3,32 @@
 
 Test(SetSuccessRegister) {
   success = YES;
-  Interpreter_Success_(YES);
+  Interpreter_success_(YES);
   Expect(success == YES);
-  Interpreter_Success_(NO);
+  Interpreter_success_(NO);
   Expect(success == NO);
   /* p616: success-setting is logical AND, so once it's failed, you can't un-fail. */
-  Interpreter_Success_(YES);
+  Interpreter_success_(YES);
   Expect(success == NO);
 }
 
 Test(FetchSuccessRegister) {
   success = NO;
-  Expect(Interpreter_Success() == NO);
+  Expect(Interpreter_success() == NO);
   success = YES;
-  Expect(Interpreter_Success() == YES);
+  Expect(Interpreter_success() == YES);
 }
 
 Test(InitializingPrimitiveSetsSuccess) {
   success = NO;
   Interpreter_initPrimitive();
-  Expect(Interpreter_Success() == YES);
+  Expect(Interpreter_success() == YES);
 }
 
 Test(FailingPrimitiveClearsSuccess) {
   success = YES;
-  Interpreter_failPrimitive();
-  Expect(Interpreter_Success() == NO);
+  Interpreter_primitiveFail();
+  Expect(Interpreter_success() == NO);
 }
 
 void PrimitiveMethodTests(struct TestResult *tr) {
