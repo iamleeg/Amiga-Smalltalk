@@ -40,7 +40,7 @@ void Interpreter_primitiveFail(void);
 
 /**
  * Convert the supplied integer into a SmallInteger object and store it in the object's field.
- * Fails if the integer cannot be stored in a SmallInteger (i.e. is higher magnitude than ±2^15)
+ * Fails if the integer cannot be stored in a SmallInteger (i.e. is higher magnitude than ±2^14)
  */
 void Interpreter_storeInteger_ofObject_withValue(Word fieldIndex, ObjectPointer objectPointer, Word integerValue);
 
