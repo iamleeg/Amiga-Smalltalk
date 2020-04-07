@@ -5,6 +5,7 @@
 #include "ObjectMemoryTests.h"
 #include "RealWordMemoryTests.h"
 #include "RefCountingTests.h"
+#include "PrimitiveMethodTests.h"
 #include "tests.h"
 
 int main(int argc, const char *argv[]) {
@@ -20,6 +21,7 @@ int main(int argc, const char *argv[]) {
   ObjectMemoryTests(&result);
   RealWordMemoryTests(&result);
   RefCountingTests(&result);
+  PrimitiveMethodTests(&result);
   
   printf("Tests completed.\n");
   printf("%d tests ran.\n", result.ran);
