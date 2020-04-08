@@ -24,6 +24,21 @@ ObjectPointer compiledMethodWithInterestingHeader(void) {
   return compiledMethod;
 }
 
+ObjectPointer compiledMethodWithExtension(void) {
+  ObjectPointer compiledMethod = 0x1234, classPointer = MethodClass, header = 0b1110000100000111, firstLiteral = NilPointer;
+  ObjectPointer extension = 0b0000001010000101;
+  Word segment = 1, location = 0, size = 4;
+
+  ObjectMemory_sizeBitsOf_put(compiledMethod, size);
+  ObjectMemory_segmentBitsOf_put(compiledMethod, segment);
+  ObjectMemory_locationBitsOf_put(compiledMethod, location);
+  ObjectMemory_classBitsOf_put(compiledMethod, classPointer);
+  ObjectMemory_storePointer_ofObject_withValue(0, compiledMethod, header);
+  ObjectMemory_storePointer_ofObject_withValue(1, compiledMethod, firstLiteral);
+  ObjectMemory_storePointer_ofObject_withValue(2, compiledMethod, extension);
+  return compiledMethod;
+}
+
 Test(FindHeaderOfCompiledMethod) {
   ObjectPointer methodHeader, compiledMethod = dummyCompiledMethod();
 
@@ -74,6 +89,12 @@ Test(ExtractFieldIndexFromCompiledMethod) {
   Expect(fieldIndex == 0b00001111);
 }
 
+Test(ExtractHeaderExtensionFromCompiledMethod) {
+  ObjectPointer compiledMethod = compiledMethodWithExtension(), headerExtension;
+  headerExtension = Interpreter_headerExtensionOf(compiledMethod);
+  Expect(headerExtension == 0b0000001010000101);
+}
+
 void CompiledMethodTests(struct TestResult *tr) {
   RunTest(FindHeaderOfCompiledMethod);
   RunTest(FindFirstLiteralInCompiledMethod);
@@ -82,4 +103,5 @@ void CompiledMethodTests(struct TestResult *tr) {
   RunTest(ExtractLiteralCountFromCompiledMethod);
   RunTest(ExtractFlagValueFromCompiledMethod);
   RunTest(ExtractFieldIndexFromCompiledMethod);
+  RunTest(ExtractHeaderExtensionFromCompiledMethod);
 }

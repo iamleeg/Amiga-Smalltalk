@@ -102,3 +102,8 @@ Byte Interpreter_flagValueOf(ObjectPointer methodPointer) {
 Byte Interpreter_fieldIndexOf(ObjectPointer methodPointer) {
   return Interpreter_extractBits_to_of(3, 7, Interpreter_headerOf(methodPointer));
 }
+
+ObjectPointer Interpreter_headerExtensionOf(ObjectPointer methodPointer) {
+  Byte literalCount = Interpreter_literalCountOf(methodPointer);
+  return Interpreter_literal_ofMethod(literalCount - 2, methodPointer);
+}

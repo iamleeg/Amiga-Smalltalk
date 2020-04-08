@@ -107,4 +107,25 @@ struct CompiledMethodHeader {
   Word isImmediateInteger: 1; /**< always true */
 };
 
+/**
+ * The layout of a CompiledMethod header extension. This will be found in the last-but-one
+ * literal of the CompiledMethod if the flagValue in the method's header is 7. Again, this
+ * bitmap is only written out for documentation purposes. Based on figure 27.4.
+ */
+struct CompiledMethodHeaderExtension {
+  /**
+   * What would you like me to tell you?
+   */
+  Word unused:2;
+  /**
+   * The number of arguments to the primitive method.
+   */
+  Word argumentCount:5;
+  /**
+   * The index of the primitive method in the primitives table.
+   */
+  Word primitiveIndex:8;
+  Word isImmediateInteger: 1; /**< always true */
+};
+
 #endif

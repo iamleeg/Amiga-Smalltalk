@@ -122,4 +122,9 @@ Byte Interpreter_flagValueOf(ObjectPointer methodPointer);
  */
 Byte Interpreter_fieldIndexOf(ObjectPointer methodPointer);
 
+/**
+ * Read the header extension from a CompiledMethod that has one.
+ * @note this value only makes sense when the CompiledMethod's flagValue is 7.
+ */
+ObjectPointer Interpreter_headerExtensionOf(ObjectPointer methodPointer);
 #endif
