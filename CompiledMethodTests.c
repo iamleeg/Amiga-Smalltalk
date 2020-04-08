@@ -126,6 +126,21 @@ Test(ArgumentCountOfMethodWithHeaderExtension) {
   Expect(argumentCount == 1);
 }
 
+Test(PrimitiveIndexOfRegularMethodIsZero) {
+  ObjectPointer compiledMethod = dummyCompiledMethod();
+  Byte primitiveIndex = Interpreter_primitiveIndexOf(compiledMethod);
+
+  Expect(primitiveIndex == 0);
+}
+
+Test(PrimitiveIndexOfMethodWithHeaderExtensionFoundInExtension) {
+  ObjectPointer compiledMethod = compiledMethodWithExtension();
+  Byte primitiveIndex = Interpreter_primitiveIndexOf(compiledMethod);
+
+  Expect(primitiveIndex == 66);
+}
+
+
 void CompiledMethodTests(struct TestResult *tr) {
   RunTest(FindHeaderOfCompiledMethod);
   RunTest(FindFirstLiteralInCompiledMethod);
@@ -138,4 +153,6 @@ void CompiledMethodTests(struct TestResult *tr) {
   RunTest(ArgumentCountOfNonprimitiveMethod);
   RunTest(ArgumentCountOfPrimitiveZeroArgMethod);
   RunTest(ArgumentCountOfMethodWithHeaderExtension);
+  RunTest(PrimitiveIndexOfRegularMethodIsZero);
+  RunTest(PrimitiveIndexOfMethodWithHeaderExtensionFoundInExtension);
 }

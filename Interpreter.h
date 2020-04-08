@@ -133,4 +133,11 @@ ObjectPointer Interpreter_headerExtensionOf(ObjectPointer methodPointer);
  */
 Byte Interpreter_argumentCountOf(ObjectPointer methodPointer);
 
+/**
+ * Return the index in the primitive method table of the associated primitive method.
+ * @note most methods don't have an associated primitive method, so this routine returns 0
+ *       in the common case.
+ */
+Byte Interpreter_primitiveIndexOf(ObjectPointer methodPointer);
+
 #endif

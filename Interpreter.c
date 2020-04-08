@@ -114,3 +114,9 @@ Byte Interpreter_argumentCountOf(ObjectPointer methodPointer) {
   if (flagValue < 7) return 0;
   return Interpreter_extractBits_to_of(2, 6, Interpreter_headerExtensionOf(methodPointer));
 }
+
+Byte Interpreter_primitiveIndexOf(ObjectPointer methodPointer) {
+  Byte flagValue = Interpreter_flagValueOf(methodPointer);
+  if (flagValue < 7) return 0;
+  return Interpreter_extractBits_to_of(7,14, Interpreter_headerExtensionOf(methodPointer));
+}
