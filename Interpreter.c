@@ -38,3 +38,21 @@ Word Interpreter_fetchInteger_ofObject(Word fieldIndex, ObjectPointer objectPoin
     return 0; /* caller shouldn't rely on this */
   }
 }
+
+void Interpreter_transfer_fromIndex_ofObject_toIndex_ofObject(
+  Word count,
+  Word firstFrom,
+  ObjectPointer fromOop,
+  Word firstTo,
+  ObjectPointer toOop
+) {
+  Word fromIndex = firstFrom, toIndex = firstTo, lastFrom = firstFrom + count;
+  ObjectPointer oop;
+  while(fromIndex < lastFrom) {
+    oop = ObjectMemory_fetchPointer_ofObject(fromIndex, fromOop);
+    ObjectMemory_storePointer_ofObject_withValue(toIndex, toOop, oop);
+    ObjectMemory_storePointer_ofObject_withValue(fromIndex, fromOop, NilPointer);
+    fromIndex += 1;
+    toIndex += 1;
+  }
+}

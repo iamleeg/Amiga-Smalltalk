@@ -50,4 +50,15 @@ void Interpreter_storeInteger_ofObject_withValue(Word fieldIndex, ObjectPointer 
  */
 Word Interpreter_fetchInteger_ofObject(Word fieldIndex, ObjectPointer objectPointer);
 
+/**
+ * Transfer ownership of a collection of pointers between objects, setting the source fields to nil.
+ */
+void Interpreter_transfer_fromIndex_ofObject_toIndex_ofObject(
+  Word count,
+  Word firstFrom,
+  ObjectPointer fromOop,
+  Word firstTo,
+  ObjectPointer toOop
+);
+
 #endif
