@@ -3,6 +3,8 @@
 
 #include "Types.h"
 
+#include "Interpreter_Constants.h"
+
 /**
  * This register indicates whether a primitive method succeeded.
  * @note if the interpreter were written in Smalltalk, it would be possible to tell that failure
