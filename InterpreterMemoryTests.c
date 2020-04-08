@@ -72,9 +72,36 @@ Test(BlockTransferOfFieldsBetweenObjects) {
   Expect(ObjectMemory_fetchPointer_ofObject(toIndex + 2, toObject) == field3);
 }
 
+Test(ExtractBitsFromInteger) {
+  Word pattern = 0xaaaa, masked, firstBitIndex = 1, lastBitIndex = 6, expected = 0b00010101;
+
+  masked = Interpreter_extractBits_to_of(firstBitIndex, lastBitIndex, pattern);
+
+  Expect(masked == expected);
+}
+
+Test(ExtractHighByteOfInteger) {
+  Word pattern = 0xaa55;
+  Byte highByte, expected = 0xaa;
+
+  highByte = Interpreter_highByteOf(pattern);
+  Expect(highByte == expected);
+}
+
+Test(ExtractLowByteOfInteger) {
+  Word pattern = 0xaa55;
+  Byte lowByte, expected = 0x55;
+
+  lowByte = Interpreter_lowByteOf(pattern);
+  Expect(lowByte == expected);
+}
+
 void InterpreterMemoryTests(struct TestResult *tr) {
   RunTest(RoundTripIntegerThroughObjectMemory);
   RunTest(FailToStoreOutOfRangeInteger);
   RunTest(FailToFetchNonIntegerValue);
   RunTest(BlockTransferOfFieldsBetweenObjects);
+  RunTest(ExtractBitsFromInteger);
+  RunTest(ExtractHighByteOfInteger);
+  RunTest(ExtractLowByteOfInteger);
 }

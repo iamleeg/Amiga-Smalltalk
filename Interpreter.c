@@ -56,3 +56,17 @@ void Interpreter_transfer_fromIndex_ofObject_toIndex_ofObject(
     toIndex += 1;
   }
 }
+
+Word Interpreter_extractBits_to_of(Word firstBitIndex, Word lastBitIndex, Word anInteger) {
+  Word shifted = (anInteger >> (15 - lastBitIndex));
+  Word mask = ((1 << (lastBitIndex - firstBitIndex + 1)) - 1);
+  return (shifted & mask);
+}
+
+Byte Interpreter_highByteOf(Word anInteger) {
+  return Interpreter_extractBits_to_of(0, 7, anInteger);
+}
+
+Byte Interpreter_lowByteOf(Word anInteger) {
+  return Interpreter_extractBits_to_of(8, 15, anInteger);
+}

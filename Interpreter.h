@@ -61,4 +61,20 @@ void Interpreter_transfer_fromIndex_ofObject_toIndex_ofObject(
   ObjectPointer toOop
 );
 
+/**
+ * Extract a bit field from an integer value (not a pointer to an immediate integer, or other integer object).
+ * The bits in a word are numbered 0 (most significant) to 15 (least significant), consistent with p575.
+ */
+Word Interpreter_extractBits_to_of(Word firstBitIndex, Word lastBitIndex, Word anInteger);
+
+/**
+ * Extract bits 0-7 of an integer word.
+ */
+Byte Interpreter_highByteOf(Word anInteger);
+
+/**
+ * Extract bits 8-15 of an integer word.
+ */
+Byte Interpreter_lowByteOf(Word anInteger);
+
 #endif
