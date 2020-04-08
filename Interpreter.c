@@ -70,3 +70,11 @@ Byte Interpreter_highByteOf(Word anInteger) {
 Byte Interpreter_lowByteOf(Word anInteger) {
   return Interpreter_extractBits_to_of(8, 15, anInteger);
 }
+
+ObjectPointer Interpreter_headerOf(ObjectPointer methodPointer) {
+  return ObjectMemory_fetchPointer_ofObject(HeaderIndex, methodPointer);
+}
+
+ObjectPointer Interpreter_literal_ofMethod(Word offset, ObjectPointer methodPointer) {
+  return ObjectMemory_fetchPointer_ofObject(LiteralStart + offset, methodPointer);
+}

@@ -79,4 +79,14 @@ Byte Interpreter_highByteOf(Word anInteger);
  */
 Byte Interpreter_lowByteOf(Word anInteger);
 
+/**
+ * Find the header of a CompiledMethod. This is a SmallInteger used as a bitfield to describe the method.
+ */
+ObjectPointer Interpreter_headerOf(ObjectPointer methodPointer);
+
+/**
+ * Find the object literal at a given index in this method's literal frame.
+ */
+ObjectPointer Interpreter_literal_ofMethod(Word offset, ObjectPointer methodPointer);
+
 #endif

@@ -60,6 +60,14 @@ enum {
   CharacterTablePointer = 50,
 };
 
-
+/**
+ * These constants are used to find information in the fields of a CompiledMethod.
+ * While CompiledMethods are stored as objects in the object table with class MethodClass,
+ * the interpreter treats them as unencapsulated data structures.
+ */
+enum {
+  HeaderIndex = 0,
+  LiteralStart = 1,
+};
 
 #endif
