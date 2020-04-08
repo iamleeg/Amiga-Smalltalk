@@ -127,4 +127,10 @@ Byte Interpreter_fieldIndexOf(ObjectPointer methodPointer);
  * @note this value only makes sense when the CompiledMethod's flagValue is 7.
  */
 ObjectPointer Interpreter_headerExtensionOf(ObjectPointer methodPointer);
+
+/**
+ * Return the number of arguments required by the CompiledMethod.
+ */
+Byte Interpreter_argumentCountOf(ObjectPointer methodPointer);
+
 #endif

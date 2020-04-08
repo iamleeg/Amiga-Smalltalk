@@ -107,3 +107,10 @@ ObjectPointer Interpreter_headerExtensionOf(ObjectPointer methodPointer) {
   Byte literalCount = Interpreter_literalCountOf(methodPointer);
   return Interpreter_literal_ofMethod(literalCount - 2, methodPointer);
 }
+
+Byte Interpreter_argumentCountOf(ObjectPointer methodPointer) {
+  Byte flagValue = Interpreter_flagValueOf(methodPointer);
+  if (flagValue < 5) return flagValue;
+  if (flagValue < 7) return 0;
+  return Interpreter_extractBits_to_of(2, 6, Interpreter_headerExtensionOf(methodPointer));
+}

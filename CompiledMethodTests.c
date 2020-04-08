@@ -95,6 +95,37 @@ Test(ExtractHeaderExtensionFromCompiledMethod) {
   Expect(headerExtension == 0b0000001010000101);
 }
 
+Test(ArgumentCountOfNonprimitiveMethod) {
+  ObjectPointer compiledMethod = dummyCompiledMethod();
+  Word header = 0b0110111101011011;
+  Byte argumentCount;
+
+  ObjectMemory_storePointer_ofObject_withValue(0, compiledMethod, header);
+
+  argumentCount = Interpreter_argumentCountOf(compiledMethod);
+
+  Expect(argumentCount == 3);
+}
+
+Test(ArgumentCountOfPrimitiveZeroArgMethod) {
+  ObjectPointer compiledMethod = dummyCompiledMethod();
+  Word header = 0b1010111101011011;
+  Byte argumentCount;
+
+  ObjectMemory_storePointer_ofObject_withValue(0, compiledMethod, header);
+
+  argumentCount = Interpreter_argumentCountOf(compiledMethod);
+
+  Expect(argumentCount == 0);
+}
+
+Test(ArgumentCountOfMethodWithHeaderExtension) {
+  ObjectPointer compiledMethod = compiledMethodWithExtension();
+  Byte argumentCount = Interpreter_argumentCountOf(compiledMethod);
+
+  Expect(argumentCount == 1);
+}
+
 void CompiledMethodTests(struct TestResult *tr) {
   RunTest(FindHeaderOfCompiledMethod);
   RunTest(FindFirstLiteralInCompiledMethod);
@@ -104,4 +135,7 @@ void CompiledMethodTests(struct TestResult *tr) {
   RunTest(ExtractFlagValueFromCompiledMethod);
   RunTest(ExtractFieldIndexFromCompiledMethod);
   RunTest(ExtractHeaderExtensionFromCompiledMethod);
+  RunTest(ArgumentCountOfNonprimitiveMethod);
+  RunTest(ArgumentCountOfPrimitiveZeroArgMethod);
+  RunTest(ArgumentCountOfMethodWithHeaderExtension);
 }
