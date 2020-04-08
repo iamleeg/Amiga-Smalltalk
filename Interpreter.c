@@ -78,3 +78,27 @@ ObjectPointer Interpreter_headerOf(ObjectPointer methodPointer) {
 ObjectPointer Interpreter_literal_ofMethod(Word offset, ObjectPointer methodPointer) {
   return ObjectMemory_fetchPointer_ofObject(LiteralStart + offset, methodPointer);
 }
+
+Byte Interpreter_temporaryCountOf(ObjectPointer methodPointer) {
+  return Interpreter_extractBits_to_of(3, 7, Interpreter_headerOf(methodPointer));
+}
+
+Bool Interpreter_largeContextFlagOf(ObjectPointer methodPointer) {
+  return Interpreter_extractBits_to_of(8, 8, methodPointer);
+}
+
+Byte Interpreter_literalCountOf(ObjectPointer methodPointer) {
+  return Interpreter_literalCountOfHeader(Interpreter_headerOf(methodPointer));
+}
+
+Byte Interpreter_literalCountOfHeader(ObjectPointer headerPointer) {
+  return Interpreter_extractBits_to_of(9, 14, headerPointer);
+}
+
+Byte Interpreter_flagValueOf(ObjectPointer methodPointer) {
+  return Interpreter_extractBits_to_of(0, 2, Interpreter_headerOf(methodPointer));
+}
+
+Byte Interpreter_fieldIndexOf(ObjectPointer methodPointer) {
+  return Interpreter_extractBits_to_of(3, 7, Interpreter_headerOf(methodPointer));
+}

@@ -85,8 +85,41 @@ Byte Interpreter_lowByteOf(Word anInteger);
 ObjectPointer Interpreter_headerOf(ObjectPointer methodPointer);
 
 /**
- * Find the object literal at a given index in this method's literal frame.
+ * Find the object literal at a given index in this CompiledMethod's literal frame.
  */
 ObjectPointer Interpreter_literal_ofMethod(Word offset, ObjectPointer methodPointer);
+
+/**
+ * Extract the count of temporary object pointers from the CompiledMethod header.
+ */
+Byte Interpreter_temporaryCountOf(ObjectPointer methodPointer);
+
+/**
+ * Report whether a CompiledMethod needs a large method context.
+ */
+Bool Interpreter_largeContextFlagOf(ObjectPointer methodPointer);
+
+/**
+ * Extract the size of this CompiledMethod's literal frame.
+ */
+Byte Interpreter_literalCountOf(ObjectPointer methodPointer);
+
+/**
+ * Extract the size of a CompiledMethod's literal frame from an immediate integer representing its header.
+ */
+Byte Interpreter_literalCountOfHeader(ObjectPointer headerPointer);
+
+/**
+ * Extract the flag value of a CompiledMethod (see the discussion in Interpreter_Constants.h).
+ * @see struct CompiledMethodHeader
+ */
+Byte Interpreter_flagValueOf(ObjectPointer methodPointer);
+
+/**
+ * Extract the field index of the ivar to return from a primitive CompiledMethod.
+ * @note this value only makes sense if the CompiledMethod represents a primitive method that returns an
+ *       instance variable from the receiver, i.e. if the CompiledMethod's flagValue is 6.
+ */
+Byte Interpreter_fieldIndexOf(ObjectPointer methodPointer);
 
 #endif

@@ -1,5 +1,6 @@
 #include "CompiledMethodTests.h"
 
+#include "Interpreter.h"
 #include "ObjectMemory.h"
 
 ObjectPointer dummyCompiledMethod(void) {
@@ -15,6 +16,14 @@ ObjectPointer dummyCompiledMethod(void) {
   return compiledMethod;
 }
 
+ObjectPointer compiledMethodWithInterestingHeader(void) {
+  ObjectPointer compiledMethod = dummyCompiledMethod();
+  Word header = 0b0000111101011011;
+  ObjectMemory_storePointer_ofObject_withValue(0, compiledMethod, header);
+
+  return compiledMethod;
+}
+
 Test(FindHeaderOfCompiledMethod) {
   ObjectPointer methodHeader, compiledMethod = dummyCompiledMethod();
 
@@ -26,10 +35,51 @@ Test(FindFirstLiteralInCompiledMethod) {
   ObjectPointer literal, compiledMethod = dummyCompiledMethod();
 
   literal = Interpreter_literal_ofMethod(0, compiledMethod);
-  
+
+  Expect(literal == NilPointer);
+}
+
+Test(ExtractTemporaryCountOfCompiledMethod) {
+  ObjectPointer compiledMethod = compiledMethodWithInterestingHeader();
+  Byte temporaryCount;
+
+  temporaryCount = Interpreter_temporaryCountOf(compiledMethod);
+  Expect(temporaryCount == 0b00001111);
+}
+
+Test(ExtractLargeContextFlagFromCompiledMethod) {
+  ObjectPointer compiledMethod = compiledMethodWithInterestingHeader();
+  Bool largeContextFlag = Interpreter_largeContextFlagOf(compiledMethod);
+  Expect(largeContextFlag == NO);
+}
+
+Test(ExtractLiteralCountFromCompiledMethod) {
+  ObjectPointer compiledMethod = compiledMethodWithInterestingHeader();
+  Byte literalCount = Interpreter_literalCountOf(compiledMethod);
+  Byte expectedValue = 0b101101;
+  Expect(literalCount == expectedValue);
+}
+
+Test(ExtractFlagValueFromCompiledMethod) {
+  ObjectPointer compiledMethod = compiledMethodWithInterestingHeader();
+  Byte flagValue = Interpreter_flagValueOf(compiledMethod);
+  Expect(flagValue == 0b000);
+}
+
+Test(ExtractFieldIndexFromCompiledMethod) {
+  ObjectPointer compiledMethod = compiledMethodWithInterestingHeader();
+  Byte fieldIndex;
+
+  fieldIndex = Interpreter_fieldIndexOf(compiledMethod);
+  Expect(fieldIndex == 0b00001111);
 }
 
 void CompiledMethodTests(struct TestResult *tr) {
   RunTest(FindHeaderOfCompiledMethod);
   RunTest(FindFirstLiteralInCompiledMethod);
+  RunTest(ExtractTemporaryCountOfCompiledMethod);
+  RunTest(ExtractLargeContextFlagFromCompiledMethod);
+  RunTest(ExtractLiteralCountFromCompiledMethod);
+  RunTest(ExtractFlagValueFromCompiledMethod);
+  RunTest(ExtractFieldIndexFromCompiledMethod);
 }
