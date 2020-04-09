@@ -140,4 +140,10 @@ Byte Interpreter_argumentCountOf(ObjectPointer methodPointer);
  */
 Byte Interpreter_primitiveIndexOf(ObjectPointer methodPointer);
 
+/**
+ * Methods that call super, and methods that have an associated primitive method, also have
+ * an associated class on which this method was defined. Return that class.
+ */
+ObjectPointer Interpreter_methodClassOf(ObjectPointer methodPointer);
+
 #endif

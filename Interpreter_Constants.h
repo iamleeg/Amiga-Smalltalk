@@ -82,10 +82,10 @@ struct CompiledMethodHeader {
    * The number of arguments, and whether the method has an associated primitive routine.
    * Adapted from the table on pp578-579, the values are:
    * 0-4 no primitive, 0-4 args.
-   * 5 0 args, primitive that returns self
-   * 6 0 args, primitive that returns an ivar. The field index of the ivar to return is stored
+   * 5 0 args, method does nothing but returns self.
+   * 6 0 args, method does nothing but returns an ivar. The field index of the ivar to return is stored
    *   in the temporaryCount bits, because the method has no temporaries.
-   * 7 see the header extension
+   * 7 see the header extension.
    */
   Word flagValue:3;
   /**
@@ -126,6 +126,17 @@ struct CompiledMethodHeaderExtension {
    */
   Word primitiveIndex:8;
   Word isImmediateInteger: 1; /**< always true */
+};
+
+/**
+ * An Association is an indirect reference to a shared object. Their value field contains
+ * the pointer to the shared object. As an example, pool variables are stored in Associations,
+ * and all objects in the pool have access to those Associations. If the pool variable changes,
+ * the Association gets updated and the pool members will find the new value next time they
+ * look in the Association.
+ */
+enum {
+  ValueIndex = 1,
 };
 
 #endif

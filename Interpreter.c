@@ -120,3 +120,11 @@ Byte Interpreter_primitiveIndexOf(ObjectPointer methodPointer) {
   if (flagValue < 7) return 0;
   return Interpreter_extractBits_to_of(7,14, Interpreter_headerExtensionOf(methodPointer));
 }
+
+ObjectPointer Interpreter_methodClassOf(ObjectPointer methodPointer) {
+  Byte literalCount;
+  ObjectPointer association;
+  literalCount = Interpreter_literalCountOf(methodPointer);
+  association = Interpreter_literal_ofMethod(literalCount - 1, methodPointer);
+  return ObjectMemory_fetchPointer_ofObject(ValueIndex, association);
+}

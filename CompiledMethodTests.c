@@ -140,6 +140,19 @@ Test(PrimitiveIndexOfMethodWithHeaderExtensionFoundInExtension) {
   Expect(primitiveIndex == 66);
 }
 
+Test(FindMethodClassOfMethodWithAssoication) {
+  ObjectPointer compiledMethod = compiledMethodWithExtension(), classPointer = 0x3576, associationPointer = 0x3578, methodClassPointer;
+  Word segment = 1, location = 0x4000, size = 3;
+  ObjectMemory_segmentBitsOf_put(associationPointer, segment);
+  ObjectMemory_locationBitsOf_put(associationPointer, location);
+  ObjectMemory_sizeBitsOf_put(associationPointer, size);
+  ObjectMemory_storePointer_ofObject_withValue(ValueIndex, associationPointer, classPointer);
+  ObjectMemory_storePointer_ofObject_withValue(3, compiledMethod, associationPointer);
+
+  methodClassPointer = Interpreter_methodClassOf(compiledMethod);
+
+  Expect(methodClassPointer == classPointer);
+}
 
 void CompiledMethodTests(struct TestResult *tr) {
   RunTest(FindHeaderOfCompiledMethod);
@@ -155,4 +168,5 @@ void CompiledMethodTests(struct TestResult *tr) {
   RunTest(ArgumentCountOfMethodWithHeaderExtension);
   RunTest(PrimitiveIndexOfRegularMethodIsZero);
   RunTest(PrimitiveIndexOfMethodWithHeaderExtensionFoundInExtension);
+  RunTest(FindMethodClassOfMethodWithAssoication);
 }
