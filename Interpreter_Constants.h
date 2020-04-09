@@ -139,4 +139,66 @@ enum {
   ValueIndex = 1,
 };
 
+/**
+ * The state of execution of the interpreter is tracked in contexts, either MethodContext or
+ * BlockContext depending on what is being executed. They track the instruction pointer,
+ * stack variables, temporary variables, and so on. Each has seven fixed fields relevant to
+ * the activation frame (though MethodContext only uses six of them) and indexed fields corresponding
+ * to the temporaries and stack, but the two contexts use the fixed fields in different ways.
+ */
+enum {
+  // Class MethodContext
+  /**
+   * The context that sent the message executed by this context. We need it to
+   * return a value.
+   */
+  SenderIndex = 0,
+  /**
+   * A cursor into the bytecode at the current execution position.
+   */
+  InstructionPointerIndex = 1,
+  /**
+   * The top of the stack.
+   */
+  StackPointerIndex = 2,
+  /**
+   * The CompiledMethod being executed.
+   */
+  MethodIndex = 3,
+  /* 4 is unused. */
+  /**
+   * The instance that received this message.
+   */
+  ReceiverIndex = 5,
+  /**
+   * The pointer index to the first temporary variable.
+   */
+  TempFrameStart = 6,
+
+  // Class BlockContext
+  /**
+   * The context to return to when the block exits.
+   */
+  CallerIndex = 0,
+  /* I.P. and S.P. as MethodContext */
+  /**
+   * Number of arguments to the block. Block#value, Block#value: and so on
+   * supply different numbers of arguments.
+   */
+  BlockArgumentCountIndex = 3,
+  /**
+   * The initial instruction pointer value.
+   * @see HomeIndex
+   */
+  InitialIPIndex = 4,
+  /**
+   * The "home" context is the MethodContext whose CompiledMethod contains this
+   * context's block. A block's instructions are compiled inline in their home
+   * method, so the home context and the initial I.P. are needed to find the
+   * block's bytecode.
+   */
+  HomeIndex = 5,
+  /* TempFrameStart as MethodContext */
+};
+
 #endif

@@ -146,4 +146,14 @@ Byte Interpreter_primitiveIndexOf(ObjectPointer methodPointer);
  */
 ObjectPointer Interpreter_methodClassOf(ObjectPointer methodPointer);
 
+/**
+ * Given a method or block context, fetch its instruction pointer.
+ */
+Word Interpreter_instructionPointerOfContext(ObjectPointer contextPointer);
+
+/**
+ * Update the instruction pointer in a method or block context.
+ */
+void Interpreter_storeInstructionPointerValue_inContext(Word value, ObjectPointer contextPointer);
+
 #endif

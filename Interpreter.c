@@ -128,3 +128,11 @@ ObjectPointer Interpreter_methodClassOf(ObjectPointer methodPointer) {
   association = Interpreter_literal_ofMethod(literalCount - 1, methodPointer);
   return ObjectMemory_fetchPointer_ofObject(ValueIndex, association);
 }
+
+Word Interpreter_instructionPointerOfContext(ObjectPointer contextPointer) {
+  return Interpreter_fetchInteger_ofObject(InstructionPointerIndex, contextPointer);
+}
+
+void Interpreter_storeInstructionPointerValue_inContext(Word value, ObjectPointer contextPointer) {
+  Interpreter_storeInteger_ofObject_withValue(InstructionPointerIndex, contextPointer, value);
+}

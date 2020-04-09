@@ -8,6 +8,7 @@
 #include "PrimitiveMethodTests.h"
 #include "InterpreterMemoryTests.h"
 #include "CompiledMethodTests.h"
+#include "ContextTests.h"
 #include "tests.h"
 
 int main(int argc, const char *argv[]) {
@@ -26,6 +27,7 @@ int main(int argc, const char *argv[]) {
   PrimitiveMethodTests(&result);
   InterpreterMemoryTests(&result);
   CompiledMethodTests(&result);
+  ContextTests(&result);
   
   printf("Tests completed.\n");
   printf("%d tests ran.\n", result.ran);
