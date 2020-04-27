@@ -11,8 +11,16 @@ ObjectPointer stubMethodContext() {
   ObjectMemory_locationBitsOf_put(methodContext, location);
   Interpreter_storeInteger_ofObject_withValue(InstructionPointerIndex, methodContext, instructionPointer);
   Interpreter_storeInteger_ofObject_withValue(StackPointerIndex, methodContext, stackPointer);
+  ObjectMemory_storePointer_ofObject_withValue(MethodIndex, methodContext, NilPointer);
 
   return methodContext;
+}
+
+ObjectPointer stubBlockContext() {
+  ObjectPointer context = stubMethodContext();
+  Interpreter_storeInteger_ofObject_withValue(BlockArgumentCountIndex, context, 2);
+
+  return context;
 }
 
 Test(FetchInstructionPointerFromContext) {
@@ -51,9 +59,30 @@ Test(StoreStackPointerInContext) {
   Expect(Interpreter_stackPointerOfContext(methodContext) == newSP);
 }
 
+Test(FetchArgumentCountOfBlockContext) {
+  ObjectPointer blockContext = stubBlockContext();
+  Word argumentCount = Interpreter_argumentCountOfBlock(blockContext);
+  Expect(argumentCount == 2);
+}
+
+Test(PositiveTestForBlockContext) {
+  ObjectPointer blockContext = stubBlockContext();
+  Bool isBlock = Interpreter_isBlockContext(blockContext);
+  Expect(isBlock == YES);
+}
+
+Test(NegativeTestForBlockContext) {
+  ObjectPointer methodContext = stubMethodContext();
+  Bool isBlock = Interpreter_isBlockContext(methodContext);
+  Expect(isBlock == NO);
+}
+
 void ContextTests(struct TestResult *tr) {
   RunTest(FetchInstructionPointerFromContext);
   RunTest(UpdateInstructionPointerInContext);
   RunTest(FetchStackPointerFromContext);
   RunTest(StoreStackPointerInContext);
+  RunTest(FetchArgumentCountOfBlockContext);
+  RunTest(PositiveTestForBlockContext);
+  RunTest(NegativeTestForBlockContext);
 }

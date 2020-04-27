@@ -166,4 +166,14 @@ Word Interpreter_stackPointerOfContext(ObjectPointer contextPointer);
  */
 void Interpreter_storeStackPointerValue_inContext(Word value, ObjectPointer contextPointer);
 
+/**
+ * Retrieve the number of arguments to the block.
+ * @note The answer is invalid if you try to use this method to get the argument count from a method context.
+ */
+Word Interpreter_argumentCountOfBlock(ObjectPointer blockPointer);
+
+/**
+ * Test whether this context is a block context.
+ */
+Bool Interpreter_isBlockContext(ObjectPointer contextPointer);
 #endif

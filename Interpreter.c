@@ -144,3 +144,12 @@ Word Interpreter_stackPointerOfContext(ObjectPointer contextPointer) {
 void Interpreter_storeStackPointerValue_inContext(Word value, ObjectPointer contextPointer) {
   Interpreter_storeInteger_ofObject_withValue(StackPointerIndex, contextPointer, value);
 }
+
+Word Interpreter_argumentCountOfBlock(ObjectPointer blockPointer) {
+  return Interpreter_fetchInteger_ofObject(BlockArgumentCountIndex, blockPointer);
+}
+
+Bool Interpreter_isBlockContext(ObjectPointer contextPointer) {
+  ObjectPointer methodOrArguments = ObjectMemory_fetchPointer_ofObject(MethodIndex, contextPointer);
+  return ObjectMemory_isIntegerObject(methodOrArguments);
+}
