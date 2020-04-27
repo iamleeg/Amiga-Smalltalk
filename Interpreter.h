@@ -156,4 +156,14 @@ Word Interpreter_instructionPointerOfContext(ObjectPointer contextPointer);
  */
 void Interpreter_storeInstructionPointerValue_inContext(Word value, ObjectPointer contextPointer);
 
+/**
+ * Fetch the stack pointer from a method or block context.
+ */
+Word Interpreter_stackPointerOfContext(ObjectPointer contextPointer);
+
+/**
+ * Update the stack pointer of a method or block context.
+ */
+void Interpreter_storeStackPointerValue_inContext(Word value, ObjectPointer contextPointer);
+
 #endif

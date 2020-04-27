@@ -136,3 +136,11 @@ Word Interpreter_instructionPointerOfContext(ObjectPointer contextPointer) {
 void Interpreter_storeInstructionPointerValue_inContext(Word value, ObjectPointer contextPointer) {
   Interpreter_storeInteger_ofObject_withValue(InstructionPointerIndex, contextPointer, value);
 }
+
+Word Interpreter_stackPointerOfContext(ObjectPointer contextPointer) {
+  return Interpreter_fetchInteger_ofObject(StackPointerIndex, contextPointer);
+}
+
+void Interpreter_storeStackPointerValue_inContext(Word value, ObjectPointer contextPointer) {
+  Interpreter_storeInteger_ofObject_withValue(StackPointerIndex, contextPointer, value);
+}
