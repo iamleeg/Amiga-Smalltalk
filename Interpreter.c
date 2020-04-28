@@ -2,6 +2,12 @@
 #include "ObjectMemory.h"
 
 Bool success = NO;
+ObjectPointer activeContext = NilPointer;
+ObjectPointer homeContext = NilPointer;
+ObjectPointer method = NilPointer;
+ObjectPointer receiver = NilPointer;
+Word instructionPointer = 0;
+Word stackPointer = 0;
 
 void Interpreter_success_(Bool successValue) {
   success = successValue && success;
