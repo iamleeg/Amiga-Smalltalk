@@ -198,4 +198,12 @@ Word Interpreter_argumentCountOfBlock(ObjectPointer blockPointer);
  * Test whether this context is a block context.
  */
 Bool Interpreter_isBlockContext(ObjectPointer contextPointer);
+
+/**
+ * Populate the context registers (stack pointer, instruction pointer, method, receiver, home context) from
+ * the active context. The receiver and method are always populated from the home context, the SP and IP
+ * always from the active context.
+ */
+void Interpreter_fetchContextRegisters(void);
+
 #endif

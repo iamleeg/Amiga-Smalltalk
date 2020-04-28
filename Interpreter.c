@@ -159,3 +159,15 @@ Bool Interpreter_isBlockContext(ObjectPointer contextPointer) {
   ObjectPointer methodOrArguments = ObjectMemory_fetchPointer_ofObject(MethodIndex, contextPointer);
   return ObjectMemory_isIntegerObject(methodOrArguments);
 }
+
+void Interpreter_fetchContextRegisters(void) {
+  if (Interpreter_isBlockContext(activeContext)) {
+    homeContext = ObjectMemory_fetchPointer_ofObject(HomeIndex, activeContext);
+  } else {
+    homeContext = activeContext;
+  }
+  receiver = ObjectMemory_fetchPointer_ofObject(ReceiverIndex, homeContext);
+  method = ObjectMemory_fetchPointer_ofObject(MethodIndex, homeContext);
+  instructionPointer = Interpreter_instructionPointerOfContext(activeContext) - 1;
+  stackPointer = Interpreter_stackPointerOfContext(activeContext) + TempFrameStart - 1;
+}
