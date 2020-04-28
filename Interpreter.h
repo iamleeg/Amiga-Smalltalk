@@ -203,7 +203,15 @@ Bool Interpreter_isBlockContext(ObjectPointer contextPointer);
  * Populate the context registers (stack pointer, instruction pointer, method, receiver, home context) from
  * the active context. The receiver and method are always populated from the home context, the SP and IP
  * always from the active context.
+ * @note In practice the IP is stored with an offset of 1 because Smalltalk's at: method uses one-based indexes,
+ *       and the SP is stored with an offset of 1 + the temporary frame because Smalltalk's indexed ivar
+ *       access takes the length of the fixed fields into account, and is one-based too.
  */
 void Interpreter_fetchContextRegisters(void);
+
+/**
+ * Store the SP and IP in the active context, to prepare for a context change.
+ */
+void Interpreter_storeContextRegisters(void);
 
 #endif

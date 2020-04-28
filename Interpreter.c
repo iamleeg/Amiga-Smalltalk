@@ -171,3 +171,8 @@ void Interpreter_fetchContextRegisters(void) {
   instructionPointer = Interpreter_instructionPointerOfContext(activeContext) - 1;
   stackPointer = Interpreter_stackPointerOfContext(activeContext) + TempFrameStart - 1;
 }
+
+void Interpreter_storeContextRegisters(void) {
+  Interpreter_storeInstructionPointerValue_inContext(instructionPointer + 1, activeContext);
+  Interpreter_storeStackPointerValue_inContext(stackPointer - TempFrameStart + 1, activeContext);
+}

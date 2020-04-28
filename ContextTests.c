@@ -110,6 +110,17 @@ Test(FetchContextRegistersFromMethodContext) {
   Expect(stackPointer == 0x1008 + TempFrameStart - 1);
 }
 
+Test(StoreContextRegisters) {
+  instructionPointer = 0x2000;
+  stackPointer = 0x2010;
+  activeContext = stubMethodContext();
+
+  Interpreter_storeContextRegisters();
+
+  Expect(Interpreter_instructionPointerOfContext(activeContext) == instructionPointer + 1);
+  Expect(Interpreter_stackPointerOfContext(activeContext) == stackPointer - TempFrameStart + 1);
+}
+
 void ContextTests(struct TestResult *tr) {
   RunTest(FetchInstructionPointerFromContext);
   RunTest(UpdateInstructionPointerInContext);
@@ -120,4 +131,5 @@ void ContextTests(struct TestResult *tr) {
   RunTest(NegativeTestForBlockContext);
   RunTest(FetchContextRegistersFromBlockContext);
   RunTest(FetchContextRegistersFromMethodContext);
+  RunTest(StoreContextRegisters);
 }
