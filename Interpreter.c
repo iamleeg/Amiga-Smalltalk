@@ -176,3 +176,18 @@ void Interpreter_storeContextRegisters(void) {
   Interpreter_storeInstructionPointerValue_inContext(instructionPointer + 1, activeContext);
   Interpreter_storeStackPointerValue_inContext(stackPointer - TempFrameStart + 1, activeContext);
 }
+
+void Interpreter_push(ObjectPointer object) {
+  stackPointer = stackPointer + 1;
+  ObjectMemory_storePointer_ofObject_withValue(stackPointer, activeContext, object);
+}
+
+ObjectPointer Interpreter_popStack(void) {
+  ObjectPointer stackTop = ObjectMemory_fetchPointer_ofObject(stackPointer, activeContext);
+  stackPointer = stackPointer - 1;
+  return stackTop;
+}
+
+ObjectPointer Interpreter_stackTop(void) {
+  return ObjectMemory_fetchPointer_ofObject(stackPointer, activeContext);
+}

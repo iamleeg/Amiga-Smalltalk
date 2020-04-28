@@ -214,4 +214,20 @@ void Interpreter_fetchContextRegisters(void);
  */
 void Interpreter_storeContextRegisters(void);
 
+/**
+ * Push an object onto the active context's stack.
+ */
+void Interpreter_push(ObjectPointer object);
+
+/**
+ * Pop the active context's stack and return the popped object.
+ * @note There is no safety check here, bad things will happen if you pop past the bottom of the stack.
+ */
+ObjectPointer Interpreter_popStack(void);
+
+/**
+ * See the object at the top of the active context's stack without popping it.
+ */
+ObjectPointer Interpreter_stackTop(void);
+
 #endif

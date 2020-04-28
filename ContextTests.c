@@ -121,6 +121,45 @@ Test(StoreContextRegisters) {
   Expect(Interpreter_stackPointerOfContext(activeContext) == stackPointer - TempFrameStart + 1);
 }
 
+Test(PushObjectOntoContextStack) {
+  ObjectPointer object = NilPointer, context = stubMethodContext();
+  Word firstStackPointer, secondStackPointer;
+  activeContext = context;
+  Interpreter_fetchContextRegisters();
+  firstStackPointer = stackPointer;
+
+  Interpreter_push(object);
+  secondStackPointer = stackPointer;
+
+  Expect(secondStackPointer - firstStackPointer == 1);
+  Expect(ObjectMemory_fetchPointer_ofObject(stackPointer, activeContext) == object);
+}
+
+Test(PopContextStack) {
+  ObjectPointer object = NilPointer, context = stubMethodContext(), popped;
+  Word firstStackPointer, secondStackPointer;
+  activeContext = context;
+  Interpreter_fetchContextRegisters();
+  firstStackPointer = stackPointer;
+  Interpreter_push(object);
+
+  popped = Interpreter_popStack();
+  secondStackPointer = stackPointer;
+
+  Expect(secondStackPointer == firstStackPointer);
+  Expect(popped == object);
+}
+
+Test(PeepStackTop) {
+  ObjectPointer object = NilPointer, context = stubMethodContext(), peeped;
+  activeContext = context;
+  Interpreter_fetchContextRegisters();
+  Interpreter_push(object);
+
+  peeped = Interpreter_stackTop();
+  Expect(peeped == object);
+}
+
 void ContextTests(struct TestResult *tr) {
   RunTest(FetchInstructionPointerFromContext);
   RunTest(UpdateInstructionPointerInContext);
@@ -132,4 +171,7 @@ void ContextTests(struct TestResult *tr) {
   RunTest(FetchContextRegistersFromBlockContext);
   RunTest(FetchContextRegistersFromMethodContext);
   RunTest(StoreContextRegisters);
+  RunTest(PushObjectOntoContextStack);
+  RunTest(PopContextStack);
+  RunTest(PeepStackTop);
 }
