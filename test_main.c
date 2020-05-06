@@ -12,9 +12,10 @@
 #include "tests.h"
 
 int main(int argc, const char *argv[]) {
+  struct TestResult result;
+
   RealWordMemory_new();
 
-  struct TestResult result;
   result.ran = 0;
   result.passed = 0;
   result.failed = 0;
