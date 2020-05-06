@@ -71,7 +71,7 @@ Test(ExtractLargeContextFlagFromCompiledMethod) {
 Test(ExtractLiteralCountFromCompiledMethod) {
   ObjectPointer compiledMethod = compiledMethodWithInterestingHeader();
   Byte literalCount = Interpreter_literalCountOf(compiledMethod);
-  Byte expectedValue = 0x2d;
+  Byte expectedValue = 0x2e;
   Expect(literalCount == expectedValue);
 }
 
