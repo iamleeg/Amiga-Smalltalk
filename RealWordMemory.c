@@ -41,8 +41,8 @@ Word RealWordMemory_mask_bits(Word firstBitIndex, Word lastBitIndex) {
 }
 
 void RealWordMemory_segment_word_bits_to_put(Word s, Word w, Word firstBitIndex, Word lastBitIndex, Word value) {
-  RealWordMemory_bit_indices_should_be_in_word_range(firstBitIndex, lastBitIndex);
   Word mask, inverseMask, shiftedValue, currentStore, newStore;
+  RealWordMemory_bit_indices_should_be_in_word_range(firstBitIndex, lastBitIndex);
   mask = RealWordMemory_mask_bits(firstBitIndex, lastBitIndex);
   inverseMask = ~mask;
   currentStore = RealWordMemory_segment_word(s, w);
@@ -53,9 +53,8 @@ void RealWordMemory_segment_word_bits_to_put(Word s, Word w, Word firstBitIndex,
 }
 
 Word RealWordMemory_segment_word_bits_to(Word s, Word w, Word firstBitIndex, Word lastBitIndex) {
-  RealWordMemory_bit_indices_should_be_in_word_range(firstBitIndex, lastBitIndex);
-
   Word mask, wordValue, maskedValue, shiftedValue;
+  RealWordMemory_bit_indices_should_be_in_word_range(firstBitIndex, lastBitIndex);
   mask = RealWordMemory_mask_bits(firstBitIndex, lastBitIndex);
   wordValue = RealWordMemory_segment_word(s, w);
   maskedValue = wordValue & mask;
@@ -64,15 +63,15 @@ Word RealWordMemory_segment_word_bits_to(Word s, Word w, Word firstBitIndex, Wor
 }
 
 Byte RealWordMemory_segment_word_byte(Word s, Word w, Byte b) {
-  assert(b == 0 || b == 1);
   Word firstBit = (b == 0) ? 0 : 8;
   Word lastBit = (b == 0) ? 7 : 15;
+  assert(b == 0 || b == 1);
   return RealWordMemory_segment_word_bits_to(s, w, firstBit, lastBit);
 }
 
 void RealWordMemory_segment_word_byte_put(Word s, Word w, Byte b, Byte value) {
-  assert(b == 0 || b == 1);
   Word firstBit = (b == 0) ? 0 : 8;
   Word lastBit = (b == 0) ? 7 : 15;
+  assert(b == 0 || b == 1);
   RealWordMemory_segment_word_bits_to_put(s, w, firstBit, lastBit, value);
 }
