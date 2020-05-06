@@ -73,7 +73,7 @@ Test(BlockTransferOfFieldsBetweenObjects) {
 }
 
 Test(ExtractBitsFromInteger) {
-  Word pattern = 0xaaaa, masked, firstBitIndex = 1, lastBitIndex = 6, expected = 0b00010101;
+  Word pattern = 0xaaaa, masked, firstBitIndex = 1, lastBitIndex = 6, expected = 0x15;
 
   masked = Interpreter_extractBits_to_of(firstBitIndex, lastBitIndex, pattern);
 

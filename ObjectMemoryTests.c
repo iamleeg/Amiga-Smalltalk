@@ -616,13 +616,13 @@ Test(SwapPointers) {
 }
 
 Test(GetIntegerValueOfObject) {
-  ObjectPointer seven = 0b1111;
+  ObjectPointer seven = 0x0f;
   short value = ObjectMemory_integerValueOf(seven);
   Expect(value == 7);
 }
 
 Test(GetObjectForIntegerValue) {
-  ObjectPointer six = 0b1101, objectPointer;
+  ObjectPointer six = 0x0d, objectPointer;
   objectPointer = ObjectMemory_integerObjectOf(6);
   Expect(objectPointer == six);
 }

@@ -18,15 +18,15 @@ ObjectPointer dummyCompiledMethod(void) {
 
 ObjectPointer compiledMethodWithInterestingHeader(void) {
   ObjectPointer compiledMethod = dummyCompiledMethod();
-  Word header = 0b0000111101011011;
+  Word header = 0x0f5d;
   ObjectMemory_storePointer_ofObject_withValue(0, compiledMethod, header);
 
   return compiledMethod;
 }
 
 ObjectPointer compiledMethodWithExtension(void) {
-  ObjectPointer compiledMethod = 0x1234, classPointer = MethodClass, header = 0b1110000100000111, firstLiteral = NilPointer;
-  ObjectPointer extension = 0b0000001010000101;
+  ObjectPointer compiledMethod = 0x1234, classPointer = MethodClass, header = 0xe107, firstLiteral = NilPointer;
+  ObjectPointer extension = 0x0285;
   Word segment = 1, location = 0, size = 4;
 
   ObjectMemory_sizeBitsOf_put(compiledMethod, size);
@@ -59,7 +59,7 @@ Test(ExtractTemporaryCountOfCompiledMethod) {
   Byte temporaryCount;
 
   temporaryCount = Interpreter_temporaryCountOf(compiledMethod);
-  Expect(temporaryCount == 0b00001111);
+  Expect(temporaryCount == 0x0f);
 }
 
 Test(ExtractLargeContextFlagFromCompiledMethod) {
@@ -71,14 +71,14 @@ Test(ExtractLargeContextFlagFromCompiledMethod) {
 Test(ExtractLiteralCountFromCompiledMethod) {
   ObjectPointer compiledMethod = compiledMethodWithInterestingHeader();
   Byte literalCount = Interpreter_literalCountOf(compiledMethod);
-  Byte expectedValue = 0b101101;
+  Byte expectedValue = 0x2d;
   Expect(literalCount == expectedValue);
 }
 
 Test(ExtractFlagValueFromCompiledMethod) {
   ObjectPointer compiledMethod = compiledMethodWithInterestingHeader();
   Byte flagValue = Interpreter_flagValueOf(compiledMethod);
-  Expect(flagValue == 0b000);
+  Expect(flagValue == 0);
 }
 
 Test(ExtractFieldIndexFromCompiledMethod) {
@@ -86,18 +86,18 @@ Test(ExtractFieldIndexFromCompiledMethod) {
   Byte fieldIndex;
 
   fieldIndex = Interpreter_fieldIndexOf(compiledMethod);
-  Expect(fieldIndex == 0b00001111);
+  Expect(fieldIndex == 0x0f);
 }
 
 Test(ExtractHeaderExtensionFromCompiledMethod) {
   ObjectPointer compiledMethod = compiledMethodWithExtension(), headerExtension;
   headerExtension = Interpreter_headerExtensionOf(compiledMethod);
-  Expect(headerExtension == 0b0000001010000101);
+  Expect(headerExtension == 0x0285);
 }
 
 Test(ArgumentCountOfNonprimitiveMethod) {
   ObjectPointer compiledMethod = dummyCompiledMethod();
-  Word header = 0b0110111101011011;
+  Word header = 0x6f5b;
   Byte argumentCount;
 
   ObjectMemory_storePointer_ofObject_withValue(0, compiledMethod, header);
@@ -109,7 +109,7 @@ Test(ArgumentCountOfNonprimitiveMethod) {
 
 Test(ArgumentCountOfPrimitiveZeroArgMethod) {
   ObjectPointer compiledMethod = dummyCompiledMethod();
-  Word header = 0b1010111101011011;
+  Word header = 0xaf5b;
   Byte argumentCount;
 
   ObjectMemory_storePointer_ofObject_withValue(0, compiledMethod, header);
