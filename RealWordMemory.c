@@ -12,7 +12,7 @@ void RealWordMemory_new() {
   short i;
   for(i = FirstHeapSegment; i <= LastHeapSegment; i++) {
     size_t size = SegmentSize*sizeof(Word);
-    segmentPointers[i] = malloc(size);
+    segmentPointers[i] = (Word *)malloc(size);
     memset(segmentPointers[i], 0, size);
   }
 }
