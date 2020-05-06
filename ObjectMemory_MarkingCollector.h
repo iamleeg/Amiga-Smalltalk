@@ -7,7 +7,7 @@
  * Put the root object pointers in this list.
  * (And decide whether to change the data structure)
  */
-ObjectPointer rootObjectPointers[0];
+extern ObjectPointer* rootObjectPointers;
 
 /**
  * The mark-and-sweep garbage collector collaborates with the reference counting collector.
