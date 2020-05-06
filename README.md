@@ -5,9 +5,10 @@ Smalltalk-80: The Language and Its Implementation.
 
 ## A note on comments
 
-Doxygen comments were added by the Amiga-Smalltalk authors, as were all /* block comments */.
-/*ST:  line comments are transcribed from the Blue Book. */ These were originally BCPL-style
-// comments, but those aren't in the C89 standard and many Amiga compilers won't accept them.
+Doxygen comments were added by the Amiga-Smalltalk authors, as were all `/* block comments */`.
+
+`/*ST:  line comments are transcribed from the Blue Book. */` These were originally BCPL-style
+`// comments`, but those aren't in the C89 standard and many Amiga compilers won't accept them.
 
 Page numbers, if not otherwise clarified, refer to pages in the single printed edition of the Blue Book.
 
