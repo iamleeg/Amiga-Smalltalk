@@ -21,24 +21,24 @@ extern Bool success;
 
 /* The register comments here _are_ quotes from p583 hence line comments. */
 
-/// This is the active context itself. It is either a MethodContext or a BlockContext.
+/*ST: / This is the active context itself. It is either a MethodContext or a BlockContext. */
 extern ObjectPointer activeContext;
 
-/// If the active context is a MethodContext, the home context is the same context. If the active context is
-/// a BlockContext, the home context is the contents of the home field of the active context. This will
-/// always be a MethodContext.
+/*ST: / If the active context is a MethodContext, the home context is the same context. If the active context is */
+/*ST: / a BlockContext, the home context is the contents of the home field of the active context. This will */
+/*ST: / always be a MethodContext. */
 extern ObjectPointer homeContext;
 
-/// This is the CompiledMethod that contains the bytecodes the interpreter is executing.
+/*ST: / This is the CompiledMethod that contains the bytecodes the interpreter is executing. */
 extern ObjectPointer method;
 
-/// This is the object that received the message that invoked the home context's method.
+/*ST: / This is the object that received the message that invoked the home context's method. */
 extern ObjectPointer receiver;
 
-/// This is the byte index of the next bytecode of the method to be executed.
+/*ST: / This is the byte index of the next bytecode of the method to be executed. */
 extern Word instructionPointer;
 
-/// This is the index of the field of the active context containing the top of the stack.
+/*ST: / This is the index of the field of the active context containing the top of the stack. */
 extern Word stackPointer;
 
 /**

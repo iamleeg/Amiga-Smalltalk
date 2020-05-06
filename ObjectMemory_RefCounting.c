@@ -33,7 +33,7 @@ ObjectPointer ObjectMemory_countDown(ObjectPointer rootObjectPointer) {
   if (ObjectMemory_isIntegerObject(rootObjectPointer)) {
     return rootObjectPointer;
   } else {
-    // this is a pointer, so decrement its reference count
+    /*ST:  this is a pointer, so decrement its reference count */
     return ObjectMemory_forAllObjectsAccessibleFrom_suchThat_do(
       rootObjectPointer,
       HELPER_decrementCountAndTestForZero,
@@ -65,50 +65,50 @@ ObjectPointer ObjectMemory_forAllOtherObjectsAccessibleFrom_suchThat_do(ObjectPo
   void(*action)(ObjectPointer)) {
   ObjectPointer prior, current, next;
   Word offset, size;
-  // compute prior, current, offset, and size to begin processing objectPointer
+  /*ST:  compute prior, current, offset, and size to begin processing objectPointer */
   prior = NonPointer;
   current = objectPointer;
   offset = size = ObjectMemory_lastPointerOf(objectPointer);
   while (YES) {
-    offset = offset - 1; // decrement the field index
-    if (offset > 1) { // the class field hasn't been passed yet
-      next = ObjectMemory_heapChunkOf_word(current, offset); // one of the pointers
+    offset = offset - 1; /*ST:  decrement the field index */
+    if (offset > 1) { /*ST:  the class field hasn't been passed yet */
+      next = ObjectMemory_heapChunkOf_word(current, offset); /*ST:  one of the pointers */
       if ((!ObjectMemory_isIntegerObject(next)) && predicate(next)) {
-        // it's a non-immediate object and it should be processed
-        // reverse the pointer chain
+        /*ST:  it's a non-immediate object and it should be processed */
+        /*ST:  reverse the pointer chain */
         ObjectMemory_heapChunkOf_word_put(current, offset, prior);
-        // save the offset either in the count field or in the extra word
+        /*ST:  save the offset either in the count field or in the extra word */
         if (size < HugeSize) {
           ObjectMemory_countBitsOf_put(current, offset);
         } else {
           ObjectMemory_heapChunkOf_word_put(current, size, offset);
         }
-        // compute prior, current, offset, and size to begin processing next
+        /*ST:  compute prior, current, offset, and size to begin processing next */
         prior = current;
         current = next;
         offset = size = ObjectMemory_lastPointerOf(current);
       }
     } else {
-      // all pointers have been followed; now perform the action
+      /*ST:  all pointers have been followed; now perform the action */
       action(current);
-      // did we get here from another object?
+      /*ST:  did we get here from another object? */
       if (prior == NonPointer) {
-        // this was the root object, so we are done
+        /*ST:  this was the root object, so we are done */
         return objectPointer;
       }
-      // restore next, current, and size to resume processing prior
+      /*ST:  restore next, current, and size to resume processing prior */
       next = current;
       current = prior;
       size = ObjectMemory_lastPointerOf(current);
-      // restore offset either from the count field or from the extra word
+      /*ST:  restore offset either from the count field or from the extra word */
       if (size < HugeSize) {
         offset = ObjectMemory_countBitsOf(current);
       } else {
         offset = ObjectMemory_heapChunkOf_word(current, size);
       }
-      // restore prior from reversed pointer chain
+      /*ST:  restore prior from reversed pointer chain */
       prior = ObjectMemory_heapChunkOf_word(current, offset);
-      // restore (unreverse) the pointer chain
+      /*ST:  restore (unreverse) the pointer chain */
       ObjectMemory_heapChunkOf_word_put(current, offset, next);
     }
   }

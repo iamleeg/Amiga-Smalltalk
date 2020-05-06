@@ -34,13 +34,13 @@ ObjectPointer ObjectMemory_allocateChunk(Word size) {
   if (objectPointer != NilPointer) {
     return objectPointer;
   }
-  ObjectMemory_reclaimInaccessibleObjects(); // garbage collect and try again
+  ObjectMemory_reclaimInaccessibleObjects(); /*ST:  garbage collect and try again */
   objectPointer = ObjectMemory_attemptToAllocateChunk(size);
   if (objectPointer != NilPointer) {
     return objectPointer;
   }
   fprintf(stderr, "VM ran out of heap space\n");
-  abort(); //give up
+  abort(); /*ST: give up */
 }
 
 ObjectPointer ObjectMemory_attemptToAllocateChunk(Word size) {
@@ -74,47 +74,47 @@ ObjectPointer ObjectMemory_attemptToAllocateChunkInCurrentSegment(Word size) {
   if (size < BigSize) {
     objectPointer = ObjectMemory_removeFromFreeChunkList(size);
     if (objectPointer) {
-      return objectPointer; // small chunk of exact size handy so use it
+      return objectPointer; /*ST:  small chunk of exact size handy so use it */
     }
   }
 
   /* we got here, so recycling an earlier allocation didn't work. Try to find a large chunk. */
-  predecessor = NonPointer; // remember predecessor of chunk under consideration
+  predecessor = NonPointer; /*ST:  remember predecessor of chunk under consideration */
   objectPointer = ObjectMemory_headOfFreeChunkList_inSegment(LastFreeChunkList, currentSegment);
-  // the search loop stops when the end of the linked list is encountered
+  /*ST:  the search loop stops when the end of the linked list is encountered */
   while(objectPointer != NonPointer) {
     availableSize = ObjectMemory_sizeBitsOf(objectPointer);
-    if (availableSize == size) { // exact fit - remove from free chunk list and return
-      next = ObjectMemory_classBitsOf(objectPointer); // the link to the next chunk
+    if (availableSize == size) { /*ST:  exact fit - remove from free chunk list and return */
+      next = ObjectMemory_classBitsOf(objectPointer); /*ST:  the link to the next chunk */
       if (predecessor == NonPointer) {
-        // it was the head of the list; make the next item the head
+        /*ST:  it was the head of the list; make the next item the head */
         ObjectMemory_headOfFreeChunkList_inSegment_put(LastFreeChunkList, currentSegment, next);
       } else {
-        // it was in between two chunks; link them together
+        /*ST:  it was in between two chunks; link them together */
         ObjectMemory_classBitsOf_put(predecessor, next);
       }
       return objectPointer;
     }
-    // this chunk was either too big or too small; inspect the amount of variance
+    /*ST:  this chunk was either too big or too small; inspect the amount of variance */
     excessSize = availableSize - size;
     if (excessSize >= HeaderSize) {
-      // can be broken into two usable parts; return the second part
-      // obtain an object table entry for the second part
+      /*ST:  can be broken into two usable parts; return the second part */
+      /*ST:  obtain an object table entry for the second part */
       newPointer = ObjectMemory_obtainPointer_location(size,
         ObjectMemory_locationBitsOf(objectPointer) + excessSize);
       if (newPointer == NilPointer) {
         return NilPointer;
       }
-      // correct the size of the first part (which remains on the free list)
+      /*ST:  correct the size of the first part (which remains on the free list) */
       ObjectMemory_sizeBitsOf_put(objectPointer, excessSize);
       return newPointer;
     } else {
-      // not big enough to use; try the next chunk on the list
+      /*ST:  not big enough to use; try the next chunk on the list */
       predecessor = objectPointer;
       objectPointer = ObjectMemory_classBitsOf(objectPointer);
     }
   }
-  return NilPointer; // the end of the linked list was reached and no fit was found
+  return NilPointer; /*ST:  the end of the linked list was reached and no fit was found */
 }
 
 ObjectPointer ObjectMemory_obtainPointer_location(Word size, ObjectPointer location) {
@@ -139,15 +139,15 @@ void ObjectMemory_deallocate(ObjectPointer objectPointer) {
 ObjectPointer ObjectMemory_abandonFreeChunksInSegment(Word segment) {
   ObjectPointer lowWaterMark, objectPointer, nextPointer, location;
   Word size;
-  lowWaterMark = HeapSpaceStop; // first assume that no chunk is free
-  for (size = HeaderSize; size < BigSize; size ++) { // for each free-chunk list
+  lowWaterMark = HeapSpaceStop; /*ST:  first assume that no chunk is free */
+  for (size = HeaderSize; size < BigSize; size ++) { /*ST:  for each free-chunk list */
     objectPointer = ObjectMemory_headOfFreeChunkList_inSegment(size, segment);
     while (objectPointer != NonPointer) {
       location = ObjectMemory_locationBitsOf(objectPointer);
       lowWaterMark = (lowWaterMark < location) ? lowWaterMark : location;
-      nextPointer = ObjectMemory_classBitsOf(objectPointer); // link to next free chunk
-      ObjectMemory_classBitsOf_put(objectPointer, NonPointer); // distinguish for sweep
-      ObjectMemory_releasePointer(objectPointer); // add entry to free-pointer list
+      nextPointer = ObjectMemory_classBitsOf(objectPointer); /*ST:  link to next free chunk */
+      ObjectMemory_classBitsOf_put(objectPointer, NonPointer); /*ST:  distinguish for sweep */
+      ObjectMemory_releasePointer(objectPointer); /*ST:  add entry to free-pointer list */
       objectPointer = nextPointer;
     }
     ObjectMemory_resetFreeChunkList_inSegment(size, segment);
@@ -164,14 +164,14 @@ void ObjectMemory_reverseHeapPointersAbove(ObjectPointer lowWaterMark) {
   Word size;
   ObjectPointer objectPointer;
   for (objectPointer = 0; objectPointer < ObjectTableSize; objectPointer += 2) {
-    if (ObjectMemory_freeBitOf(objectPointer) == 0) { // the object table entry is in use
+    if (ObjectMemory_freeBitOf(objectPointer) == 0) { /*ST:  the object table entry is in use */
       if (ObjectMemory_segmentBitsOf(objectPointer) == currentSegment) {
-        // the object is in this segment
+        /*ST:  the object is in this segment */
         if (ObjectMemory_locationBitsOf(objectPointer) >= lowWaterMark) {
-          // the object will be swept
-          size = ObjectMemory_sizeBitsOf(objectPointer); // rescue the size
-          ObjectMemory_sizeBitsOf_put(objectPointer, objectPointer); // reverse the pointer
-          ObjectMemory_locationBitsOf_put(objectPointer, size); // save the size
+          /*ST:  the object will be swept */
+          size = ObjectMemory_sizeBitsOf(objectPointer); /*ST:  rescue the size */
+          ObjectMemory_sizeBitsOf_put(objectPointer, objectPointer); /*ST:  reverse the pointer */
+          ObjectMemory_locationBitsOf_put(objectPointer, size); /*ST:  save the size */
         }
       }
     }
@@ -181,21 +181,21 @@ void ObjectMemory_reverseHeapPointersAbove(ObjectPointer lowWaterMark) {
 ObjectPointer ObjectMemory_sweepCurrentSegmentFrom(ObjectPointer lowWaterMark) {
   ObjectPointer si = lowWaterMark, di = lowWaterMark, objectPointer;
   Word size, i;
-  while (si < HeapSpaceStop) { // for each object, si
+  while (si < HeapSpaceStop) { /*ST:  for each object, si */
     if (RealWordMemory_segment_word(currentSegment, si+1) == NonPointer) {
-      // unallocated, so skip it
+      /*ST:  unallocated, so skip it */
       size = RealWordMemory_segment_word(currentSegment, si);
       si += size;
     } else {
-      // uallocated, so keep it, but move it to compact storage
+      /*ST:  uallocated, so keep it, but move it to compact storage */
       objectPointer = RealWordMemory_segment_word(currentSegment, si);
-      size = ObjectMemory_locationBitsOf(objectPointer); // the reversed size
-      ObjectMemory_locationBitsOf_put(objectPointer, di); // point object table at new location
-      ObjectMemory_sizeBitsOf_put(objectPointer, size); // restore the size to its proper place
-      si++; // skip the size
-      di++; // skip the size
+      size = ObjectMemory_locationBitsOf(objectPointer); /*ST:  the reversed size */
+      ObjectMemory_locationBitsOf_put(objectPointer, di); /*ST:  point object table at new location */
+      ObjectMemory_sizeBitsOf_put(objectPointer, size); /*ST:  restore the size to its proper place */
+      si++; /*ST:  skip the size */
+      di++; /*ST:  skip the size */
       for(i = 2; i <= ObjectMemory_spaceOccupiedBy(objectPointer); i++) {
-        // move the rest of the object
+        /*ST:  move the rest of the object */
         RealWordMemory_segment_word_put(currentSegment,
           di,
           RealWordMemory_segment_word(currentSegment,

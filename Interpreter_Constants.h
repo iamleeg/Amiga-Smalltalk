@@ -21,13 +21,13 @@ enum {
  * Guaranteed Pointers.
  */
 enum {
-  // UndefinedObject and Booleans
+  /*ST:  UndefinedObject and Booleans */
   NilPointer = 2,
   FalsePointer = 4,
   TruePointer = 6,
-  // Root
+  /*ST:  Root */
   SchedulerAssociationPointer = 8,
-  // Classes
+  /*ST:  Classes */
   /**
    * The entry in the object table for the CompiledMethod class.
    * @note I've put 1.5 and 1.5 together and come up with 4 here. On p686,
@@ -53,11 +53,11 @@ enum {
   ClassMessagePointer = 30,
   ClassSelectorPointer = 32,
   ClassCharacterPointer = 40,
-  // Selectors
+  /*ST:  Selectors */
   DoesNotUnderstandSelector = 42,
   CannotReturnSelector = 44,
   MustBeBooleanSelector = 52,
-  // Tables
+  /*ST:  Tables */
   SpecialSelectorsPointer = 48,
   CharacterTablePointer = 50,
 };
@@ -147,7 +147,7 @@ enum {
  * to the temporaries and stack, but the two contexts use the fixed fields in different ways.
  */
 enum {
-  // Class MethodContext
+  /*ST:  Class MethodContext */
   /**
    * The context that sent the message executed by this context. We need it to
    * return a value.
@@ -175,7 +175,7 @@ enum {
    */
   TempFrameStart = 6,
 
-  // Class BlockContext
+  /*ST:  Class BlockContext */
   /**
    * The context to return to when the block exits.
    */

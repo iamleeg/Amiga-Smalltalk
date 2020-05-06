@@ -50,21 +50,21 @@ void ObjectMemory_rectifyCountsAndDeallocateGarbage(void) {
   ObjectPointer objectPointer, rootObjectPointer;
   for (segment = FirstHeapSegment; segment <= LastHeapSegment; segment++) {
     for (size = HeaderSize; size < BigSize; size++) {
-      // reset the list head
+      /*ST:  reset the list head */
       ObjectMemory_resetFreeChunkList_inSegment(size, segment);
     }
   }
-  // rectify counts, and deallocate garbage
+  /*ST:  rectify counts, and deallocate garbage */
   for (objectPointer = 0; objectPointer < ObjectTableSize; objectPointer += 2) {
     if (ObjectMemory_freeBitOf(objectPointer) == 0) {
-      // if it is not a free entry
+      /*ST:  if it is not a free entry */
       if ((count = ObjectMemory_countBitsOf(objectPointer)) == 0) {
-        // it is unmarked, so deallocate it
+        /*ST:  it is unmarked, so deallocate it */
         ObjectMemory_deallocate(objectPointer);
       } else {
-        // it is marked, so rectify reference counts
+        /*ST:  it is marked, so rectify reference counts */
         if (count < 128) {
-          // subtract 1 to compensate for the mark
+          /*ST:  subtract 1 to compensate for the mark */
           ObjectMemory_countBitsOf_put(objectPointer, count - 1);
         }
         for (offset = 1; offset < ObjectMemory_lastPointerOf(objectPointer); offset++) {
@@ -73,8 +73,8 @@ void ObjectMemory_rectifyCountsAndDeallocateGarbage(void) {
       }
     }
   }
-  // be sure the root objects don't disappear
-  while (NO) { // there aren't any root objects yet
+  /*ST:  be sure the root objects don't disappear */
+  while (NO) { /*ST:  there aren't any root objects yet */
     ObjectMemory_countUp(rootObjectPointer);
   }
   ObjectMemory_countBitsOf_put(NilPointer, 128);
