@@ -45,11 +45,11 @@ void ObjectMemory_toFreeChunkList_add(Word size, ObjectPointer objectPointer) {
 }
 
 ObjectPointer ObjectMemory_removeFromFreeChunkList(Word size) {
-  ObjectPointer objectPointer = ObjectMemory_headOfFreeChunkList_inSegment(size, currentSegment);
+  ObjectPointer objectPointer = ObjectMemory_headOfFreeChunkList_inSegment(size, currentSegment), secondChunk;
   if (objectPointer == NonPointer) {
     return NilPointer;
   }
-  ObjectPointer secondChunk = ObjectMemory_classBitsOf(objectPointer);
+  secondChunk = ObjectMemory_classBitsOf(objectPointer);
   ObjectMemory_headOfFreeChunkList_inSegment_put(size, currentSegment, secondChunk);
   return objectPointer;
 }
