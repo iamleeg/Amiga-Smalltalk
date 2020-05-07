@@ -253,4 +253,10 @@ void Interpreter_pop(Word number);
  */
 void Interpreter_unPop(Word number);
 
+/**
+ * Change active contexts. This stores the IP and SP in the context we're leaving, and retrieves
+ * the register values from the context we're activating.
+ */
+void Interpreter_newActiveContext(ObjectPointer aContext);
+
 #endif

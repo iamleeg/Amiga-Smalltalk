@@ -203,3 +203,11 @@ void Interpreter_pop(Word number) {
 void Interpreter_unPop(Word number) {
   stackPointer = stackPointer + number;
 }
+
+void Interpreter_newActiveContext(ObjectPointer aContext) {
+  Interpreter_storeContextRegisters();
+  ObjectMemory_decreaseReferencesTo(activeContext);
+  activeContext = aContext;
+  ObjectMemory_increaseReferencesTo(activeContext);
+  Interpreter_fetchContextRegisters();
+}

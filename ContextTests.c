@@ -192,6 +192,23 @@ Test(RoundTripPopAndUnPopByN) {
   Expect(top == TwoPointer);
 }
 
+Test(ActivateContext) {
+  ObjectPointer firstContext = activeContextWithThreeObjectsOnTheStack(), secondContext = stubBlockContext(), currentSP = stackPointer, savedSP;
+  Word firstRefCount = 3, secondRefCount = 6, stackOffset = 2;
+  ObjectMemory_countBitsOf_put(firstContext, firstRefCount);
+  ObjectMemory_countBitsOf_put(secondContext, secondRefCount);
+  Interpreter_pop(stackOffset);
+
+  Interpreter_newActiveContext(secondContext);
+
+  Expect(Interpreter_stackPointerOfContext(firstContext) == (currentSP - stackOffset - TempFrameStart + 1));
+  Expect(ObjectMemory_countBitsOf(firstContext) == (firstRefCount - 1));
+  Expect(ObjectMemory_countBitsOf(secondContext) == (secondRefCount + 1));
+  Expect(activeContext == secondContext);
+  Expect(instructionPointer == Interpreter_instructionPointerOfContext(secondContext) - 1);
+  Expect(stackPointer == (Interpreter_stackPointerOfContext(secondContext) + TempFrameStart - 1));
+}
+
 void ContextTests(struct TestResult *tr) {
   RunTest(FetchInstructionPointerFromContext);
   RunTest(UpdateInstructionPointerInContext);
@@ -209,4 +226,5 @@ void ContextTests(struct TestResult *tr) {
   RunTest(ExamineValueOnStack);
   RunTest(PopStackByN);
   RunTest(RoundTripPopAndUnPopByN);
+  RunTest(ActivateContext);
 }
