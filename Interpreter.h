@@ -230,4 +230,27 @@ ObjectPointer Interpreter_popStack(void);
  */
 ObjectPointer Interpreter_stackTop(void);
 
+/**
+ * See the object at a particular depth on the active context's stack without modifying the stack.
+ * @note The offset here uses zero-based indexing, so Interpreter_stackValue(0) == Interpreter_stackTop().
+ * @see Interpreter_stackTop
+ */
+ObjectPointer Interpreter_stackValue(Word offset);
+
+/**
+ * Adjust the stack pointer to remove the top number elements from the stack.
+ * @note This operation doesn't remove the pointer references from the "popped" elements, so
+ *       the garbage collector will not think that they have been relinquished. The operation
+ *       is potentially unsafe; it is up to the caller to ensure that the SP still points to
+ *       a location within the stack.
+ */
+void Interpreter_pop(Word number);
+
+/**
+ * Adjust the stack pointer to unpop a number of elements back into the stack.
+ * @note This operation is potentially unsafe; it's up to the caller to ensure that the SP
+ *       still points to a location within the stack.
+ */
+void Interpreter_unPop(Word number);
+
 #endif

@@ -191,3 +191,15 @@ ObjectPointer Interpreter_popStack(void) {
 ObjectPointer Interpreter_stackTop(void) {
   return ObjectMemory_fetchPointer_ofObject(stackPointer, activeContext);
 }
+
+ObjectPointer Interpreter_stackValue(Word offset) {
+  return ObjectMemory_fetchPointer_ofObject(stackPointer - offset, activeContext);
+}
+
+void Interpreter_pop(Word number) {
+  stackPointer = stackPointer - number;
+}
+
+void Interpreter_unPop(Word number) {
+  stackPointer = stackPointer + number;
+}

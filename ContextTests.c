@@ -30,6 +30,17 @@ ObjectPointer stubBlockContext() {
   return context;
 }
 
+ObjectPointer activeContextWithThreeObjectsOnTheStack() {
+  ObjectPointer object1 = NilPointer, object2 = OnePointer, object3 = TwoPointer, context = stubMethodContext(), found;
+  activeContext = context;
+  Interpreter_fetchContextRegisters();
+  Interpreter_push(object1);
+  Interpreter_push(object2);
+  Interpreter_push(object3);
+  return context;
+}
+
+
 Test(FetchInstructionPointerFromContext) {
   ObjectPointer methodContext = stubMethodContext();
 
@@ -160,6 +171,27 @@ Test(PeepStackTop) {
   Expect(peeped == object);
 }
 
+Test(ExamineValueOnStack) {
+  ObjectPointer context = activeContextWithThreeObjectsOnTheStack(), found;
+  found = Interpreter_stackValue(2);
+  Expect(found == NilPointer);
+}
+
+Test(PopStackByN) {
+  ObjectPointer context = activeContextWithThreeObjectsOnTheStack(), top;
+  Interpreter_pop(2);
+  top = Interpreter_stackTop();
+  Expect(top == NilPointer);
+}
+
+Test(RoundTripPopAndUnPopByN) {
+  ObjectPointer context = activeContextWithThreeObjectsOnTheStack(), top;
+  Interpreter_pop(2);
+  Interpreter_unPop(2);
+  top = Interpreter_stackTop();
+  Expect(top == TwoPointer);
+}
+
 void ContextTests(struct TestResult *tr) {
   RunTest(FetchInstructionPointerFromContext);
   RunTest(UpdateInstructionPointerInContext);
@@ -174,4 +206,7 @@ void ContextTests(struct TestResult *tr) {
   RunTest(PushObjectOntoContextStack);
   RunTest(PopContextStack);
   RunTest(PeepStackTop);
+  RunTest(ExamineValueOnStack);
+  RunTest(PopStackByN);
+  RunTest(RoundTripPopAndUnPopByN);
 }
