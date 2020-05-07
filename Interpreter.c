@@ -211,3 +211,24 @@ void Interpreter_newActiveContext(ObjectPointer aContext) {
   ObjectMemory_increaseReferencesTo(activeContext);
   Interpreter_fetchContextRegisters();
 }
+
+ObjectPointer Interpreter_sender(void) {
+  return ObjectMemory_fetchPointer_ofObject(SenderIndex, activeContext);
+}
+
+ObjectPointer Interpreter_caller(void) {
+  /*
+   * Note in p586 the constant SenderIndex is used, which has the same value
+   * as CallerIndex but is supposed to relate to method contexts so I've
+   * changed that here.
+   */
+  return ObjectMemory_fetchPointer_ofObject(CallerIndex, activeContext);
+}
+
+ObjectPointer Interpreter_temporary(Word offset) {
+  return ObjectMemory_fetchPointer_ofObject(offset + TempFrameStart, homeContext);
+}
+
+ObjectPointer Interpreter_literal(Word offset) {
+  return Interpreter_literal_ofMethod(offset, method);
+}

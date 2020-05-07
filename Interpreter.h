@@ -259,4 +259,29 @@ void Interpreter_unPop(Word number);
  */
 void Interpreter_newActiveContext(ObjectPointer aContext);
 
+/**
+ * Fetch the sender - the context object that caused the current context to be activated (and thus
+ * the context to return to).
+ */
+ObjectPointer Interpreter_sender(void);
+
+/**
+ * Fetch the caller - the context object that caused the current block context to be activated (and thus
+ * the context to return to).
+ */
+ObjectPointer Interpreter_caller(void);
+
+/**
+ * Fetch the temporary variable at the given offset in the home context (because a block has access to
+ * the same temporaries as its enclosing method).
+ * @note There is no safety check that offset is within the bounds of the temporary frame.
+ */
+ObjectPointer Interpreter_temporary(Word offset);
+
+/**
+ * Fetch the literal value at the given offset in the active method.
+ * @note There is no safety check that offset is within the bounds of the method literals.
+ */
+ObjectPointer Interpreter_literal(Word offset);
+
 #endif

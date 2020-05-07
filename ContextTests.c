@@ -4,15 +4,20 @@
 #include "ObjectMemory.h"
 
 ObjectPointer stubMethodContext() {
-  ObjectPointer methodContext = 0x1220, location = 0x0ffe;
+  ObjectPointer methodContext = 0x1220, location = 0x0ffe, method = 0x200c, methodLocation = 0x0f00, literal = NilPointer;
   Word segment = 2, instructionPointer = 0x1000, stackPointer = 0x1008;
 
   ObjectMemory_segmentBitsOf_put(methodContext, segment);
   ObjectMemory_locationBitsOf_put(methodContext, location);
+  ObjectMemory_segmentBitsOf_put(method, segment);
+  ObjectMemory_locationBitsOf_put(method, methodLocation);
+  ObjectMemory_storePointer_ofObject_withValue(LiteralStart, method, literal);
   Interpreter_storeInteger_ofObject_withValue(InstructionPointerIndex, methodContext, instructionPointer);
   Interpreter_storeInteger_ofObject_withValue(StackPointerIndex, methodContext, stackPointer);
-  ObjectMemory_storePointer_ofObject_withValue(MethodIndex, methodContext, NilPointer);
+  ObjectMemory_storePointer_ofObject_withValue(MethodIndex, methodContext, method);
   ObjectMemory_storePointer_ofObject_withValue(ReceiverIndex, methodContext, ZeroPointer);
+  ObjectMemory_storePointer_ofObject_withValue(SenderIndex, methodContext, TwoPointer);
+  ObjectMemory_storePointer_ofObject_withValue(1 + TempFrameStart, methodContext, TruePointer);
 
   return methodContext;
 }
@@ -27,6 +32,7 @@ ObjectPointer stubBlockContext() {
   Interpreter_storeInteger_ofObject_withValue(StackPointerIndex, context, stackPointer);
   Interpreter_storeInteger_ofObject_withValue(BlockArgumentCountIndex, context, 2);
   ObjectMemory_storePointer_ofObject_withValue(HomeIndex, context, homeMethod);
+  ObjectMemory_storePointer_ofObject_withValue(CallerIndex, context, OnePointer);
   return context;
 }
 
@@ -103,7 +109,7 @@ Test(FetchContextRegistersFromBlockContext) {
 
   Expect(homeContext == expectedHome);
   Expect(receiver == ZeroPointer);
-  Expect(method == NilPointer);
+  Expect(method == 0x200c);
   Expect(instructionPointer == 0x1004 - 1);
   Expect(stackPointer == 0x100c + TempFrameStart - 1);
 }
@@ -116,7 +122,7 @@ Test(FetchContextRegistersFromMethodContext) {
 
   Expect(homeContext == expectedHome);
   Expect(receiver == ZeroPointer);
-  Expect(method == NilPointer);
+  Expect(method == 0x200c);
   Expect(instructionPointer == 0x1000 - 1);
   Expect(stackPointer == 0x1008 + TempFrameStart - 1);
 }
@@ -209,6 +215,31 @@ Test(ActivateContext) {
   Expect(stackPointer == (Interpreter_stackPointerOfContext(secondContext) + TempFrameStart - 1));
 }
 
+Test(FetchSender) {
+  ObjectPointer context = activeContextWithThreeObjectsOnTheStack(), sender;
+  sender = Interpreter_sender();
+  Expect(sender == TwoPointer);
+}
+
+Test(FetchCaller) {
+  ObjectPointer context = stubBlockContext(), caller;
+  Interpreter_newActiveContext(context);
+  caller = Interpreter_caller();
+  Expect(caller == OnePointer);
+}
+
+Test(FetchTemporary) {
+  ObjectPointer context = activeContextWithThreeObjectsOnTheStack(), temp;
+  temp = Interpreter_temporary(1);
+  Expect(temp == TruePointer);
+}
+
+Test(FetchLiteral) {
+  ObjectPointer context = activeContextWithThreeObjectsOnTheStack(), literal;
+  literal = Interpreter_literal(0);
+  Expect(literal == NilPointer);
+}
+
 void ContextTests(struct TestResult *tr) {
   RunTest(FetchInstructionPointerFromContext);
   RunTest(UpdateInstructionPointerInContext);
@@ -227,4 +258,8 @@ void ContextTests(struct TestResult *tr) {
   RunTest(PopStackByN);
   RunTest(RoundTripPopAndUnPopByN);
   RunTest(ActivateContext);
+  RunTest(FetchSender);
+  RunTest(FetchCaller);
+  RunTest(FetchTemporary);
+  RunTest(FetchLiteral);
 }
