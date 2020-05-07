@@ -6,11 +6,12 @@
 #include "ObjectMemory_Storage.h"
 #include "RealWordMemory.h"
 
+#include <stddef.h>
 /**
  * Put the root object pointers in this list.
  * (And decide whether to change the data structure)
  */
-ObjectPointer rootObjectPointers[0];
+ObjectPointer *rootObjectPointers = NULL;
 
 
 void ObjectMemory_reclaimInaccessibleObjects(void) {
