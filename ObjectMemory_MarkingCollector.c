@@ -29,7 +29,7 @@ void ObjectMemory_zeroReferenceCounts(void) {
 
 void ObjectMemory_markAccessibleObjects(void) {
   ObjectPointer rootObjectPointer;
-  while(NO) { /* haven't defined any root objects yet */
+  while(rootObjectPointers) { /* haven't defined any root objects yet */
     ObjectMemory_markObjectsAccessibleFrom(rootObjectPointer);
   }
 }
@@ -82,7 +82,7 @@ void ObjectMemory_rectifyCountsAndDeallocateGarbage(void) {
     }
   }
   /*ST:  be sure the root objects don't disappear */
-  while (NO) { /*ST:  there aren't any root objects yet */
+  while (rootObjectPointers) { /*ST:  there aren't any root objects yet */
     ObjectMemory_countUp(rootObjectPointer);
   }
   ObjectMemory_countBitsOf_put(NilPointer, 128);
