@@ -36,14 +36,13 @@ ObjectPointer stubBlockContext() {
   return context;
 }
 
-ObjectPointer activeContextWithThreeObjectsOnTheStack() {
-  ObjectPointer object1 = NilPointer, object2 = OnePointer, object3 = TwoPointer, context = stubMethodContext(), found;
+void activateContextWithThreeObjectsOnTheStack() {
+  ObjectPointer object1 = NilPointer, object2 = OnePointer, object3 = TwoPointer, context = stubMethodContext();
   activeContext = context;
   Interpreter_fetchContextRegisters();
   Interpreter_push(object1);
   Interpreter_push(object2);
   Interpreter_push(object3);
-  return context;
 }
 
 
@@ -178,20 +177,23 @@ Test(PeepStackTop) {
 }
 
 Test(ExamineValueOnStack) {
-  ObjectPointer context = activeContextWithThreeObjectsOnTheStack(), found;
+  ObjectPointer found;
+  activateContextWithThreeObjectsOnTheStack();
   found = Interpreter_stackValue(2);
   Expect(found == NilPointer);
 }
 
 Test(PopStackByN) {
-  ObjectPointer context = activeContextWithThreeObjectsOnTheStack(), top;
+  ObjectPointer top;
+  activateContextWithThreeObjectsOnTheStack();
   Interpreter_pop(2);
   top = Interpreter_stackTop();
   Expect(top == NilPointer);
 }
 
 Test(RoundTripPopAndUnPopByN) {
-  ObjectPointer context = activeContextWithThreeObjectsOnTheStack(), top;
+  ObjectPointer top;
+  activateContextWithThreeObjectsOnTheStack();
   Interpreter_pop(2);
   Interpreter_unPop(2);
   top = Interpreter_stackTop();
@@ -199,8 +201,11 @@ Test(RoundTripPopAndUnPopByN) {
 }
 
 Test(ActivateContext) {
-  ObjectPointer firstContext = activeContextWithThreeObjectsOnTheStack(), secondContext = stubBlockContext(), currentSP = stackPointer, savedSP;
+  ObjectPointer firstContext, secondContext = stubBlockContext(), currentSP = stackPointer;
   Word firstRefCount = 3, secondRefCount = 6, stackOffset = 2;
+
+  activateContextWithThreeObjectsOnTheStack();
+  firstContext = activeContext;
   ObjectMemory_countBitsOf_put(firstContext, firstRefCount);
   ObjectMemory_countBitsOf_put(secondContext, secondRefCount);
   Interpreter_pop(stackOffset);
@@ -216,7 +221,8 @@ Test(ActivateContext) {
 }
 
 Test(FetchSender) {
-  ObjectPointer context = activeContextWithThreeObjectsOnTheStack(), sender;
+  ObjectPointer sender;
+  activateContextWithThreeObjectsOnTheStack();
   sender = Interpreter_sender();
   Expect(sender == TwoPointer);
 }
@@ -229,13 +235,15 @@ Test(FetchCaller) {
 }
 
 Test(FetchTemporary) {
-  ObjectPointer context = activeContextWithThreeObjectsOnTheStack(), temp;
+  ObjectPointer temp;
+  activateContextWithThreeObjectsOnTheStack();
   temp = Interpreter_temporary(1);
   Expect(temp == TruePointer);
 }
 
 Test(FetchLiteral) {
-  ObjectPointer context = activeContextWithThreeObjectsOnTheStack(), literal;
+  ObjectPointer literal;
+  activateContextWithThreeObjectsOnTheStack();
   literal = Interpreter_literal(0);
   Expect(literal == NilPointer);
 }

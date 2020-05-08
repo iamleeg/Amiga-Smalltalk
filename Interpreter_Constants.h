@@ -14,7 +14,7 @@ enum {
   MinusOnePointer = 65535,
   ZeroPointer = 1,
   OnePointer = 3,
-  TwoPointer = 5,
+  TwoPointer = 5
 };
 
 /**
@@ -59,7 +59,7 @@ enum {
   MustBeBooleanSelector = 52,
   /*ST:  Tables */
   SpecialSelectorsPointer = 48,
-  CharacterTablePointer = 50,
+  CharacterTablePointer = 50
 };
 
 /**
@@ -69,7 +69,7 @@ enum {
  */
 enum {
   HeaderIndex = 0,
-  LiteralStart = 1,
+  LiteralStart = 1
 };
 
 /**
@@ -136,7 +136,7 @@ struct CompiledMethodHeaderExtension {
  * look in the Association.
  */
 enum {
-  ValueIndex = 1,
+  ValueIndex = 1
 };
 
 /**
@@ -197,7 +197,7 @@ enum {
    * method, so the home context and the initial I.P. are needed to find the
    * block's bytecode.
    */
-  HomeIndex = 5,
+  HomeIndex = 5
   /* TempFrameStart as MethodContext */
 };
 

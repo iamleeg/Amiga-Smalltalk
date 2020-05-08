@@ -145,7 +145,7 @@ Test(LocationBitsAreInTheSecondWordOfObjectHeader) {
 
 Test(LocationBitsStoredInSecondWordOfObjectHeader) {
   ObjectPointer objectPointer = 0x0;
-  short locationWord = objectPointer + 1, value = 0xb33f, result = 0;
+  short value = 0xb33f, result = 0;
   ObjectMemory_locationBitsOf_put(objectPointer, value);
   result = RealWordMemory_segment_word(ObjectTableSegment,
     ObjectTableStart + objectPointer + 1);
@@ -282,7 +282,7 @@ Test(FetchWordFromAppropriateLocationInMemory) {
 
 Test(StoreWordInObjectField) {
   ObjectPointer objectPointer = 0x1234;
-  short segment = 3, offset = 4, location = 0x2468, wordIndex = 2, value = 0x3579, retrievedWord;
+  short segment = 3, location = 0x2468, wordIndex = 2, value = 0x3579, retrievedWord;
   ObjectMemory_segmentBitsOf_put(objectPointer, segment);
   ObjectMemory_locationBitsOf_put(objectPointer, location);
 
@@ -294,7 +294,7 @@ Test(StoreWordInObjectField) {
 
 Test(FetchLowByteOfWord) {
   ObjectPointer objectPointer = 0x1234;
-  short segment = 3, offset = 4, location = 0x2468, wordIndex = 2, byteIndex = 5, value = 0x3579;
+  short segment = 3, location = 0x2468, wordIndex = 2, byteIndex = 5, value = 0x3579;
   char retrievedByte, expectedByte = 0x79;
   ObjectMemory_segmentBitsOf_put(objectPointer, segment);
   ObjectMemory_locationBitsOf_put(objectPointer, location);
@@ -307,7 +307,7 @@ Test(FetchLowByteOfWord) {
 
 Test(FetchHighByteOfWord) {
   ObjectPointer objectPointer = 0x1234;
-  short segment = 3, offset = 4, location = 0x2468, wordIndex = 2, byteIndex = 4, value = 0x3579;
+  short segment = 3, location = 0x2468, wordIndex = 2, byteIndex = 4, value = 0x3579;
   char retrievedByte, expectedByte = 0x35;
   ObjectMemory_segmentBitsOf_put(objectPointer, segment);
   ObjectMemory_locationBitsOf_put(objectPointer, location);
@@ -320,7 +320,7 @@ Test(FetchHighByteOfWord) {
 
 Test(StoreBytesOfWord) {
   ObjectPointer objectPointer = 0x1234;
-  short segment = 3, offset = 4, location = 0x2468, wordIndex = 2, lowByteIndex = 5, highByteIndex = 4, expectedWord = 0x3579, retrievedWord;
+  short segment = 3, location = 0x2468, wordIndex = 2, lowByteIndex = 5, highByteIndex = 4, expectedWord = 0x3579, retrievedWord;
   char lowValue = 0x79, highValue = 0x35;
   ObjectMemory_segmentBitsOf_put(objectPointer, segment);
   ObjectMemory_locationBitsOf_put(objectPointer, location);
