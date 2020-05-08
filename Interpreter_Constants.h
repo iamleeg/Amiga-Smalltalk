@@ -87,24 +87,24 @@ struct CompiledMethodHeader {
    *   in the temporaryCount bits, because the method has no temporaries.
    * 7 see the header extension.
    */
-  Word flagValue:3;
+  unsigned int flagValue:3;
   /**
    * The number of temporary variables used by the method, including the arguments.
    */
-  Word temporaryCount: 5;
+  unsigned int temporaryCount: 5;
   /**
    * The total context space needed to execute a method is the sum of the maximum stack depth
    * and the number of temporaries. Small contexts have space for 12 object pointers, while
    * large ones have space for 32. This flag is YES if the method needs a large context.
    */
-  Word largeContextFlag: 1;
+  unsigned int largeContextFlag: 1;
   /**
    * The number of literals used by the method. These are all stored in the literal frame,
    * which is directly after the header in the method's fields. The bytecodes start in the
    * field immediately after the last literal.
    */
-  Word literalCount: 6;
-  Word isImmediateInteger: 1; /**< always true */
+  unsigned int literalCount: 6;
+  unsigned int isImmediateInteger: 1; /**< always true */
 };
 
 /**
@@ -116,16 +116,16 @@ struct CompiledMethodHeaderExtension {
   /**
    * What would you like me to tell you?
    */
-  Word unused:2;
+  unsigned int unused:2;
   /**
    * The number of arguments to the primitive method.
    */
-  Word argumentCount:5;
+  unsigned int argumentCount:5;
   /**
    * The index of the primitive method in the primitives table.
    */
-  Word primitiveIndex:8;
-  Word isImmediateInteger: 1; /**< always true */
+  unsigned int primitiveIndex:8;
+  unsigned int isImmediateInteger: 1; /**< always true */
 };
 
 /**
