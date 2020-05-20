@@ -28,10 +28,10 @@ void ObjectMemory_zeroReferenceCounts(void) {
 }
 
 void ObjectMemory_markAccessibleObjects(void) {
-  ObjectPointer rootObjectPointer;
-  while(rootObjectPointers) { /* haven't defined any root objects yet */
+  /* ObjectPointer rootObjectPointer;
+  while(rootObjectPointers) { haven't defined any root objects yet
     ObjectMemory_markObjectsAccessibleFrom(rootObjectPointer);
-  }
+  } */
 }
 
 Bool HELPER_mark_unmarked_objects(ObjectPointer objectPointer) {
@@ -55,7 +55,7 @@ void ObjectMemory_markObjectsAccessibleFrom(ObjectPointer rootObjectPointer) {
 
 void ObjectMemory_rectifyCountsAndDeallocateGarbage(void) {
   Word count, segment, size, offset;
-  ObjectPointer objectPointer, rootObjectPointer;
+  ObjectPointer objectPointer;
   for (segment = FirstHeapSegment; segment <= LastHeapSegment; segment++) {
     for (size = HeaderSize; size < BigSize; size++) {
       /*ST:  reset the list head */
@@ -82,8 +82,8 @@ void ObjectMemory_rectifyCountsAndDeallocateGarbage(void) {
     }
   }
   /*ST:  be sure the root objects don't disappear */
-  while (rootObjectPointers) { /*ST:  there aren't any root objects yet */
+  /*while (rootObjectPointer) {  there aren't any root objects yet 
     ObjectMemory_countUp(rootObjectPointer);
-  }
+  }*/
   ObjectMemory_countBitsOf_put(NilPointer, 128);
 }
