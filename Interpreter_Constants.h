@@ -201,4 +201,14 @@ enum {
   /* TempFrameStart as MethodContext */
 };
 
+/*ST: Class Class */
+enum ClassIndices {
+  SuperClassIndex = 0,
+  MessageDictionaryIndex = 1,
+  InstanceSpecificationIndex = 2,
+  /*ST: Fields of a message dictionary */
+  MethodArrayIndex = 1,
+  SelectorStart = 2
+};
+
 #endif

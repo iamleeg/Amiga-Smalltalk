@@ -9,6 +9,7 @@
 #include "InterpreterMemoryTests.h"
 #include "CompiledMethodTests.h"
 #include "ContextTests.h"
+#include "ClassTests.h"
 #include "tests.h"
 
 int main(int argc, const char *argv[]) {
@@ -29,6 +30,7 @@ int main(int argc, const char *argv[]) {
   InterpreterMemoryTests(&result);
   CompiledMethodTests(&result);
   ContextTests(&result);
+  ClassTests(&result);
   
   printf("Tests completed.\n");
   printf("%d tests ran.\n", result.ran);

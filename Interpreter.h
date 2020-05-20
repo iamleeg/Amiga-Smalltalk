@@ -21,25 +21,40 @@ extern Bool success;
 
 /* The register comments here _are_ quotes from p583 hence line comments. */
 
-/*ST: / This is the active context itself. It is either a MethodContext or a BlockContext. */
+/**ST: This is the active context itself. It is either a MethodContext or a BlockContext. */
 extern ObjectPointer activeContext;
 
-/*ST: / If the active context is a MethodContext, the home context is the same context. If the active context is */
-/*ST: / a BlockContext, the home context is the contents of the home field of the active context. This will */
-/*ST: / always be a MethodContext. */
+/**ST: If the active context is a MethodContext, the home context is the same context. If the active context is */
+/**ST: a BlockContext, the home context is the contents of the home field of the active context. This will */
+/**ST: always be a MethodContext. */
 extern ObjectPointer homeContext;
 
-/*ST: / This is the CompiledMethod that contains the bytecodes the interpreter is executing. */
+/**ST: This is the CompiledMethod that contains the bytecodes the interpreter is executing. */
 extern ObjectPointer method;
 
-/*ST: / This is the object that received the message that invoked the home context's method. */
+/**ST: This is the object that received the message that invoked the home context's method. */
 extern ObjectPointer receiver;
 
-/*ST: / This is the byte index of the next bytecode of the method to be executed. */
+/**ST: This is the byte index of the next bytecode of the method to be executed. */
 extern Word instructionPointer;
 
-/*ST: / This is the index of the field of the active context containing the top of the stack. */
+/**ST: This is the index of the field of the active context containing the top of the stack. */
 extern Word stackPointer;
+
+/* The register comments here are quotes from p587. */
+
+/**ST: This is the selector of the message being sent. It is always a Symbol. */
+extern ObjectPointer messageSelector;
+
+/**ST: This is the number of arguments in the message currently being sent. It indicates where the message */
+/**ST: receiver can be found on the stack since it is below the arguments. */
+extern Word argumentCount;
+
+/**ST: This is the method associated with the messageSelector. */
+extern ObjectPointer newMethod;
+
+/**ST: This is the index of a primitive routine associated with newMethod if one exists. */
+extern Word primitiveIndex;
 
 /**
  * Set the success register.
@@ -283,5 +298,10 @@ ObjectPointer Interpreter_temporary(Word offset);
  * @note There is no safety check that offset is within the bounds of the method literals.
  */
 ObjectPointer Interpreter_literal(Word offset);
+
+/**
+ * Calculate a prehash for a Symbol object to choose its location in a dictionary.
+ */
+Word Interpreter_hash(ObjectPointer objectPointer);
 
 #endif

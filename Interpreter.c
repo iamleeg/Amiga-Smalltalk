@@ -8,6 +8,10 @@ ObjectPointer method = NilPointer;
 ObjectPointer receiver = NilPointer;
 Word instructionPointer = 0;
 Word stackPointer = 0;
+ObjectPointer messageSelector = NilPointer;
+Word argumentCount = 0;
+ObjectPointer newMethod = NilPointer;
+Word primitiveIndex = 0;
 
 void Interpreter_success_(Bool successValue) {
   success = successValue && success;
@@ -231,4 +235,8 @@ ObjectPointer Interpreter_temporary(Word offset) {
 
 ObjectPointer Interpreter_literal(Word offset) {
   return Interpreter_literal_ofMethod(offset, method);
+}
+
+Word Interpreter_hash(ObjectPointer objectPointer) {
+  return (objectPointer >> 1);
 }
