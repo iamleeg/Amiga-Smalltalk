@@ -25,10 +25,22 @@ extern Byte LastHeapSegment;
 #define HeapSpaceStop 0xffca
 
 /**
- * Initialize the VM's Memory. This MUST be done once before
- * using the VM.
+ * Initialize the VM's heap. This MUST be done once before
+ * using the VM. Memory is allocated in segments of 2^16 Words
+ * (128kB), preferentially on fast RAM. The maximum size of the
+ * heap is 16 such segments (2MB).
+ * @note The object table is stored in the first segment, so on
+ *       very memory constrained systems there won't be much of
+ *       a heap for making objects.
+ * @return YES if at least one memory segment (128kB) was allocated.
  */
-void RealWordMemory_new(void);
+Bool RealWordMemory_new(void);
+
+/**
+ * Deallocate the heap memory. It's a good idea to call this before
+ * exit, because there's no guarantee that Exec will clean up after you.
+ */
+void RealWordMemory_delete(void);
 
 /**
  * Store a value at a given word in the specified segment in

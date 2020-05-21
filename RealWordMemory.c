@@ -4,19 +4,35 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <proto/exec.h>
+
 #define SegmentSize 0xFFFF
 
-Byte HeapSegmentCount = HeapSegmentLimit;
-Byte LastHeapSegment = HeapSegmentLimit - 1;
+Byte HeapSegmentCount = 0;
+Byte LastHeapSegment = 0;
 
 static Word *segmentPointers[HeapSegmentLimit];
 
-void RealWordMemory_new() {
-  short i;
-  for(i = FirstHeapSegment; i <= LastHeapSegment; i++) {
-    size_t size = SegmentSize*sizeof(Word);
-    segmentPointers[i] = (Word *)malloc(size);
-    memset(segmentPointers[i], 0, size);
+Bool RealWordMemory_new() {
+  Bool hasASegment = NO;
+  Word *pointer = NULL;
+  do {
+    pointer = (Word *)AllocMem(SegmentSize * sizeof(Word), MEMF_CLEAR);
+    if (pointer) {
+      hasASegment = YES;
+      segmentPointers[HeapSegmentCount++] = pointer;
+    } else {
+      hasASegment = NO;
+    }
+  } while (hasASegment && (HeapSegmentCount < HeapSegmentLimit));
+  LastHeapSegment = HeapSegmentCount - 1;
+  return (HeapSegmentCount > 0);
+}
+
+void RealWordMemory_delete() {
+  Byte i;
+  for (i = 0; i < HeapSegmentCount; i++) {
+    FreeMem(segmentPointers[i], SegmentSize * sizeof(Word));
   }
 }
 

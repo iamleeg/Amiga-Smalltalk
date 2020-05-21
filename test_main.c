@@ -14,8 +14,13 @@
 
 int main(int argc, const char *argv[]) {
   struct TestResult result;
+  Bool hasMemory = NO;
 
-  RealWordMemory_new();
+  hasMemory = RealWordMemory_new();
+  if (!hasMemory) {
+    fprintf(stderr, "Unable to allocate heap space for the VM\n");
+    return 1;
+  }
 
   result.ran = 0;
   result.passed = 0;
@@ -32,6 +37,8 @@ int main(int argc, const char *argv[]) {
   ContextTests(&result);
   ClassTests(&result);
   
+  RealWordMemory_delete();
+
   printf("Tests completed.\n");
   printf("%d tests ran.\n", result.ran);
   printf("%d tests passed.\n", result.passed);
