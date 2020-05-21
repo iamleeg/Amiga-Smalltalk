@@ -4,9 +4,13 @@
 #include "Types.h"
 
 /**
+ * The maximum possible number of heap segments.
+ */
+#define HeapSegmentLimit 16
+/**
  * The number of memory segments comprising the heap.
  */
-#define HeapSegmentCount 16
+extern Byte HeapSegmentCount;
 /**
  * The index of the first heap segment.
 */
@@ -14,7 +18,7 @@
 /**
  * The index of the last heap segment.
  */
-#define LastHeapSegment 15
+extern Byte LastHeapSegment;
 /**
  * The last address used in any heap segment.
  */

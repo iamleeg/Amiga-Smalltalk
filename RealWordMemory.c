@@ -6,7 +6,10 @@
 
 #define SegmentSize 0xFFFF
 
-static Word *segmentPointers[HeapSegmentCount];
+Byte HeapSegmentCount = HeapSegmentLimit;
+Byte LastHeapSegment = HeapSegmentLimit - 1;
+
+static Word *segmentPointers[HeapSegmentLimit];
 
 void RealWordMemory_new() {
   short i;
