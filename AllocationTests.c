@@ -14,7 +14,7 @@ Test(ReleasePointer) {
 }
 
 Test(LowWaterMarkCalculation) {
-  Word NonEmptyListSize = 3, segment = 4, size;
+  Word NonEmptyListSize = 3, segment = (4 % HeapSegmentCount), size;
   ObjectPointer freeRegion = 0xabc0;
   ObjectPointer location = 0x4242, lowWaterMark;
   ObjectMemory_locationBitsOf_put(freeRegion, location);
@@ -32,7 +32,7 @@ Test(LowWaterMarkCalculation) {
 }
 
 Test(ReverseHeapPointerAboveLowWaterMark) {
-  Word segment = 2, size = 0x0a, retrievedSize = 0x0;
+  Word segment = (2 % HeapSegmentCount), size = 0x0a, retrievedSize = 0x0;
   ObjectPointer lowWaterMark = 0x1000,
     location = 0x2000,
     objectPointer = 0x1010;
@@ -55,7 +55,7 @@ Test(ReverseHeapPointerAboveLowWaterMark) {
 }
 
 Test(DoNotReverseHeapPointerBelowLowWaterMark) {
-  Word segment = 2, size = 0x0a, retrievedSize = 0x0;
+  Word segment = (2 % HeapSegmentCount), size = 0x0a, retrievedSize = 0x0;
   ObjectPointer lowWaterMark = 0x3000,
     location = 0x2000,
     objectPointer = 0x1010;
@@ -73,7 +73,7 @@ Test(DoNotReverseHeapPointerBelowLowWaterMark) {
 }
 
 Test(DoNotReverseHeapPointerInWrongSegment) {
-  Word segment = 2, size = 0x0a, retrievedSize = 0x0;
+  Word segment = (2 % HeapSegmentCount), size = 0x0a, retrievedSize = 0x0;
   ObjectPointer lowWaterMark = 0x1000,
     location = 0x2000,
     objectPointer = 0x1010;
@@ -91,7 +91,7 @@ Test(DoNotReverseHeapPointerInWrongSegment) {
 }
 
 Test(DoNotReverseHeapPointerOfUnusedSpace) {
-  Word segment = 2, size = 0x0a, retrievedSize = 0x0;
+  Word segment = (2 % HeapSegmentCount), size = 0x0a, retrievedSize = 0x0;
   ObjectPointer lowWaterMark = 0x1000,
     location = 0x2000,
     objectPointer = 0x1010;

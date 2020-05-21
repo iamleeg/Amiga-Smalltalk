@@ -2,10 +2,11 @@
 
 #include "Interpreter.h"
 #include "ObjectMemory.h"
+#include "RealWordMemory.h"
 
 ObjectPointer dummyCompiledMethod(void) {
   ObjectPointer compiledMethod = 0x1234, classPointer = MethodClass, header = OnePointer, firstLiteral = NilPointer;
-  Word segment = 1, location = 0, size = 2;
+  Word segment = (1 % HeapSegmentCount), location = 0, size = 2;
 
   ObjectMemory_sizeBitsOf_put(compiledMethod, size);
   ObjectMemory_segmentBitsOf_put(compiledMethod, segment);
@@ -27,7 +28,7 @@ ObjectPointer compiledMethodWithInterestingHeader(void) {
 ObjectPointer compiledMethodWithExtension(void) {
   ObjectPointer compiledMethod = 0x1234, classPointer = MethodClass, header = 0xe107, firstLiteral = NilPointer;
   ObjectPointer extension = 0x0285;
-  Word segment = 1, location = 0, size = 4;
+  Word segment = (1 % HeapSegmentCount), location = 0, size = 4;
 
   ObjectMemory_sizeBitsOf_put(compiledMethod, size);
   ObjectMemory_segmentBitsOf_put(compiledMethod, segment);
@@ -142,7 +143,7 @@ Test(PrimitiveIndexOfMethodWithHeaderExtensionFoundInExtension) {
 
 Test(FindMethodClassOfMethodWithAssociation) {
   ObjectPointer compiledMethod = compiledMethodWithExtension(), classPointer = 0x3576, associationPointer = 0x3578, methodClassPointer;
-  Word segment = 1, location = 0x4000, size = 3;
+  Word segment = (1 % HeapSegmentCount), location = 0x4000, size = 3;
   ObjectMemory_segmentBitsOf_put(associationPointer, segment);
   ObjectMemory_locationBitsOf_put(associationPointer, location);
   ObjectMemory_sizeBitsOf_put(associationPointer, size);

@@ -2,9 +2,10 @@
 
 #include "Interpreter.h"
 #include "ObjectMemory.h"
+#include "RealWordMemory.h"
 
 Test(RoundTripIntegerThroughObjectMemory) {
-  Word integerValue = 12, fetchedInteger, fieldIndex = 2, segment = 3;
+  Word integerValue = 12, fetchedInteger, fieldIndex = 2, segment = (3 % HeapSegmentCount);
   ObjectPointer objectPointer = 0x1000, location = 0x2000;
 
   Interpreter_initPrimitive(); /* clear the success register before test */
@@ -21,7 +22,7 @@ Test(RoundTripIntegerThroughObjectMemory) {
 }
 
 Test(FailToStoreOutOfRangeInteger) {
-  Word integerValue = 32768, fieldIndex = 1, segment = 2, sentinelValue = 0x4141;
+  Word integerValue = 32768, fieldIndex = 1, segment = (2 % HeapSegmentCount), sentinelValue = 0x4141;
   ObjectPointer objectPointer = 0x1000, location = 0x2000;
 
   Interpreter_initPrimitive();
@@ -35,7 +36,7 @@ Test(FailToStoreOutOfRangeInteger) {
 }
 
 Test(FailToFetchNonIntegerValue) {
-  Word fieldIndex = 1, segment = 2, pointerWord = 0x2468;
+  Word fieldIndex = 1, segment = (2 % HeapSegmentCount), pointerWord = 0x2468;
   ObjectPointer objectPointer = 0x1000, location = 0x2000;
 
   Interpreter_initPrimitive();
@@ -50,7 +51,7 @@ Test(FailToFetchNonIntegerValue) {
 Test(BlockTransferOfFieldsBetweenObjects) {
   ObjectPointer fromObject = 0x1234, toObject = 0x1236, fromLocation = 0x1000, toLocation = 0x2000;
   ObjectPointer field1 = 0x2300, field2 = 0x2302, field3 = 0x2304;
-  Word segment = 1, fromIndex = 2, toIndex = 3;
+  Word segment = (1 % HeapSegmentCount), fromIndex = 2, toIndex = 3;
 
   ObjectMemory_segmentBitsOf_put(fromObject, segment);
   ObjectMemory_locationBitsOf_put(fromObject, fromLocation);

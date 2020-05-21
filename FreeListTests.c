@@ -48,7 +48,7 @@ Test(GettingNilWhenTryingToRemoveFromEmptyFreePointerList) {
 }
 
 Test(RetrieveHeadOfFreeChunkListFromRealWordMemory) {
-  Word value = 0x37b5, size = 0x24, segment = 3, result = 0;
+  Word value = 0x37b5, size = 0x24, segment = (3 % HeapSegmentCount), result = 0;
   RealWordMemory_segment_word_put(segment,
     FirstFreeChunkList + size,
     value);
@@ -57,7 +57,7 @@ Test(RetrieveHeadOfFreeChunkListFromRealWordMemory) {
 }
 
 Test(SetHeadOfFreeChunkListInRealWordMemory) {
-  Word value = 0x37b5, size = 0x24, segment = 3, result = 0;
+  Word value = 0x37b5, size = 0x24, segment = (3 % HeapSegmentCount), result = 0;
   ObjectMemory_headOfFreeChunkList_inSegment_put(size, segment, value);
   result = RealWordMemory_segment_word(segment,
     FirstFreeChunkList + size);
@@ -66,7 +66,7 @@ Test(SetHeadOfFreeChunkListInRealWordMemory) {
 
 Test(AddObjectToFreeChunkListInItsSegment) {
   ObjectPointer objectPointer = 0x2468, otherObject = 0x1238, head = 0, next = 0;
-  Word size = 0x10, segment = 8;
+  Word size = 0x10, segment = (8 % HeapSegmentCount);
   ObjectMemory_headOfFreeChunkList_inSegment_put(size, segment, otherObject);
   ObjectMemory_segmentBitsOf_put(objectPointer, segment);
   ObjectMemory_toFreeChunkList_add(size, objectPointer);
@@ -79,7 +79,7 @@ Test(AddObjectToFreeChunkListInItsSegment) {
 
 Test(RemoveEntryFromCurrentSegmentFreeChunkList) {
   ObjectPointer object1 = 0x1234, object2 = 0x1236, removedObject = 0, newHead = 0;
-  Word segment = 4, size = 2;
+  Word segment = (4 % HeapSegmentCount), size = 2;
   ObjectMemory_segmentBitsOf_put(object1, segment);
   ObjectMemory_segmentBitsOf_put(object2, segment);
   ObjectMemory_headOfFreeChunkList_inSegment_put(size, segment, object1);
@@ -94,7 +94,7 @@ Test(RemoveEntryFromCurrentSegmentFreeChunkList) {
 
 Test(GetNilWhenTryingToRemoveFromEmptyFreeChunkList) {
   ObjectPointer removed = 0;
-  Word segment = 4, size = 0xc;
+  Word segment = (4 % HeapSegmentCount), size = 0xc;
   currentSegment = segment;
   ObjectMemory_headOfFreeChunkList_inSegment_put(size, segment, NonPointer);
 
@@ -103,7 +103,7 @@ Test(GetNilWhenTryingToRemoveFromEmptyFreeChunkList) {
 }
 
 Test(ResetAFreeChunkListByWritingANonPointerToItsHead) {
-  Word segment = 2, size = 4;
+  Word segment = (2 % HeapSegmentCount), size = 4;
 
   ObjectMemory_resetFreeChunkList_inSegment(size, segment);
 

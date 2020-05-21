@@ -2,10 +2,11 @@
 
 #include "Interpreter.h"
 #include "ObjectMemory.h"
+#include "RealWordMemory.h"
 
 ObjectPointer stubMethodContext() {
   ObjectPointer methodContext = 0x1220, location = 0x0ffe, method = 0x200c, methodLocation = 0x0f00, literal = NilPointer;
-  Word segment = 2, instructionPointer = 0x1000, stackPointer = 0x1008;
+  Word segment = (2 % HeapSegmentCount), instructionPointer = 0x1000, stackPointer = 0x1008;
 
   ObjectMemory_segmentBitsOf_put(methodContext, segment);
   ObjectMemory_locationBitsOf_put(methodContext, location);
@@ -24,7 +25,7 @@ ObjectPointer stubMethodContext() {
 
 ObjectPointer stubBlockContext() {
   ObjectPointer context = 0x1222, location = 0x1ffc, homeMethod = stubMethodContext();
-  Word segment = 2, instructionPointer = 0x1004, stackPointer = 0x100c;
+  Word segment = (2 % HeapSegmentCount), instructionPointer = 0x1004, stackPointer = 0x100c;
 
   ObjectMemory_segmentBitsOf_put(context, segment);
   ObjectMemory_locationBitsOf_put(context, location);

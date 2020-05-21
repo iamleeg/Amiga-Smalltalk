@@ -3,7 +3,7 @@
 #include "ObjectMemory_Storage.h"
 #include "RealWordMemory.h"
 
-Word currentSegment = 0;
+Word currentSegment = (0 % HeapSegmentCount);
 
 ObjectPointer ObjectMemory_headOfFreePointerList(void) {
   return RealWordMemory_segment_word(ObjectTableSegment,
