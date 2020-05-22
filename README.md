@@ -14,7 +14,9 @@ Page numbers, if not otherwise clarified, refer to pages in the single printed e
 
 ## Building the tests
 
-### In AROS/AmigaDOS
+### In Debianish Linux
+
+You need the AxRuntime https://www.axrt.org/download/libaxrt-2.0_40.0-1_amd64.deb and SDK https://www.axrt.org/download/libaxrt-2.0-dev_40.0-1_amd64.deb
 
 `make check` will build and run the tests.
 
