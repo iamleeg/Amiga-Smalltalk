@@ -240,3 +240,35 @@ ObjectPointer Interpreter_literal(Word offset) {
 Word Interpreter_hash(ObjectPointer objectPointer) {
   return (objectPointer >> 1);
 }
+
+Bool Interpreter_lookupMethodInDictionary(ObjectPointer dictionary) {
+  Word length, index, mask;
+  ObjectPointer nextSelector, methodArray;
+  Bool wrapAround;
+
+  length = ObjectMemory_fetchWordLengthOf(dictionary);
+  mask = length - SelectorStart - 1;
+  index = (mask & Interpreter_hash(messageSelector)) + SelectorStart;
+  wrapAround = NO;
+
+  while(YES) {
+    nextSelector = ObjectMemory_fetchPointer_ofObject(index, dictionary);
+    if (nextSelector == NilPointer) {
+      return NO;
+    }
+    if (nextSelector == messageSelector) {
+      methodArray = ObjectMemory_fetchPointer_ofObject(MethodArrayIndex, dictionary);
+      newMethod = ObjectMemory_fetchPointer_ofObject(index - SelectorStart, methodArray);
+      primitiveIndex = Interpreter_primitiveIndexOf(newMethod);
+      return YES;
+    }
+    index = index + 1;
+    if (index = length) {
+      if (wrapAround != NO) {
+        return NO;
+      }
+      wrapAround = YES;
+      index = SelectorStart;
+    }
+  }
+}

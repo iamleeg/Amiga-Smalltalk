@@ -94,3 +94,7 @@ void RealWordMemory_segment_word_byte_put(Word s, Word w, Byte b, Byte value) {
   assert(b == 0 || b == 1);
   RealWordMemory_segment_word_bits_to_put(s, w, firstBit, lastBit, value);
 }
+
+Byte RealWordMemory_bestSegmentFor(Byte preferredSegment) {
+  return preferredSegment % HeapSegmentCount;
+}

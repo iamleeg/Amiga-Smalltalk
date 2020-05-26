@@ -86,4 +86,11 @@ Byte RealWordMemory_segment_word_byte(Word s, Word w, Byte b);
  */
 void RealWordMemory_segment_word_byte_put(Word s, Word w, Byte b, Byte value);
 
+/**
+ * Given that the programmer would like to use this segment, choose an appropriate segment for them.
+ * Currently this doesn't check whether the memory at that address in that segment is currently in
+ * use, but does at least ensure that the resulting segment is within the heap.
+ */
+Byte RealWordMemory_bestSegmentFor(Byte preferredSegment);
+
 #endif

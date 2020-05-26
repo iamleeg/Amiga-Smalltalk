@@ -304,4 +304,13 @@ ObjectPointer Interpreter_literal(Word offset);
  */
 Word Interpreter_hash(ObjectPointer objectPointer);
 
+/**
+ * Find a method in a class's method dictionary. This routine reads the message selector from
+ * the messageSelector register. On success, it sets the newMethod register to the found
+ * CompiledMethod instance, and the primitiveIndex register to that method's primitive index.
+ * On failure, it does nothing.
+ * @return A Boolean indicating whether it found the method.
+ */
+Bool Interpreter_lookupMethodInDictionary(ObjectPointer dictionary);
+
 #endif
