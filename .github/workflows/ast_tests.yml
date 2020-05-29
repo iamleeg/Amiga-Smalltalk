@@ -6,13 +6,13 @@ jobs:
     name: AmigaSmalltalkTests
     runs-on: ubuntu-latest
     steps:
-	- name: Check Out
-	  uses: actions/checkout@v2
-	- name: Get AXRT
-	  run: sudo dpkg -i ./vendor/libaxrt-2.0_40.0-1_amd64.deb
-	- name: Get AXRT-dev
-	  run: sudo dpkg -i ./vendor/libaxrt-2.0-dev_40.0-1_amd64.deb
-	- name: Use patched runtime (temporary until new release)
-	  run: mv ./vendor/libaxrt.so.40.1.20200526 ./libaxrt.so
-	- name: Build and run tests
-	  run: make check
+      - name: Check Out
+        uses: actions/checkout@v2
+      - name: Get AXRT
+        run: sudo dpkg -i ./vendor/libaxrt-2.0_40.0-1_amd64.deb
+      - name: Get AXRT-dev
+        run: sudo dpkg -i ./vendor/libaxrt-2.0-dev_40.0-1_amd64.deb
+      - name: Use patched runtime (temporary until new release)
+        run: mv ./vendor/libaxrt.so.40.1.20200526 ./libaxrt.so
+      - name: Build and run tests
+        run: make check
