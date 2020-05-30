@@ -8,8 +8,6 @@ jobs:
     steps:
       - name: Check Out
         uses: actions/checkout@v2
-      - name: Get xfvb
-        run: sudo apt-get install xvfb
       - name: Get AXRT
         run: sudo dpkg -i ./vendor/libaxrt-2.0_40.0-1_amd64.deb
       - name: Get AXRT-dev
@@ -19,7 +17,7 @@ jobs:
       - name: Make sure prefs are readable
         run: sudo chmod -R a+r /usr/lib/x86_64-linux-gnu/axrt
       - name: start xvfb
-        run: xvfb &
+        run: Xvfb &
 #      - name: set up a tmate session
 #        uses: mxschmitt/action-tmate@v2
       - name: Build and run tests
