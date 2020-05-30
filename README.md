@@ -3,6 +3,8 @@
 It's Smalltalk. For Amiga. It was made by following the instructions in the Blue Book:
 Smalltalk-80: The Language and Its Implementation.
 
+![VM Tests](https://github.com/iamleeg/Amiga-Smalltalk/workflows/VM%20Tests/badge.svg)
+
 ## A note on comments
 
 Doxygen comments were added by the Amiga-Smalltalk authors, as were all `/* block comments */`.
