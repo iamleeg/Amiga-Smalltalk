@@ -8,17 +8,5 @@ jobs:
     steps:
       - name: Check Out
         uses: actions/checkout@v2
-      - name: Get AXRT
-        run: sudo dpkg -i ./vendor/libaxrt-2.0_40.0-1_amd64.deb
-      - name: Get AXRT-dev
-        run: sudo dpkg -i ./vendor/libaxrt-2.0-dev_40.0-1_amd64.deb
-      - name: Use patched runtime (temporary until new release)
-        run: sudo cp ./vendor/libaxrt.so.40.1.20200526 /usr/lib/x86_64-linux-gnu/libaxrt.so
-      - name: Make sure prefs are readable
-        run: sudo chmod -R a+r /usr/lib/x86_64-linux-gnu/axrt
-      - name: start xvfb
-        run: Xvfb &
-#      - name: set up a tmate session
-#        uses: mxschmitt/action-tmate@v2
       - name: Build and run tests
         run: DISPLAY=:0 make check
