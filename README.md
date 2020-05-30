@@ -3,6 +3,8 @@
 It's Smalltalk. For Amiga. It was made by following the instructions in the Blue Book:
 Smalltalk-80: The Language and Its Implementation.
 
+![VM Tests](https://github.com/iamleeg/Amiga-Smalltalk/workflows/VM%20Tests/badge.svg)
+
 ## A note on comments
 
 Doxygen comments were added by the Amiga-Smalltalk authors, as were all `/* block comments */`.
@@ -14,7 +16,9 @@ Page numbers, if not otherwise clarified, refer to pages in the single printed e
 
 ## Building the tests
 
-### In AROS/AmigaDOS
+### In Debianish Linux
+
+You need the AxRuntime, which is included in `vendor/`. Note that once you've installed the packages you (currently) need to link against the included version of the library, which addresses a crash on process quit that made successful tests look like failures.
 
 `make check` will build and run the tests.
 
