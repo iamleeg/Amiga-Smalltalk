@@ -16,7 +16,7 @@ Page numbers, if not otherwise clarified, refer to pages in the single printed e
 
 ### In Debianish Linux
 
-You need the AxRuntime https://www.axrt.org/download/libaxrt-2.0_40.0-1_amd64.deb and SDK https://www.axrt.org/download/libaxrt-2.0-dev_40.0-1_amd64.deb
+You need the AxRuntime, which is included in `vendor/`. Note that once you've installed the packages you (currently) need to link against the included version of the library, which addresses a crash on process quit that made successful tests look like failures.
 
 `make check` will build and run the tests.
 
