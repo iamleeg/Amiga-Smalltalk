@@ -86,6 +86,7 @@ Test(FindingMethodInDictionaryWithCorrectKeySucceeds) {
   ObjectMemory_segmentBitsOf_put(array, segment);
   ObjectMemory_sizeBitsOf_put(array, HeaderSize + 1);
   ObjectMemory_storeWord_ofObject_withValue(0, array, compiledMethod);
+  ObjectMemory_storeWord_ofObject_withValue(MethodArrayIndex, dictionary, array);
 
   messageSelector = symbol;
 
