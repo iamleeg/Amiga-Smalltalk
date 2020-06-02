@@ -49,8 +49,56 @@ Test(FindingMethodInDictionaryWithNilKeyFails) {
   Expect(foundMethod == NO);
 }
 
+
+Test(FindingMethodInDictionaryWithWrongKeyFails) {
+  ObjectPointer dictionary = 0x2600, location = 0x3006, array = 0x2610, arrayLocation = 0x3016, compiledMethod = 0xf002, symbol = DoesNotUnderstandSelector;
+  Word dictionarySize = SelectorStart + HeaderSize + 1, segment = RealWordMemory_bestSegmentFor(3);
+  Bool foundMethod;
+
+  ObjectMemory_locationBitsOf_put(dictionary, location);
+  ObjectMemory_segmentBitsOf_put(dictionary, segment);
+  ObjectMemory_sizeBitsOf_put(dictionary, dictionarySize);
+  ObjectMemory_storeWord_ofObject_withValue(SelectorStart, dictionary, symbol);
+
+  ObjectMemory_locationBitsOf_put(array, arrayLocation);
+  ObjectMemory_segmentBitsOf_put(array, segment);
+  ObjectMemory_sizeBitsOf_put(array, HeaderSize + 1);
+  ObjectMemory_storeWord_ofObject_withValue(0, array, compiledMethod);
+
+  messageSelector = symbol + 2;
+
+  foundMethod = Interpreter_lookupMethodInDictionary(dictionary);
+
+  Expect(foundMethod == NO);
+}
+
+Test(FindingMethodInDictionaryWithCorrectKeySucceeds) {
+  ObjectPointer dictionary = 0x2600, location = 0x3006, array = 0x2610, arrayLocation = 0x3016, compiledMethod = 0xf002, symbol = DoesNotUnderstandSelector;
+  Word dictionarySize = SelectorStart + HeaderSize + 1, segment = RealWordMemory_bestSegmentFor(3);
+  Bool foundMethod;
+
+  ObjectMemory_locationBitsOf_put(dictionary, location);
+  ObjectMemory_segmentBitsOf_put(dictionary, segment);
+  ObjectMemory_sizeBitsOf_put(dictionary, dictionarySize);
+  ObjectMemory_storeWord_ofObject_withValue(SelectorStart, dictionary, symbol);
+
+  ObjectMemory_locationBitsOf_put(array, arrayLocation);
+  ObjectMemory_segmentBitsOf_put(array, segment);
+  ObjectMemory_sizeBitsOf_put(array, HeaderSize + 1);
+  ObjectMemory_storeWord_ofObject_withValue(0, array, compiledMethod);
+
+  messageSelector = symbol;
+
+  foundMethod = Interpreter_lookupMethodInDictionary(dictionary);
+
+  Expect(foundMethod == YES);
+  Expect(newMethod == compiledMethod);
+}
+
 void ClassTests(struct TestResult *tr) {
   RunTest(TestHashOfDifferentObjectsIsDifferent);
   RunTest(FindingMethodInEmptyDictionaryFails);
   RunTest(FindingMethodInDictionaryWithNilKeyFails);
+  RunTest(FindingMethodInDictionaryWithWrongKeyFails);
+  RunTest(FindingMethodInDictionaryWithCorrectKeySucceeds);
 }
