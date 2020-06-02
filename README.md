@@ -30,6 +30,10 @@ You need the AxRuntime, which is included in `vendor/`. Note that once you've in
 4. `make local-amigasmalltalktests`
 5. The tests are available in AROS as `:local/AmigaSmalltalk/AmigaSmalltalkTests`.
 
+### `error_host`
+
+`error_host` is a tool that simulates a VM error, to make sure that it displays the UI correctly. Just build and run to see an uninspiring error message :).
+
 
 ## Copying
 

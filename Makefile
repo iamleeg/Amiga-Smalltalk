@@ -15,3 +15,6 @@ TEST_HEADERS = tests.h FreeListTests.h ObjectMemoryTests.h RealWordMemoryTests.h
 
 ast_tests: $(SOURCE_FILES) $(HEADER_FILES) $(TEST_SOURCES) $(TEST_HEADERS)
 	gcc $(CFLAGS) $(SOURCE_FILES) $(TEST_SOURCES) $(OBJ) -o ast_tests $(LDFLAGS)
+
+error_host: Interpreter_Error.c Interpreter_Error.h Error_Host.c
+	gcc $(CFLAGS) Interpreter_Error.c Error_Host.c $(OBJ) -o error_host -lintuition
