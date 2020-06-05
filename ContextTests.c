@@ -4,7 +4,7 @@
 #include "ObjectMemory.h"
 #include "RealWordMemory.h"
 
-ObjectPointer stubMethodContext() {
+ObjectPointer stubMethodContext(void) {
   ObjectPointer methodContext = 0x1220, location = 0x0ffe, method = 0x200c, methodLocation = 0x0f00, literal = NilPointer;
   Word segment = (2 % HeapSegmentCount), instructionPointer = 0x1000, stackPointer = 0x1008;
 
@@ -23,7 +23,7 @@ ObjectPointer stubMethodContext() {
   return methodContext;
 }
 
-ObjectPointer stubBlockContext() {
+ObjectPointer stubBlockContext(void) {
   ObjectPointer context = 0x1222, location = 0x1ffc, homeMethod = stubMethodContext();
   Word segment = (2 % HeapSegmentCount), instructionPointer = 0x1004, stackPointer = 0x100c;
 
@@ -37,7 +37,7 @@ ObjectPointer stubBlockContext() {
   return context;
 }
 
-void activateContextWithThreeObjectsOnTheStack() {
+void activateContextWithThreeObjectsOnTheStack(void) {
   ObjectPointer object1 = NilPointer, object2 = OnePointer, object3 = TwoPointer, context = stubMethodContext();
   activeContext = context;
   Interpreter_fetchContextRegisters();
