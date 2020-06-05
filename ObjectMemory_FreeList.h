@@ -49,7 +49,7 @@ void ObjectMemory_toFreePointerListAdd(ObjectPointer objectPointer);
  * Remove the most recent entry from the free pointer list and return it.
  * If the list is empty, then return nil.
  */
-ObjectPointer ObjectMemory_removeFromFreePointerList();
+ObjectPointer ObjectMemory_removeFromFreePointerList(void);
 
 /**
  * Return the head of the free chunk list of given size in the specified segment.
