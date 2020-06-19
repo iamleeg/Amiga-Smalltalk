@@ -152,6 +152,54 @@ Test(LookingUpMethodInClassFindsItInDictionary) {
   Expect(newMethod == compiledMethod);
 }
 
+Test(LookingUpMethodInSuperclassDictionary) {
+  ObjectPointer dictionary = 0x2600, location = 0x3006, array = 0x2610, arrayLocation = 0x3016, compiledMethod = 0xf002, symbol = 0x2468;
+  ObjectPointer class = 0x2620, classLocation = 0x3030, subclass = 0x2820, subclassLocation = 0x3230, subdictionary = 0x2800, subdictionaryLocation = 0x3206;
+  ObjectPointer subarray = 0x2810, subarrayLocation=0x3216, wrongSymbol = 0x2668, wrongMethod = 0x3430;
+  Word dictionarySize = SelectorStart + HeaderSize + 1, segment = RealWordMemory_bestSegmentFor(3);
+  Bool foundMethod;
+
+  ObjectMemory_locationBitsOf_put(dictionary, location);
+  ObjectMemory_segmentBitsOf_put(dictionary, segment);
+  ObjectMemory_sizeBitsOf_put(dictionary, dictionarySize);
+  ObjectMemory_storeWord_ofObject_withValue(SelectorStart, dictionary, symbol);
+
+  ObjectMemory_locationBitsOf_put(array, arrayLocation);
+  ObjectMemory_segmentBitsOf_put(array, segment);
+  ObjectMemory_sizeBitsOf_put(array, HeaderSize + 1);
+  ObjectMemory_storeWord_ofObject_withValue(0, array, compiledMethod);
+  ObjectMemory_storeWord_ofObject_withValue(MethodArrayIndex, dictionary, array);
+
+  ObjectMemory_locationBitsOf_put(class, classLocation);
+  ObjectMemory_segmentBitsOf_put(class, segment);
+  ObjectMemory_sizeBitsOf_put(class, 3);
+  ObjectMemory_storeWord_ofObject_withValue(MessageDictionaryIndex, class, dictionary);
+
+  ObjectMemory_locationBitsOf_put(subdictionary, subdictionaryLocation);
+  ObjectMemory_segmentBitsOf_put(subdictionary, segment);
+  ObjectMemory_sizeBitsOf_put(subdictionary, HeaderSize + SelectorStart + 1);
+  ObjectMemory_storeWord_ofObject_withValue(SelectorStart, subdictionary, wrongSymbol);
+
+  ObjectMemory_locationBitsOf_put(subarray, subarrayLocation);
+  ObjectMemory_segmentBitsOf_put(subarray, segment);
+  ObjectMemory_sizeBitsOf_put(subarray, HeaderSize + 1);
+  ObjectMemory_storeWord_ofObject_withValue(0, subarray, wrongMethod);
+  ObjectMemory_storeWord_ofObject_withValue(MethodArrayIndex, subdictionary, subarray);
+
+  ObjectMemory_locationBitsOf_put(subclass, subclassLocation);
+  ObjectMemory_segmentBitsOf_put(subclass, segment);
+  ObjectMemory_sizeBitsOf_put(subclass, 3);
+  ObjectMemory_storeWord_ofObject_withValue(MessageDictionaryIndex, subclass, subdictionary);
+  ObjectMemory_storeWord_ofObject_withValue(SuperClassIndex, subclass, class);
+
+  messageSelector = symbol;
+
+  foundMethod = Interpreter_lookupMethodInClass(subclass);
+
+  Expect(foundMethod == YES);
+  Expect(newMethod == compiledMethod);
+}
+
 void ClassTests(struct TestResult *tr) {
   RunTest(TestHashOfDifferentObjectsIsDifferent);
   RunTest(FindingMethodInEmptyDictionaryFails);
@@ -160,4 +208,5 @@ void ClassTests(struct TestResult *tr) {
   RunTest(FindingMethodInDictionaryWithCorrectKeySucceeds);
   RunTest(FindingMethodInDictionaryWithMultipleWrongKeysFails);
   RunTest(LookingUpMethodInClassFindsItInDictionary);
+  RunTest(LookingUpMethodInSuperclassDictionary);
 }
