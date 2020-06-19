@@ -211,4 +211,22 @@ enum ClassIndices {
   SelectorStart = 2
 };
 
+/**
+ * The indices used to access fields of a Message.
+ */
+enum MessageIndices {
+  /**
+   * The message selector.
+   */
+  MessageSelectorIndex = 0,
+  /**
+   * The list of arguments to the message.
+   */
+  MessageArgumentsIndex = 1,
+  /**
+   * The number of fields in a message.
+   */
+  MessageSize = 2
+};
+
 #endif

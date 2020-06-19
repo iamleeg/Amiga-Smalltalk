@@ -313,4 +313,32 @@ Word Interpreter_hash(ObjectPointer objectPointer);
  */
 Bool Interpreter_lookupMethodInDictionary(ObjectPointer dictionary);
 
+/**
+ * Find the method implementation that the given class associates with a selector.
+ * The selector is read from the messageSelector register, and the method is stored in
+ * newMethod (and primitiveIndex is set if necessary). If the requested method doesn't
+ * exist, then the interpreter looks through the chain of superclasses. If no parent class
+ * implements the method, then the interpreter restarts the search, for the doesNotUnderstand:
+ * selector. A functioning Smalltalk-80 MUST provide an implementation in the root
+ * (Object) class for doesNotUnderstand: and the interpreter will report an error if it
+ * cannot find doesNotUnderstand:.
+ * @return YES
+ */
+Bool Interpreter_lookupMethodInClass(ObjectPointer class);
+
+/**
+ * Return the current class's superclass. The root class's superclass is NilPointer, but that's
+ * up to your Smalltalk-80 implementation to arrange, not the interpreter.
+ */
+ObjectPointer Interpreter_superclassOf(ObjectPointer classPointer);
+
+/**
+ * If the interpreter can't find a method on a class (or any of its superclasses), then it sends
+ * doesNotUnderstand: to the receiver. It needs to package up the original method selector and
+ * arguments in a Message object, which becomes the single argument to doesNotUnderstand:.
+ * This routine creates that Message, and pushes it onto the active context's stack.
+ */
+void Interpreter_createActualMessage();
+
+
 #endif

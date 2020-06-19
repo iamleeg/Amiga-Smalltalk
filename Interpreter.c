@@ -1,4 +1,5 @@
 #include "Interpreter.h"
+#include "Interpreter_Error.h"
 #include "ObjectMemory.h"
 
 Bool success = NO;
@@ -271,4 +272,42 @@ Bool Interpreter_lookupMethodInDictionary(ObjectPointer dictionary) {
       index = SelectorStart;
     }
   }
+}
+
+Bool Interpreter_lookupMethodInClass(ObjectPointer class) {
+  ObjectPointer currentClass, dictionary;
+  currentClass = class;
+  while(currentClass != NilPointer) {
+    dictionary = ObjectMemory_fetchPointer_ofObject(MessageDictionaryIndex, currentClass);
+    if (Interpreter_lookupMethodInDictionary(dictionary)) {
+      return YES;
+    }
+    currentClass = Interpreter_superclassOf(currentClass);
+  }
+  if (messageSelector == DoesNotUnderstandSelector) {
+    Interpreter_error("Recursive not understood error encountered");
+  }
+  Interpreter_createActualMessage();
+  messageSelector = DoesNotUnderstandSelector;
+  return Interpreter_lookupMethodInClass(class);
+}
+
+ObjectPointer Interpreter_superclassOf(ObjectPointer classPointer) {
+  return ObjectMemory_fetchPointer_ofObject(SuperClassIndex, classPointer);
+}
+
+void Interpreter_createActualMessage() {
+  ObjectPointer argumentArray, message;
+  argumentArray = ObjectMemory_instantiateClass_withPointers(ClassArrayPointer, argumentCount);
+  /*
+   * On p589, the next line calls Interpreter_messageSize(), which isn't given. But it's evident
+   * that a Message instance has constant size and no indexed variables.
+   */
+  message = ObjectMemory_instantiateClass_withPointers(ClassMessagePointer, MessageSize);
+  ObjectMemory_storePointer_ofObject_withValue(MessageSelectorIndex, message, messageSelector);
+  ObjectMemory_storePointer_ofObject_withValue(MessageArgumentsIndex, message, argumentArray);
+  Interpreter_transfer_fromIndex_ofObject_toIndex_ofObject(argumentCount, stackPointer - (argumentCount - 1), activeContext, 0, argumentArray);
+  Interpreter_pop(argumentCount);
+  Interpreter_push(message);
+  argumentCount = 1;
 }
