@@ -3,6 +3,24 @@
 #include "ObjectMemory.h"
 #include "RealWordMemory.h"
 
+static Word segment = 0; /* The only segment we know to exist */
+
+void IdentityDictionaryAtPointer_key_value(ObjectPointer dictionary, ObjectPointer key, ObjectPointer value) {
+  Word size = HeaderSize + SelectorStart + 1;
+  ObjectPointer location = dictionary + 0x10, array = dictionary + 0x20, arrayLocation = dictionary + 0x30;
+
+  ObjectMemory_locationBitsOf_put(array, arrayLocation);
+  ObjectMemory_segmentBitsOf_put(array, segment);
+  ObjectMemory_sizeBitsOf_put(array, HeaderSize + 1);
+  ObjectMemory_storePointer_ofObject_withValue(0, array, value);
+
+  ObjectMemory_locationBitsOf_put(dictionary, location);
+  ObjectMemory_segmentBitsOf_put(dictionary, segment);
+  ObjectMemory_sizeBitsOf_put(dictionary, size);
+  ObjectMemory_storePointer_ofObject_withValue(SelectorStart, dictionary, key);
+  ObjectMemory_storePointer_ofObject_withValue(MethodArrayIndex, dictionary, array);
+}
+
 Test(TestHashOfDifferentObjectsIsDifferent) {
   /* honestly I find it hard to think of a non-exhaustive but meaningful test for a hash function. */
   Word hash1, hash2;
@@ -13,7 +31,7 @@ Test(TestHashOfDifferentObjectsIsDifferent) {
 
 Test(FindingMethodInEmptyDictionaryFails) {
   ObjectPointer dictionary = 0x2400, location = 0x3006;
-  Word dictionarySize = SelectorStart + HeaderSize, segment = RealWordMemory_bestSegmentFor(3);
+  Word dictionarySize = SelectorStart + HeaderSize;
   Bool foundMethod;
 
   ObjectMemory_locationBitsOf_put(dictionary, location);
@@ -28,19 +46,10 @@ Test(FindingMethodInEmptyDictionaryFails) {
 }
 
 Test(FindingMethodInDictionaryWithNilKeyFails) {
-  ObjectPointer dictionary = 0x2600, location = 0x3006, array = 0x2610, arrayLocation = 0x3016, compiledMethod = 0xf002;
-  Word dictionarySize = SelectorStart + HeaderSize + 1, segment = RealWordMemory_bestSegmentFor(3);
+  ObjectPointer dictionary = 0x2600, compiledMethod = 0xf002;
   Bool foundMethod;
 
-  ObjectMemory_locationBitsOf_put(dictionary, location);
-  ObjectMemory_segmentBitsOf_put(dictionary, segment);
-  ObjectMemory_sizeBitsOf_put(dictionary, dictionarySize);
-  ObjectMemory_storeWord_ofObject_withValue(SelectorStart, dictionary, NilPointer);
-
-  ObjectMemory_locationBitsOf_put(array, arrayLocation);
-  ObjectMemory_segmentBitsOf_put(array, segment);
-  ObjectMemory_sizeBitsOf_put(array, HeaderSize + 1);
-  ObjectMemory_storeWord_ofObject_withValue(0, array, compiledMethod);
+  IdentityDictionaryAtPointer_key_value(dictionary, NilPointer, compiledMethod);
 
   messageSelector = DoesNotUnderstandSelector;
 
@@ -51,20 +60,10 @@ Test(FindingMethodInDictionaryWithNilKeyFails) {
 
 
 Test(FindingMethodInDictionaryWithWrongKeyFails) {
-  ObjectPointer dictionary = 0x2600, location = 0x3006, array = 0x2610, arrayLocation = 0x3016, compiledMethod = 0xf002, symbol = DoesNotUnderstandSelector;
-  Word dictionarySize = SelectorStart + HeaderSize + 1, segment = RealWordMemory_bestSegmentFor(3);
+  ObjectPointer dictionary = 0x2600, compiledMethod = 0xf002, symbol = DoesNotUnderstandSelector;
   Bool foundMethod;
 
-  ObjectMemory_locationBitsOf_put(dictionary, location);
-  ObjectMemory_segmentBitsOf_put(dictionary, segment);
-  ObjectMemory_sizeBitsOf_put(dictionary, dictionarySize);
-  ObjectMemory_storeWord_ofObject_withValue(SelectorStart, dictionary, symbol);
-
-  ObjectMemory_locationBitsOf_put(array, arrayLocation);
-  ObjectMemory_segmentBitsOf_put(array, segment);
-  ObjectMemory_sizeBitsOf_put(array, HeaderSize + 1);
-  ObjectMemory_storeWord_ofObject_withValue(0, array, compiledMethod);
-  ObjectMemory_storeWord_ofObject_withValue(MethodArrayIndex, dictionary, array);
+  IdentityDictionaryAtPointer_key_value(dictionary, symbol, compiledMethod);
 
   messageSelector = symbol + 2;
 
@@ -74,20 +73,10 @@ Test(FindingMethodInDictionaryWithWrongKeyFails) {
 }
 
 Test(FindingMethodInDictionaryWithCorrectKeySucceeds) {
-  ObjectPointer dictionary = 0x2600, location = 0x3006, array = 0x2610, arrayLocation = 0x3016, compiledMethod = 0xf002, symbol = DoesNotUnderstandSelector;
-  Word dictionarySize = SelectorStart + HeaderSize + 1, segment = RealWordMemory_bestSegmentFor(3);
+  ObjectPointer dictionary = 0x2600, compiledMethod = 0xf002, symbol = DoesNotUnderstandSelector;
   Bool foundMethod;
 
-  ObjectMemory_locationBitsOf_put(dictionary, location);
-  ObjectMemory_segmentBitsOf_put(dictionary, segment);
-  ObjectMemory_sizeBitsOf_put(dictionary, dictionarySize);
-  ObjectMemory_storeWord_ofObject_withValue(SelectorStart, dictionary, symbol);
-
-  ObjectMemory_locationBitsOf_put(array, arrayLocation);
-  ObjectMemory_segmentBitsOf_put(array, segment);
-  ObjectMemory_sizeBitsOf_put(array, HeaderSize + 1);
-  ObjectMemory_storeWord_ofObject_withValue(0, array, compiledMethod);
-  ObjectMemory_storeWord_ofObject_withValue(MethodArrayIndex, dictionary, array);
+  IdentityDictionaryAtPointer_key_value(dictionary, symbol, compiledMethod);
 
   messageSelector = symbol;
 
@@ -99,7 +88,7 @@ Test(FindingMethodInDictionaryWithCorrectKeySucceeds) {
 
 Test(FindingMethodInDictionaryWithMultipleWrongKeysFails) {
   ObjectPointer dictionary = 0x2600, location = 0x3006, array = 0x2610, arrayLocation = 0x3016, compiledMethod = 0xf002, symbol = DoesNotUnderstandSelector, otherSymbol = 0x1030, otherMethod = 0xf008;
-  Word dictionarySize = SelectorStart + HeaderSize + 1, segment = RealWordMemory_bestSegmentFor(3);
+  Word dictionarySize = SelectorStart + HeaderSize + 2;
   Bool foundMethod;
 
   ObjectMemory_locationBitsOf_put(dictionary, location);
@@ -123,26 +112,17 @@ Test(FindingMethodInDictionaryWithMultipleWrongKeysFails) {
 }
 
 Test(LookingUpMethodInClassFindsItInDictionary) {
-  ObjectPointer dictionary = 0x2600, location = 0x3006, array = 0x2610, arrayLocation = 0x3016, compiledMethod = 0xf002, symbol = 0x2468;
-  ObjectPointer class = 0x2620, classLocation = 0x3030;
-  Word dictionarySize = SelectorStart + HeaderSize + 1, segment = RealWordMemory_bestSegmentFor(3);
+  ObjectPointer dictionary = 0x2600, compiledMethod = 0xf002, symbol = 0x2468;
+  ObjectPointer class = 0x3000, classLocation = 0x3030;
   Bool foundMethod;
 
-  ObjectMemory_locationBitsOf_put(dictionary, location);
-  ObjectMemory_segmentBitsOf_put(dictionary, segment);
-  ObjectMemory_sizeBitsOf_put(dictionary, dictionarySize);
-  ObjectMemory_storeWord_ofObject_withValue(SelectorStart, dictionary, symbol);
-
-  ObjectMemory_locationBitsOf_put(array, arrayLocation);
-  ObjectMemory_segmentBitsOf_put(array, segment);
-  ObjectMemory_sizeBitsOf_put(array, HeaderSize + 1);
-  ObjectMemory_storeWord_ofObject_withValue(0, array, compiledMethod);
-  ObjectMemory_storeWord_ofObject_withValue(MethodArrayIndex, dictionary, array);
+  IdentityDictionaryAtPointer_key_value(dictionary, symbol, compiledMethod);
 
   ObjectMemory_locationBitsOf_put(class, classLocation);
   ObjectMemory_segmentBitsOf_put(class, segment);
   ObjectMemory_sizeBitsOf_put(class, 3);
-  ObjectMemory_storeWord_ofObject_withValue(MessageDictionaryIndex, class, dictionary);
+  ObjectMemory_storePointer_ofObject_withValue(MessageDictionaryIndex, class, dictionary);
+  ObjectMemory_storePointer_ofObject_withValue(SuperClassIndex, class, NilPointer);
 
   messageSelector = symbol;
 
@@ -153,38 +133,20 @@ Test(LookingUpMethodInClassFindsItInDictionary) {
 }
 
 Test(LookingUpMethodInSuperclassDictionary) {
-  ObjectPointer dictionary = 0x2600, location = 0x3006, array = 0x2610, arrayLocation = 0x3016, compiledMethod = 0xf002, symbol = 0x2468;
-  ObjectPointer class = 0x2620, classLocation = 0x3030, subclass = 0x2820, subclassLocation = 0x3230, subdictionary = 0x2800, subdictionaryLocation = 0x3206;
-  ObjectPointer subarray = 0x2810, subarrayLocation=0x3216, wrongSymbol = 0x2668, wrongMethod = 0x3430;
-  Word dictionarySize = SelectorStart + HeaderSize + 1, segment = RealWordMemory_bestSegmentFor(3);
+  ObjectPointer dictionary = 0x2600, compiledMethod = 0xf002, symbol = 0x2468;
+  ObjectPointer class = 0x3000, classLocation = 0x3030, subclass = 0x2820, subclassLocation = 0x3230, subdictionary = 0x2800;
+  ObjectPointer wrongSymbol = 0x2668, wrongMethod = 0x3430;
+  Word dictionarySize = SelectorStart + HeaderSize + 1;
   Bool foundMethod;
 
-  ObjectMemory_locationBitsOf_put(dictionary, location);
-  ObjectMemory_segmentBitsOf_put(dictionary, segment);
-  ObjectMemory_sizeBitsOf_put(dictionary, dictionarySize);
-  ObjectMemory_storeWord_ofObject_withValue(SelectorStart, dictionary, symbol);
-
-  ObjectMemory_locationBitsOf_put(array, arrayLocation);
-  ObjectMemory_segmentBitsOf_put(array, segment);
-  ObjectMemory_sizeBitsOf_put(array, HeaderSize + 1);
-  ObjectMemory_storeWord_ofObject_withValue(0, array, compiledMethod);
-  ObjectMemory_storeWord_ofObject_withValue(MethodArrayIndex, dictionary, array);
+  IdentityDictionaryAtPointer_key_value(dictionary, symbol, compiledMethod);
 
   ObjectMemory_locationBitsOf_put(class, classLocation);
   ObjectMemory_segmentBitsOf_put(class, segment);
   ObjectMemory_sizeBitsOf_put(class, 3);
   ObjectMemory_storeWord_ofObject_withValue(MessageDictionaryIndex, class, dictionary);
 
-  ObjectMemory_locationBitsOf_put(subdictionary, subdictionaryLocation);
-  ObjectMemory_segmentBitsOf_put(subdictionary, segment);
-  ObjectMemory_sizeBitsOf_put(subdictionary, HeaderSize + SelectorStart + 1);
-  ObjectMemory_storeWord_ofObject_withValue(SelectorStart, subdictionary, wrongSymbol);
-
-  ObjectMemory_locationBitsOf_put(subarray, subarrayLocation);
-  ObjectMemory_segmentBitsOf_put(subarray, segment);
-  ObjectMemory_sizeBitsOf_put(subarray, HeaderSize + 1);
-  ObjectMemory_storeWord_ofObject_withValue(0, subarray, wrongMethod);
-  ObjectMemory_storeWord_ofObject_withValue(MethodArrayIndex, subdictionary, subarray);
+  IdentityDictionaryAtPointer_key_value(subdictionary, wrongSymbol, wrongMethod);
 
   ObjectMemory_locationBitsOf_put(subclass, subclassLocation);
   ObjectMemory_segmentBitsOf_put(subclass, segment);
