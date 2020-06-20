@@ -21,6 +21,17 @@ void IdentityDictionaryAtPointer_key_value(ObjectPointer dictionary, ObjectPoint
   ObjectMemory_storePointer_ofObject_withValue(MethodArrayIndex, dictionary, array);
 }
 
+void ClassAtPointer_super_methods(ObjectPointer class, ObjectPointer superclass, ObjectPointer messageDictionary) {
+  Word size = 3;
+  ObjectPointer location = class + 0x10;
+
+  ObjectMemory_locationBitsOf_put(class, location);
+  ObjectMemory_segmentBitsOf_put(class, segment);
+  ObjectMemory_sizeBitsOf_put(class, size);
+  ObjectMemory_storePointer_ofObject_withValue(SuperClassIndex, class, superclass);
+  ObjectMemory_storePointer_ofObject_withValue(MessageDictionaryIndex, class, messageDictionary);
+}
+
 Test(TestHashOfDifferentObjectsIsDifferent) {
   /* honestly I find it hard to think of a non-exhaustive but meaningful test for a hash function. */
   Word hash1, hash2;
@@ -113,16 +124,11 @@ Test(FindingMethodInDictionaryWithMultipleWrongKeysFails) {
 
 Test(LookingUpMethodInClassFindsItInDictionary) {
   ObjectPointer dictionary = 0x2600, compiledMethod = 0xf002, symbol = 0x2468;
-  ObjectPointer class = 0x3000, classLocation = 0x3030;
+  ObjectPointer class = 0x3000;
   Bool foundMethod;
 
   IdentityDictionaryAtPointer_key_value(dictionary, symbol, compiledMethod);
-
-  ObjectMemory_locationBitsOf_put(class, classLocation);
-  ObjectMemory_segmentBitsOf_put(class, segment);
-  ObjectMemory_sizeBitsOf_put(class, 3);
-  ObjectMemory_storePointer_ofObject_withValue(MessageDictionaryIndex, class, dictionary);
-  ObjectMemory_storePointer_ofObject_withValue(SuperClassIndex, class, NilPointer);
+  ClassAtPointer_super_methods(class, NilPointer, dictionary);
 
   messageSelector = symbol;
 
@@ -140,19 +146,10 @@ Test(LookingUpMethodInSuperclassDictionary) {
   Bool foundMethod;
 
   IdentityDictionaryAtPointer_key_value(dictionary, symbol, compiledMethod);
-
-  ObjectMemory_locationBitsOf_put(class, classLocation);
-  ObjectMemory_segmentBitsOf_put(class, segment);
-  ObjectMemory_sizeBitsOf_put(class, 3);
-  ObjectMemory_storeWord_ofObject_withValue(MessageDictionaryIndex, class, dictionary);
+  ClassAtPointer_super_methods(class, NilPointer, dictionary);
 
   IdentityDictionaryAtPointer_key_value(subdictionary, wrongSymbol, wrongMethod);
-
-  ObjectMemory_locationBitsOf_put(subclass, subclassLocation);
-  ObjectMemory_segmentBitsOf_put(subclass, segment);
-  ObjectMemory_sizeBitsOf_put(subclass, 3);
-  ObjectMemory_storeWord_ofObject_withValue(MessageDictionaryIndex, subclass, subdictionary);
-  ObjectMemory_storeWord_ofObject_withValue(SuperClassIndex, subclass, class);
+  ClassAtPointer_super_methods(subclass, class, subdictionary);
 
   messageSelector = symbol;
 
