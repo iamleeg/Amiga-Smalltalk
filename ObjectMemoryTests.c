@@ -436,14 +436,16 @@ Test(DiscoverByteLengthOfObjectWithOddSize) {
 }
 
 Test(AllocateSmallObject) {
-  ObjectPointer objectPointer, classPointer = 0x2468, reportedClass;
+  ObjectPointer objectPointer, anObject = 0x2300, classPointer = 0x2468, reportedClass, location = 0x3200;
   Word size, wordLength = 10;
   Bool pointerBit;
   /* this test actually allocates an object, so let's ensure there's a free space */
   Word segment = (1 % HeapSegmentCount);
   currentSegment = segment;
   /* add a valid pointer to the free chunk list */
-  ObjectMemory_headOfFreeChunkList_inSegment_put(wordLength + HeaderSize, currentSegment, 0x2300);
+  ObjectMemory_locationBitsOf_put(anObject, location);
+  ObjectMemory_segmentBitsOf_put(anObject, segment);
+  ObjectMemory_headOfFreeChunkList_inSegment_put(wordLength + HeaderSize, currentSegment, anObject);
 
   objectPointer = ObjectMemory_instantiateClass_withPointers(classPointer, wordLength);
 
