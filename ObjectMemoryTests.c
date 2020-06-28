@@ -435,7 +435,7 @@ Test(DiscoverByteLengthOfObjectWithOddSize) {
   Expect(byteLength == (size - 2)*2 - 1);
 }
 
-Test(AllocateSmallObject) {
+Test(AllocateSmallObjectByReclaimingRightSizedSpace) {
   ObjectPointer objectPointer, anObject = 0x2300, classPointer = 0x2468, reportedClass, location = 0x3200;
   Word size, wordLength = 10;
   Bool pointerBit;
@@ -691,7 +691,7 @@ void ObjectMemoryTests(struct TestResult *tr) {
   RunIsolatedTest(DiscoverWordLengthOfObject);
   RunIsolatedTest(DiscoverByteLengthOfObjectWithEvenSize);
   RunIsolatedTest(DiscoverByteLengthOfObjectWithOddSize);
-  RunIsolatedTest(AllocateSmallObject);
+  RunIsolatedTest(AllocateSmallObjectByReclaimingRightSizedSpace);
   RunIsolatedTest(AllocateHugeObject);
   RunIsolatedTest(AllocateSmallObjectWithWordStorage);
   RunIsolatedTest(AllocateSmallObjectWithByteStorage);
