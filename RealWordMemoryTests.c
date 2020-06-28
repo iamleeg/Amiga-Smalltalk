@@ -54,8 +54,8 @@ Test(PutAndRetrieveByteInSegment) {
 }
 
 void RealWordMemoryTests(struct TestResult *tr) {
-  RunTest(PutAndRetrieveWordInSegment);
-  RunTest(PutSpecificBitsInAWord);
-  RunTest(RetrieveSpecificBitsFromAWord);
-  RunTest(PutAndRetrieveByteInSegment);
+  RunIsolatedTest(PutAndRetrieveWordInSegment);
+  RunIsolatedTest(PutSpecificBitsInAWord);
+  RunIsolatedTest(RetrieveSpecificBitsFromAWord);
+  RunIsolatedTest(PutAndRetrieveByteInSegment);
 }

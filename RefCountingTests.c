@@ -32,7 +32,7 @@ Test(ReturnPointerToImmediateInteger) {
 }
 
 void RefCountingTests(struct TestResult *tr) {
-  RunTest(IncrementCountOfRegularObject);
-  RunTest(DoNotIncrementOverflownCount);
-  RunTest(ReturnPointerToImmediateInteger);
+  RunIsolatedTest(IncrementCountOfRegularObject);
+  RunIsolatedTest(DoNotIncrementOverflownCount);
+  RunIsolatedTest(ReturnPointerToImmediateInteger);
 }

@@ -439,11 +439,11 @@ Test(AllocateSmallObject) {
   ObjectPointer objectPointer, classPointer = 0x2468, reportedClass;
   Word size, wordLength = 10;
   Bool pointerBit;
-  /* this test actually allocates an object, so let's ensure there's a free space 
+  /* this test actually allocates an object, so let's ensure there's a free space */
   Word segment = (1 % HeapSegmentCount);
   currentSegment = segment;
-  /* add a valid pointer to the free chunk list 
-  ObjectMemory_headOfFreeChunkList_inSegment_put(wordLength + HeaderSize, currentSegment, 0x2300); */
+  /* add a valid pointer to the free chunk list */
+  ObjectMemory_headOfFreeChunkList_inSegment_put(wordLength + HeaderSize, currentSegment, 0x2300);
 
   objectPointer = ObjectMemory_instantiateClass_withPointers(classPointer, wordLength);
 
@@ -646,61 +646,61 @@ Test(IntegerValueWithinRange) {
 }
 
 void ObjectMemoryTests(struct TestResult *tr) {
-  RunTest(NonIntegerObjectIsNotIntegerObject);
-  RunTest(IntegerObjectIsIntegerObject);
-  RunTest(ObjectTableLookupFindsWordInRealWordMemory);
-  RunTest(ObjectTableStorageSetsWordInRealWordMemory);
-  RunTest(ObjectTableStorageRetrievesSpecificBitsInRealWordMemory);
-  RunTest(ObjectTableStorageSetsSpecificBitsInRealWordMemory);
-  RunTest(CountBitsInObjectStorageAreMostSignificantByteOfObjectHeader);
-  RunTest(CountBitsStoredInMostSignificantByteOfObjectHeader);
-  RunTest(OddBitIsAtBitEightOfObjectHeader);
-  RunTest(OddBitIsSetAtBitEightOfObjectHeader);
-  RunTest(PointerBitIsAtBitNineOfObjectHeader);
-  RunTest(PointerBitIsSetAtBitNineOfObjectHeader);
-  RunTest(FreeBitIsAtBitTenOfObjectHeader);
-  RunTest(FreeBitIsSetAtBitTenOfObjectHeader);
-  RunTest(SegmentBitsAtLowestNybbleOfObjectHeader);
-  RunTest(SegmentBitsStoredInLowestNybbleOfObjectHeader);
-  RunTest(LocationBitsAreInTheSecondWordOfObjectHeader);
-  RunTest(LocationBitsStoredInSecondWordOfObjectHeader);
-  RunTest(GrabbingHeapChunkOfObjectGetsWordDeeperIntoMemory);
-  RunTest(StoringHeapChunkOfObjectWritesWordDeeperIntoMemory);
-  RunTest(GetHeapChunkOfObjectMemoryByByte);
-  RunTest(StoreHeapChunkOfObjectMemoryByByte);
-  RunTest(SizeBitsOfObjectAreInFirstWordOfHeap);
-  RunTest(StoreSizeBitsOfObjectInFirstWordOfItsHeap);
-  RunTest(ClassBitsOfObjectAreInSecondWordOfHeap);
-  RunTest(StoreClassBitsOfObjectInSecondWordOfItsHeap);
-  RunTest(FetchPointerByRetrievingAppropriateWordInMemory);
-  RunTest(StorePointerSavesInCorrectLocationAndAdjustsCounts);
-  RunTest(FetchWordFromAppropriateLocationInMemory);
-  RunTest(StoreWordInObjectField);
-  RunTest(FetchLowByteOfWord);
-  RunTest(FetchHighByteOfWord);
-  RunTest(StoreBytesOfWord);
-  RunTest(IncrementRefCount);
-  RunTest(UpperBoundOfRefCount);
-  RunTest(DecrementRefCount);
-  RunTest(DoNotDecrementCountForMaximallyReferencedObject);
-  RunTest(DeallocateObjectWhenFinalReferenceRemoved);
-  RunTest(FetchClassOfRegularObject);
-  RunTest(FetchClassOfImmediateInteger);
-  RunTest(DiscoverWordLengthOfObject);
-  RunTest(DiscoverByteLengthOfObjectWithEvenSize);
-  RunTest(DiscoverByteLengthOfObjectWithOddSize);
-  RunTest(AllocateSmallObject);
-  RunTest(AllocateHugeObject);
-  RunTest(AllocateSmallObjectWithWordStorage);
-  RunTest(AllocateSmallObjectWithByteStorage);
-  RunTest(FindFirstInstanceOfClass);
-  RunTest(FindFirstLiveInstanceOfClass);
-  RunTest(FindNextInstanceOfClass);
-  RunTest(DoNotFindAnyInstanceOfClassThatWasNeverInstantiated);
-  RunTest(SwapPointers);
-  RunTest(GetIntegerValueOfObject);
-  RunTest(GetObjectForIntegerValue);
-  RunTest(IntegerValueBelowRange);
-  RunTest(IntegerValueAboveRange);
-  RunTest(IntegerValueWithinRange);
+  RunIsolatedTest(NonIntegerObjectIsNotIntegerObject);
+  RunIsolatedTest(IntegerObjectIsIntegerObject);
+  RunIsolatedTest(ObjectTableLookupFindsWordInRealWordMemory);
+  RunIsolatedTest(ObjectTableStorageSetsWordInRealWordMemory);
+  RunIsolatedTest(ObjectTableStorageRetrievesSpecificBitsInRealWordMemory);
+  RunIsolatedTest(ObjectTableStorageSetsSpecificBitsInRealWordMemory);
+  RunIsolatedTest(CountBitsInObjectStorageAreMostSignificantByteOfObjectHeader);
+  RunIsolatedTest(CountBitsStoredInMostSignificantByteOfObjectHeader);
+  RunIsolatedTest(OddBitIsAtBitEightOfObjectHeader);
+  RunIsolatedTest(OddBitIsSetAtBitEightOfObjectHeader);
+  RunIsolatedTest(PointerBitIsAtBitNineOfObjectHeader);
+  RunIsolatedTest(PointerBitIsSetAtBitNineOfObjectHeader);
+  RunIsolatedTest(FreeBitIsAtBitTenOfObjectHeader);
+  RunIsolatedTest(FreeBitIsSetAtBitTenOfObjectHeader);
+  RunIsolatedTest(SegmentBitsAtLowestNybbleOfObjectHeader);
+  RunIsolatedTest(SegmentBitsStoredInLowestNybbleOfObjectHeader);
+  RunIsolatedTest(LocationBitsAreInTheSecondWordOfObjectHeader);
+  RunIsolatedTest(LocationBitsStoredInSecondWordOfObjectHeader);
+  RunIsolatedTest(GrabbingHeapChunkOfObjectGetsWordDeeperIntoMemory);
+  RunIsolatedTest(StoringHeapChunkOfObjectWritesWordDeeperIntoMemory);
+  RunIsolatedTest(GetHeapChunkOfObjectMemoryByByte);
+  RunIsolatedTest(StoreHeapChunkOfObjectMemoryByByte);
+  RunIsolatedTest(SizeBitsOfObjectAreInFirstWordOfHeap);
+  RunIsolatedTest(StoreSizeBitsOfObjectInFirstWordOfItsHeap);
+  RunIsolatedTest(ClassBitsOfObjectAreInSecondWordOfHeap);
+  RunIsolatedTest(StoreClassBitsOfObjectInSecondWordOfItsHeap);
+  RunIsolatedTest(FetchPointerByRetrievingAppropriateWordInMemory);
+  RunIsolatedTest(StorePointerSavesInCorrectLocationAndAdjustsCounts);
+  RunIsolatedTest(FetchWordFromAppropriateLocationInMemory);
+  RunIsolatedTest(StoreWordInObjectField);
+  RunIsolatedTest(FetchLowByteOfWord);
+  RunIsolatedTest(FetchHighByteOfWord);
+  RunIsolatedTest(StoreBytesOfWord);
+  RunIsolatedTest(IncrementRefCount);
+  RunIsolatedTest(UpperBoundOfRefCount);
+  RunIsolatedTest(DecrementRefCount);
+  RunIsolatedTest(DoNotDecrementCountForMaximallyReferencedObject);
+  RunIsolatedTest(DeallocateObjectWhenFinalReferenceRemoved);
+  RunIsolatedTest(FetchClassOfRegularObject);
+  RunIsolatedTest(FetchClassOfImmediateInteger);
+  RunIsolatedTest(DiscoverWordLengthOfObject);
+  RunIsolatedTest(DiscoverByteLengthOfObjectWithEvenSize);
+  RunIsolatedTest(DiscoverByteLengthOfObjectWithOddSize);
+  RunIsolatedTest(AllocateSmallObject);
+  RunIsolatedTest(AllocateHugeObject);
+  RunIsolatedTest(AllocateSmallObjectWithWordStorage);
+  RunIsolatedTest(AllocateSmallObjectWithByteStorage);
+  RunIsolatedTest(FindFirstInstanceOfClass);
+  RunIsolatedTest(FindFirstLiveInstanceOfClass);
+  RunIsolatedTest(FindNextInstanceOfClass);
+  RunIsolatedTest(DoNotFindAnyInstanceOfClassThatWasNeverInstantiated);
+  RunIsolatedTest(SwapPointers);
+  RunIsolatedTest(GetIntegerValueOfObject);
+  RunIsolatedTest(GetObjectForIntegerValue);
+  RunIsolatedTest(IntegerValueBelowRange);
+  RunIsolatedTest(IntegerValueAboveRange);
+  RunIsolatedTest(IntegerValueWithinRange);
 }

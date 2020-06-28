@@ -156,18 +156,18 @@ Test(FindMethodClassOfMethodWithAssociation) {
 }
 
 void CompiledMethodTests(struct TestResult *tr) {
-  RunTest(FindHeaderOfCompiledMethod);
-  RunTest(FindFirstLiteralInCompiledMethod);
-  RunTest(ExtractTemporaryCountOfCompiledMethod);
-  RunTest(ExtractLargeContextFlagFromCompiledMethod);
-  RunTest(ExtractLiteralCountFromCompiledMethod);
-  RunTest(ExtractFlagValueFromCompiledMethod);
-  RunTest(ExtractFieldIndexFromCompiledMethod);
-  RunTest(ExtractHeaderExtensionFromCompiledMethod);
-  RunTest(ArgumentCountOfNonprimitiveMethod);
-  RunTest(ArgumentCountOfPrimitiveZeroArgMethod);
-  RunTest(ArgumentCountOfMethodWithHeaderExtension);
-  RunTest(PrimitiveIndexOfRegularMethodIsZero);
-  RunTest(PrimitiveIndexOfMethodWithHeaderExtensionFoundInExtension);
-  RunTest(FindMethodClassOfMethodWithAssociation);
+  RunIsolatedTest(FindHeaderOfCompiledMethod);
+  RunIsolatedTest(FindFirstLiteralInCompiledMethod);
+  RunIsolatedTest(ExtractTemporaryCountOfCompiledMethod);
+  RunIsolatedTest(ExtractLargeContextFlagFromCompiledMethod);
+  RunIsolatedTest(ExtractLiteralCountFromCompiledMethod);
+  RunIsolatedTest(ExtractFlagValueFromCompiledMethod);
+  RunIsolatedTest(ExtractFieldIndexFromCompiledMethod);
+  RunIsolatedTest(ExtractHeaderExtensionFromCompiledMethod);
+  RunIsolatedTest(ArgumentCountOfNonprimitiveMethod);
+  RunIsolatedTest(ArgumentCountOfPrimitiveZeroArgMethod);
+  RunIsolatedTest(ArgumentCountOfMethodWithHeaderExtension);
+  RunIsolatedTest(PrimitiveIndexOfRegularMethodIsZero);
+  RunIsolatedTest(PrimitiveIndexOfMethodWithHeaderExtensionFoundInExtension);
+  RunIsolatedTest(FindMethodClassOfMethodWithAssociation);
 }

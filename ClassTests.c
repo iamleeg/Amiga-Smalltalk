@@ -160,12 +160,12 @@ Test(LookingUpMethodInSuperclassDictionary) {
 }
 
 void ClassTests(struct TestResult *tr) {
-  RunTest(TestHashOfDifferentObjectsIsDifferent);
-  RunTest(FindingMethodInEmptyDictionaryFails);
-  RunTest(FindingMethodInDictionaryWithNilKeyFails);
-  RunTest(FindingMethodInDictionaryWithWrongKeyFails);
-  RunTest(FindingMethodInDictionaryWithCorrectKeySucceeds);
-  RunTest(FindingMethodInDictionaryWithMultipleWrongKeysFails);
-  RunTest(LookingUpMethodInClassFindsItInDictionary);
-  RunTest(LookingUpMethodInSuperclassDictionary);
+  RunIsolatedTest(TestHashOfDifferentObjectsIsDifferent);
+  RunIsolatedTest(FindingMethodInEmptyDictionaryFails);
+  RunIsolatedTest(FindingMethodInDictionaryWithNilKeyFails);
+  RunIsolatedTest(FindingMethodInDictionaryWithWrongKeyFails);
+  RunIsolatedTest(FindingMethodInDictionaryWithCorrectKeySucceeds);
+  RunIsolatedTest(FindingMethodInDictionaryWithMultipleWrongKeysFails);
+  RunIsolatedTest(LookingUpMethodInClassFindsItInDictionary);
+  RunIsolatedTest(LookingUpMethodInSuperclassDictionary);
 }

@@ -111,15 +111,15 @@ Test(ResetAFreeChunkListByWritingANonPointerToItsHead) {
 }
 
 void FreeListTests(struct TestResult *tr) {
-  RunTest(RetrieveHeadOfFreePointerListFromObjectTable);
-  RunTest(SetHeadOfFreePointerListInObjectTable);
-  RunTest(AppendingEntryToFreePointerList);
-  RunTest(RemovingEntryFromFreePointerList);
-  RunTest(GettingNilWhenTryingToRemoveFromEmptyFreePointerList);
-  RunTest(RetrieveHeadOfFreeChunkListFromRealWordMemory);
-  RunTest(SetHeadOfFreeChunkListInRealWordMemory);
-  RunTest(AddObjectToFreeChunkListInItsSegment);
-  RunTest(RemoveEntryFromCurrentSegmentFreeChunkList);
-  RunTest(GetNilWhenTryingToRemoveFromEmptyFreeChunkList);
-  RunTest(ResetAFreeChunkListByWritingANonPointerToItsHead);
+  RunIsolatedTest(RetrieveHeadOfFreePointerListFromObjectTable);
+  RunIsolatedTest(SetHeadOfFreePointerListInObjectTable);
+  RunIsolatedTest(AppendingEntryToFreePointerList);
+  RunIsolatedTest(RemovingEntryFromFreePointerList);
+  RunIsolatedTest(GettingNilWhenTryingToRemoveFromEmptyFreePointerList);
+  RunIsolatedTest(RetrieveHeadOfFreeChunkListFromRealWordMemory);
+  RunIsolatedTest(SetHeadOfFreeChunkListInRealWordMemory);
+  RunIsolatedTest(AddObjectToFreeChunkListInItsSegment);
+  RunIsolatedTest(RemoveEntryFromCurrentSegmentFreeChunkList);
+  RunIsolatedTest(GetNilWhenTryingToRemoveFromEmptyFreeChunkList);
+  RunIsolatedTest(ResetAFreeChunkListByWritingANonPointerToItsHead);
 }

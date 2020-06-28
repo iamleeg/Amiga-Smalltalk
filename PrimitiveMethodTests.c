@@ -32,8 +32,8 @@ Test(FailingPrimitiveClearsSuccess) {
 }
 
 void PrimitiveMethodTests(struct TestResult *tr) {
-  RunTest(SetSuccessRegister);
-  RunTest(FetchSuccessRegister);
-  RunTest(InitializingPrimitiveSetsSuccess);
-  RunTest(FailingPrimitiveClearsSuccess);
+  RunIsolatedTest(SetSuccessRegister);
+  RunIsolatedTest(FetchSuccessRegister);
+  RunIsolatedTest(InitializingPrimitiveSetsSuccess);
+  RunIsolatedTest(FailingPrimitiveClearsSuccess);
 }
