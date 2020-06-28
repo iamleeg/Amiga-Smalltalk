@@ -5,6 +5,22 @@
 
 #include "ObjectMemory_Constants.h"
 
+/**
+ * Set the ObjectMemory up into a usable state:
+ * - a clean heap with at least one 128kB segment
+ * - object table in the first segment
+ * - empty "small chunk" free lists in all segments
+ * - all free memory in one "large chunk" object in each segment
+ * - all unused object pointers are on the free pointer list
+ * @return YES iff at least one heap segment is allocated and the memory is initialised.
+ */
+Bool ObjectMemory_new(void);
+
+/**
+ * Tear down ObjectMemory.
+ */
+void ObjectMemory_delete(void);
+
 /* "Public" methods used by the interpreter. */
 
 /**

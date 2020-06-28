@@ -1,4 +1,41 @@
 #include "ObjectMemory.h"
+#include "RealWordMemory.h"
+
+Bool ObjectMemory_new(void) {
+  Word thisSegment, chunkList, freeChunkSize;
+  ObjectPointer objectPointer, freeObjectPointer;
+  Bool hasMemory = RealWordMemory_new();
+  if (!hasMemory) {
+    return NO;
+  }
+  for (thisSegment = 0; thisSegment < HeapSegmentCount; thisSegment++) {
+    /* Make sure chunk lists are empty */
+    for (chunkList = HeaderSize; chunkList <= BigSize; chunkList++) {
+      ObjectMemory_resetFreeChunkList_inSegment(chunkList, thisSegment);
+    }
+    /* create one object with all of the free memory in this segment */
+    freeChunkSize = (thisSegment > 0) ? HeapSpaceStop - 1 : HeapSpaceStop - ObjectTableSize - 1;
+    freeObjectPointer = FirstFreeObject + (2 * thisSegment);
+    ObjectMemory_sizeBitsOf_put(freeObjectPointer, freeChunkSize);
+    ObjectMemory_segmentBitsOf_put(freeObjectPointer, thisSegment);
+    ObjectMemory_toFreeChunkList_add((BigSize), freeObjectPointer);
+  }
+  /* All predefined objects get an initial reference count */
+  for (objectPointer = 0; objectPointer < FirstUnusedObjectPointer; objectPointer += 2) {
+    ObjectMemory_countBitsOf_put(objectPointer, 1);
+  }
+  /* All remaining object pointers are on the free pointer list */
+  ObjectMemory_headOfFreePointerList_put(NonPointer);
+  for (objectPointer = FirstUnusedObjectPointer; objectPointer < FirstFreeObject; objectPointer += 2) {
+    ObjectMemory_freeBitOf_put(objectPointer, YES);
+    ObjectMemory_toFreePointerListAdd(objectPointer);
+  }
+  return YES;
+}
+
+void ObjectMemory_delete(void) {
+  RealWordMemory_delete();
+}
 
 ObjectPointer ObjectMemory_fetchPointer_ofObject(Word fieldIndex, ObjectPointer objectPointer) {
   return ObjectMemory_heapChunkOf_word(objectPointer, HeaderSize + fieldIndex);

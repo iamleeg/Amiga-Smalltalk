@@ -439,11 +439,11 @@ Test(AllocateSmallObject) {
   ObjectPointer objectPointer, classPointer = 0x2468, reportedClass;
   Word size, wordLength = 10;
   Bool pointerBit;
-  /* this test actually allocates an object, so let's ensure there's a free space */
+  /* this test actually allocates an object, so let's ensure there's a free space 
   Word segment = (1 % HeapSegmentCount);
   currentSegment = segment;
-  /* add a valid pointer to the free chunk list */
-  ObjectMemory_headOfFreeChunkList_inSegment_put(wordLength + HeaderSize, currentSegment, 0x2300);
+  /* add a valid pointer to the free chunk list 
+  ObjectMemory_headOfFreeChunkList_inSegment_put(wordLength + HeaderSize, currentSegment, 0x2300); */
 
   objectPointer = ObjectMemory_instantiateClass_withPointers(classPointer, wordLength);
 
