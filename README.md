@@ -34,6 +34,14 @@ You need the AxRuntime, which is included in `vendor/`. Note that once you've in
 
 `error_host` is a tool that simulates a VM error, to make sure that it displays the UI correctly. Just build and run to see an uninspiring error message :).
 
+## A note on the tests
+
+While these tests mostly look like unit tests, they're actually integration tests because they use the real `RealWordMemory` even when testing the `Interpreter`. A test suite gets a new, blank `RealWordMemory` on each run. You should be aware of these gotchas in your test design:
+
+ - assigning object pointers to variables will change the retain counts on the pointers, and potentially trigger deallocation. For this reason, I often design tests to write the pointers into memory as _words_ to avoid triggering unexpected behaviour.
+ - re-using objects or obejct pointers between tests _may_ cause problems if you don't explicitly clean up.
+ - allocating a new object, either in test code or in the SUT, relies on having free memory available from which to allocate the object. If sufficient memory isn't immediately available, the VM will trigger a mark-sweep garbage collection which may both take time and fail, if the memory is not in a consistent state.
+ - if the test runner launches, then you have exactly one segment (128kB, minus space for the free lists and object table) of memory available to use. You may have more, but can't rely on that. Once I realised this I introduced the `RealWordMemory_bestSegmentFor` method to support "legacy" tests that wrote to arbitrarily-chosen segments (it picks a segment number based on the requested one, and the number actually available). This introduces some non-determinism into the tests, so isn't recommended. For new tests, use segment 0 wherever possible.
 
 ## Copying
 

@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 
+#include "RealWordMemory.h"
+
 struct TestResult {
   int ran;
   int passed;
@@ -30,5 +32,15 @@ struct TestResult {
     printf("FAIL " #t "\n"); \
   } \
 } while(0)
+
+#define RunSuite(s) do { \
+  Bool hasMemory = RealWordMemory_new(); \
+  if (!hasMemory) { \
+    fprintf(stderr, "Unable to allocate heap space for the VM\n"); \
+    return 1; \
+  } \
+  s(&result); \
+  RealWordMemory_delete(); \
+} while (0)
 
 #endif

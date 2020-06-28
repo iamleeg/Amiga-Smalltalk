@@ -16,6 +16,7 @@ static Word *segmentPointers[HeapSegmentLimit];
 Bool RealWordMemory_new() {
   Bool hasASegment = NO;
   Word *pointer = NULL;
+  HeapSegmentCount = 0;
   do {
     pointer = (Word *)AllocMem(SegmentSize * sizeof(Word), MEMF_CLEAR);
     if (pointer) {
