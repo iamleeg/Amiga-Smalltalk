@@ -80,7 +80,7 @@ ObjectPointer ObjectMemory_attemptToAllocateChunkInCurrentSegment(Word size) {
 
   /* we got here, so recycling an earlier allocation didn't work. Try to find a large chunk. */
   predecessor = NonPointer; /*ST:  remember predecessor of chunk under consideration */
-  objectPointer = ObjectMemory_headOfFreeChunkList_inSegment(LastFreeChunkList, currentSegment);
+  objectPointer = ObjectMemory_headOfFreeChunkList_inSegment(BigSize, currentSegment);
   /*ST:  the search loop stops when the end of the linked list is encountered */
   while(objectPointer != NonPointer) {
     availableSize = ObjectMemory_sizeBitsOf(objectPointer);
@@ -88,7 +88,7 @@ ObjectPointer ObjectMemory_attemptToAllocateChunkInCurrentSegment(Word size) {
       next = ObjectMemory_classBitsOf(objectPointer); /*ST:  the link to the next chunk */
       if (predecessor == NonPointer) {
         /*ST:  it was the head of the list; make the next item the head */
-        ObjectMemory_headOfFreeChunkList_inSegment_put(LastFreeChunkList, currentSegment, next);
+        ObjectMemory_headOfFreeChunkList_inSegment_put(BigSize, currentSegment, next);
       } else {
         /*ST:  it was in between two chunks; link them together */
         ObjectMemory_classBitsOf_put(predecessor, next);

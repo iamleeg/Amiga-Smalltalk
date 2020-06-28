@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-#include "RealWordMemory.h"
+#include "ObjectMemory.h"
 
 struct TestResult {
   int ran;
@@ -33,14 +33,23 @@ struct TestResult {
   } \
 } while(0)
 
+/* If you think a test needs its own memory, use this. */
+#define RunIsolatedTest(t) do { \
+  ObjectMemory_delete(); \
+  ObjectMemory_new(); \
+  RunTest(t); \
+  ObjectMemory_delete(); \
+  ObjectMemory_new(); \
+} while (0)
+
 #define RunSuite(s) do { \
-  Bool hasMemory = RealWordMemory_new(); \
+  Bool hasMemory = ObjectMemory_new(); \
   if (!hasMemory) { \
     fprintf(stderr, "Unable to allocate heap space for the VM\n"); \
     return 1; \
   } \
   s(&result); \
-  RealWordMemory_delete(); \
+  ObjectMemory_delete(); \
 } while (0)
 
 #endif

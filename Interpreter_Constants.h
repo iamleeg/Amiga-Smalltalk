@@ -59,7 +59,11 @@ enum {
   MustBeBooleanSelector = 52,
   /*ST:  Tables */
   SpecialSelectorsPointer = 48,
-  CharacterTablePointer = 50
+  CharacterTablePointer = 50,
+  /**
+   * The ObjectMemory needs to know not to add the above pointers to the free pointer list on initialisation.
+   */
+  FirstUnusedObjectPointer = 52
 };
 
 /**

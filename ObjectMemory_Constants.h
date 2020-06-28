@@ -26,6 +26,33 @@
  * A size that is too big to appear in one of the small free chunk lists.
  */
 #define BigSize 0x2e
+/**
+ * A run of object pointers that can be used to hold the free memory when the VM starts.
+ */
+#define FirstFreeObject 0x7F00
+
+/**
+ * The location in the object table of the head of the free pointer list.
+ */
+#define FreePointerList 0xffce
+
+/**
+ * The location in each segment of the first free chunk list.
+ */
+#define FirstFreeChunkList 0xffd0
+/**
+ * The location in each segment of the last free chunk list.
+ * @note The last free chunk list contains big chunks. All other free chunk lists
+ *       contain chunks of a small size, given by
+ *       size = (location of list head) - (FirstFreeChunkList).
+ */
+#define LastFreeChunkList 0xfffe
+
+/**
+ * A pointer value that cannot be an object pointer.
+ */
+#define NonPointer 0xffff
+
 
 /**
  * @note the ObjectMemory also needs to know constants published by the Interpreter.
