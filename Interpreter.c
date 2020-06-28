@@ -2,7 +2,15 @@
 #include "Interpreter_Error.h"
 #include "ObjectMemory.h"
 
+/**
+ * Page 616.
+ * Interpreter must keep track of primitive success or failure independently of routine 
+ * call structure.  Part of the book specification therefore is a register called success
+ * that is initialized to true when the primitive is started and may be set
+ * to false if the routine fails.
+ */
 Bool success = NO;
+
 ObjectPointer activeContext = NilPointer;
 ObjectPointer homeContext = NilPointer;
 ObjectPointer method = NilPointer;
@@ -14,6 +22,10 @@ Word argumentCount = 0;
 ObjectPointer newMethod = NilPointer;
 Word primitiveIndex = 0;
 
+/**
+ * Page 616.
+ * The following two routines set and test the state of the primitive success register
+ */
 void Interpreter_success_(Bool successValue) {
   success = successValue && success;
 }
@@ -22,6 +34,12 @@ Bool Interpreter_success(void) {
   return success;
 }
 
+/**
+ * Page 616.
+ * The following  routines set the state of the success flag in the two common cases of 
+ * initialization before a primitive routine runs and discovery by a primitive 
+ * routine that it cannot complete
+ */
 void Interpreter_initPrimitive(void) {
   success = YES;
 }
@@ -29,6 +47,35 @@ void Interpreter_initPrimitive(void) {
 void Interpreter_primitiveFail(void) {
   success = NO;
 }
+
+/** 
+ * Page 617
+ * Many of the primitives manipulate integer quantities so the interpreter includes 
+ * several routines that perform common functions
+ */
+
+/**
+ * Page 617.  
+ * Used when a primitive expects a SmallInteger on top of the stack, if it is a 
+ * SmallInteger it's value is returned, if not a primitive failure is signalled.
+ */
+ 
+short Interpreter_popInteger(void) {
+	ObjectPointer result = Interpreter_popStack();
+	Interpreter_success_(ObjectMemory_isIntegerObject(result));
+	if( Interpreter_success() ) {
+		return ObjectMemory_integerValueOf(result);
+	} else {
+		Interpreter_primitiveFail();
+		return 0; /* caller shouldn't rely on this */
+	}
+}
+
+void Interpreter_pushInteger(short integerValue) {
+	Interpreter_push(ObjectMemory_integerObjectOf(integerValue));
+	Interpreter_success_(YES);
+}
+
 
 void Interpreter_storeInteger_ofObject_withValue(Word fieldIndex, ObjectPointer objectPointer, Word integerValue) {
   ObjectPointer integerPointer;
