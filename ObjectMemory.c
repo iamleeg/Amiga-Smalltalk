@@ -18,7 +18,7 @@ Bool ObjectMemory_new(void) {
     freeObjectPointer = FirstFreeObject + (2 * thisSegment);
     ObjectMemory_sizeBitsOf_put(freeObjectPointer, freeChunkSize);
     ObjectMemory_segmentBitsOf_put(freeObjectPointer, thisSegment);
-    ObjectMemory_toFreeChunkList_add((BigSize), freeObjectPointer);
+    ObjectMemory_toFreeChunkList_add(BigSize, freeObjectPointer);
   }
   /* All predefined objects get an initial reference count */
   for (objectPointer = 0; objectPointer < FirstUnusedObjectPointer; objectPointer += 2) {
