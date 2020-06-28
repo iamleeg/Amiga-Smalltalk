@@ -26,6 +26,8 @@ Bool ObjectMemory_new(void) {
   for (objectPointer = 0; objectPointer < FirstUnusedObjectPointer; objectPointer += 2) {
     ObjectMemory_countBitsOf_put(objectPointer, 1);
   }
+  /* But NilPointer cannot be released */
+  ObjectMemory_countBitsOf_put(NilPointer, 128);
   /* All remaining object pointers are on the free pointer list */
   ObjectMemory_headOfFreePointerList_put(NonPointer);
   for (objectPointer = FirstUnusedObjectPointer; objectPointer < FirstFreeObject; objectPointer += 2) {
