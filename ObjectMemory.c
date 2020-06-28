@@ -15,7 +15,7 @@ Bool ObjectMemory_new(void) {
     }
     /* create one object with all of the free memory in this segment */
     freeChunkSize = (thisSegment > 0) ? HeapSpaceStop - 1 : HeapSpaceStop - ObjectTableSize - 1;
-    freeChunkStart = (thisSegment > 0) ? 0 : ObjectTableSize;
+    freeChunkStart = (thisSegment > 0) ? 0 : ObjectTableSize + 2;
     freeObjectPointer = FirstFreeObject + (2 * thisSegment);
     ObjectMemory_sizeBitsOf_put(freeObjectPointer, freeChunkSize);
     ObjectMemory_segmentBitsOf_put(freeObjectPointer, thisSegment);
@@ -32,6 +32,8 @@ Bool ObjectMemory_new(void) {
     ObjectMemory_freeBitOf_put(objectPointer, YES);
     ObjectMemory_toFreePointerListAdd(objectPointer);
   }
+  /* Make sure we start in the first segment, in case something has already been happening */
+  currentSegment = 0;
   return YES;
 }
 
