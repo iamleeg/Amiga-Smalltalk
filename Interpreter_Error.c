@@ -7,6 +7,7 @@
 void Interpreter_error(char *message)
 {
   struct IntuiText body, postext, negtext;
+  BOOL response;
 
   body.IText = message;
   body.FrontPen = 0;
@@ -35,7 +36,7 @@ void Interpreter_error(char *message)
   negtext.ITextFont = NULL;
   negtext.NextText = NULL;
 
-  BOOL response = AutoRequest(NULL, &body, &postext, &negtext, 0, 0, 200, 80);
+  response = AutoRequest(NULL, &body, &postext, &negtext, 0, 0, 200, 80);
   if (response == FALSE) {
     exit(-1);
   }
