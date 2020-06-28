@@ -45,7 +45,7 @@ ObjectPointer ObjectMemory_allocateChunk(Word size) {
 
 ObjectPointer ObjectMemory_attemptToAllocateChunk(Word size) {
   ObjectPointer objectPointer = ObjectMemory_attemptToAllocateChunkInCurrentSegment(size);
-  short i;
+  Word i;
   if (objectPointer != NilPointer) {
     return objectPointer;
   }
