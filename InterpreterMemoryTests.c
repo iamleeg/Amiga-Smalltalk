@@ -97,7 +97,37 @@ Test(ExtractLowByteOfInteger) {
   Expect(lowByte == expected);
 }
 
+
+Test(PushAndPop) {
+	ObjectPointer anObject = 0x1234;
+	ObjectPointer aResult = 0;
+
+	activeContext = stubBlockContext();
+    Interpreter_fetchContextRegisters();
+    
+	Interpreter_push(anObject);
+	aResult = Interpreter_popStack();
+	Expect(anObject == aResult);
+}
+
+Test(PushAndPopInteger) {
+	short integerValue=1;
+	short actual = 0;
+	
+	activeContext = stubBlockContext();
+    Interpreter_fetchContextRegisters();
+
+	Interpreter_initPrimitive();
+	Interpreter_pushInteger(integerValue);
+	Expect(Interpreter_success() == YES);
+	actual = Interpreter_popInteger();
+	Expect(Interpreter_success() == YES);
+	Expect(integerValue == actual);
+}
+
 void InterpreterMemoryTests(struct TestResult *tr) {
+  RunTest(PushAndPop);
+  RunTest(PushAndPopInteger);
   RunTest(RoundTripIntegerThroughObjectMemory);
   RunTest(FailToStoreOutOfRangeInteger);
   RunTest(FailToFetchNonIntegerValue);
