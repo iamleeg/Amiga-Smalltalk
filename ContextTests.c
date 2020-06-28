@@ -250,25 +250,25 @@ Test(FetchLiteral) {
 }
 
 void ContextTests(struct TestResult *tr) {
-  RunTest(FetchInstructionPointerFromContext);
-  RunTest(UpdateInstructionPointerInContext);
-  RunTest(FetchStackPointerFromContext);
-  RunTest(StoreStackPointerInContext);
-  RunTest(FetchArgumentCountOfBlockContext);
-  RunTest(PositiveTestForBlockContext);
-  RunTest(NegativeTestForBlockContext);
-  RunTest(FetchContextRegistersFromBlockContext);
-  RunTest(FetchContextRegistersFromMethodContext);
-  RunTest(StoreContextRegisters);
-  RunTest(PushObjectOntoContextStack);
-  RunTest(PopContextStack);
-  RunTest(PeepStackTop);
-  RunTest(ExamineValueOnStack);
-  RunTest(PopStackByN);
-  RunTest(RoundTripPopAndUnPopByN);
-  RunTest(ActivateContext);
-  RunTest(FetchSender);
-  RunTest(FetchCaller);
-  RunTest(FetchTemporary);
-  RunTest(FetchLiteral);
+  RunIsolatedTest(FetchInstructionPointerFromContext);
+  RunIsolatedTest(UpdateInstructionPointerInContext);
+  RunIsolatedTest(FetchStackPointerFromContext);
+  RunIsolatedTest(StoreStackPointerInContext);
+  RunIsolatedTest(FetchArgumentCountOfBlockContext);
+  RunIsolatedTest(PositiveTestForBlockContext);
+  RunIsolatedTest(NegativeTestForBlockContext);
+  RunIsolatedTest(FetchContextRegistersFromBlockContext);
+  RunIsolatedTest(FetchContextRegistersFromMethodContext);
+  RunIsolatedTest(StoreContextRegisters);
+  RunIsolatedTest(PushObjectOntoContextStack);
+  RunIsolatedTest(PopContextStack);
+  RunIsolatedTest(PeepStackTop);
+  RunIsolatedTest(ExamineValueOnStack);
+  RunIsolatedTest(PopStackByN);
+  RunIsolatedTest(RoundTripPopAndUnPopByN);
+  RunIsolatedTest(ActivateContext);
+  RunIsolatedTest(FetchSender);
+  RunIsolatedTest(FetchCaller);
+  RunIsolatedTest(FetchTemporary);
+  RunIsolatedTest(FetchLiteral);
 }

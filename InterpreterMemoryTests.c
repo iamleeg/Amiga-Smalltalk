@@ -128,11 +128,11 @@ Test(PushAndPopInteger) {
 void InterpreterMemoryTests(struct TestResult *tr) {
   RunTest(PushAndPop);
   RunTest(PushAndPopInteger);
-  RunTest(RoundTripIntegerThroughObjectMemory);
-  RunTest(FailToStoreOutOfRangeInteger);
-  RunTest(FailToFetchNonIntegerValue);
-  RunTest(BlockTransferOfFieldsBetweenObjects);
-  RunTest(ExtractBitsFromInteger);
-  RunTest(ExtractHighByteOfInteger);
-  RunTest(ExtractLowByteOfInteger);
+  RunIsolatedTest(RoundTripIntegerThroughObjectMemory);
+  RunIsolatedTest(FailToStoreOutOfRangeInteger);
+  RunIsolatedTest(FailToFetchNonIntegerValue);
+  RunIsolatedTest(BlockTransferOfFieldsBetweenObjects);
+  RunIsolatedTest(ExtractBitsFromInteger);
+  RunIsolatedTest(ExtractHighByteOfInteger);
+  RunIsolatedTest(ExtractLowByteOfInteger);
 }
