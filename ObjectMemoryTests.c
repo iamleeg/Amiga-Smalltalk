@@ -439,7 +439,7 @@ Test(AllocateSmallObjectByReclaimingRightSizedSpace) {
   ObjectPointer objectPointer, anObject = 0x2300, classPointer = 0x2468, reportedClass, location = 0x3200;
   Word size, wordLength = 10;
   Bool pointerBit;
-  /* this test actually allocates an object, so let's ensure there's a free space */
+  /* this test allocates an object, so let's ensure there's a free space exactly equal to the object size */
   Word segment = (1 % HeapSegmentCount);
   currentSegment = segment;
   /* add a valid pointer to the free chunk list */
@@ -447,6 +447,25 @@ Test(AllocateSmallObjectByReclaimingRightSizedSpace) {
   ObjectMemory_segmentBitsOf_put(anObject, segment);
   ObjectMemory_headOfFreeChunkList_inSegment_put(wordLength + HeaderSize, currentSegment, anObject);
 
+  objectPointer = ObjectMemory_instantiateClass_withPointers(classPointer, wordLength);
+
+  Expect(objectPointer != NilPointer);
+
+  size = ObjectMemory_sizeBitsOf(objectPointer);
+  Expect(size == wordLength + HeaderSize);
+
+  reportedClass = ObjectMemory_fetchClassOf(objectPointer);
+  Expect(reportedClass == classPointer);
+
+  pointerBit = ObjectMemory_pointerBitOf(objectPointer);
+  Expect(pointerBit == YES);
+}
+
+Test(AllocateSmallObjectBySplittingLargeChunk) {
+  ObjectPointer objectPointer, classPointer = 0x2468, reportedClass;
+  Word size, wordLength = 10;
+  Bool pointerBit;
+  /* don't add a valid pointer to the free chunk list - rely on a BigSize chunk already existing */
   objectPointer = ObjectMemory_instantiateClass_withPointers(classPointer, wordLength);
 
   Expect(objectPointer != NilPointer);
@@ -692,6 +711,7 @@ void ObjectMemoryTests(struct TestResult *tr) {
   RunIsolatedTest(DiscoverByteLengthOfObjectWithEvenSize);
   RunIsolatedTest(DiscoverByteLengthOfObjectWithOddSize);
   RunIsolatedTest(AllocateSmallObjectByReclaimingRightSizedSpace);
+  RunIsolatedTest(AllocateSmallObjectBySplittingLargeChunk);
   RunIsolatedTest(AllocateHugeObject);
   RunIsolatedTest(AllocateSmallObjectWithWordStorage);
   RunIsolatedTest(AllocateSmallObjectWithByteStorage);
