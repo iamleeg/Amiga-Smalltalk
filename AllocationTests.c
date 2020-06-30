@@ -109,10 +109,10 @@ Test(DoNotReverseHeapPointerOfUnusedSpace) {
 }
 
 void AllocationTests(struct TestResult *tr) {
-  RunIsolatedTest(ReleasePointer);
-  RunIsolatedTest(LowWaterMarkCalculation);
-  RunIsolatedTest(ReverseHeapPointerAboveLowWaterMark);
-  RunIsolatedTest(DoNotReverseHeapPointerBelowLowWaterMark);
-  RunIsolatedTest(DoNotReverseHeapPointerInWrongSegment);
-  RunIsolatedTest(DoNotReverseHeapPointerOfUnusedSpace);
+  RunTest(ReleasePointer);
+  RunTest(LowWaterMarkCalculation);
+  RunTest(ReverseHeapPointerAboveLowWaterMark);
+  RunTest(DoNotReverseHeapPointerBelowLowWaterMark);
+  RunTest(DoNotReverseHeapPointerInWrongSegment);
+  RunTest(DoNotReverseHeapPointerOfUnusedSpace);
 }
