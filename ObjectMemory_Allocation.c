@@ -73,7 +73,7 @@ ObjectPointer ObjectMemory_attemptToAllocateChunkInCurrentSegment(Word size) {
    */
   if (size < BigSize) {
     objectPointer = ObjectMemory_removeFromFreeChunkList(size);
-    if (objectPointer) {
+    if (objectPointer != NilPointer) {
       return objectPointer; /*ST:  small chunk of exact size handy so use it */
     }
   }
