@@ -1,7 +1,7 @@
 #include "ObjectMemory_Allocation.h"
 #include "ObjectMemory_Constants.h"
 #include "ObjectMemory_FreeList.h"
-#include "ObjectMemory_MarkingCollector.h"
+#include "ObjectMemory_GC.h"
 #include "ObjectMemory_RefCounting.h"
 #include "ObjectMemory_Storage.h"
 #include "RealWordMemory.h"
