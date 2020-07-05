@@ -140,6 +140,6 @@ Bool ObjectMemory_isIntegerValue(short valueWord);
 #include "ObjectMemory_FreeList.h"
 #include "ObjectMemory_Allocation.h"
 #include "ObjectMemory_RefCounting.h"
-#include "ObjectMemory_MarkingCollector.h"
+#include "ObjectMemory_GC.h"
 
 #endif
