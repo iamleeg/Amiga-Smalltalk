@@ -340,5 +340,10 @@ ObjectPointer Interpreter_superclassOf(ObjectPointer classPointer);
  */
 void Interpreter_createActualMessage();
 
+/**
+ * A class's instance specification describes what fixed fields instances of that class have, and
+ * how they are addressed. They are stored in an immediate integer object.
+ */
+ObjectPointer Interpreter_instanceSpecificationOf(ObjectPointer classPointer);
 
 #endif
