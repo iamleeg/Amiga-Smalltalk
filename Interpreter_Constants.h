@@ -233,4 +233,18 @@ enum MessageIndices {
   MessageSize = 2
 };
 
+/**
+ * The interpretation of a class instance specification.
+ * Adapted from figure 27.8 on p590
+ */
+struct InstanceSpecificationField {
+  /* isPointers implies isWords */
+  unsigned int isPointers:1;
+  unsigned int isWords:1;
+  unsigned int isIndexable:1;
+  unsigned int unused:1; /* documented as 0 */
+  unsigned int fixedFieldsCount:11;
+  unsigned int isImmediateInteger: 1; /* always 1 */
+};
+
 #endif

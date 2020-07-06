@@ -173,6 +173,65 @@ Test(GetClassInstanceSpecification) {
   Expect(instanceSpecification == MinusOnePointer);
 }
 
+Test(ExtractPointerBitFromInstanceSpecification) {
+  ObjectPointer class = 0x3008, location = 0x200c, instanceSpecification = 0x8001;
+  Word segment = 0, size = 5;
+  Bool isPointers = NO;
+
+  ObjectMemory_locationBitsOf_put(class, location);
+  ObjectMemory_segmentBitsOf_put(class, segment);
+  ObjectMemory_sizeBitsOf_put(class, size);
+  ObjectMemory_storeWord_ofObject_withValue(InstanceSpecificationIndex, class, instanceSpecification);
+
+  isPointers = Interpreter_isPointers(class);
+  
+  Expect(isPointers == YES);
+}
+
+Test(ExtractWordBitFromInstanceSpecification) {
+  ObjectPointer class = 0x3008, location = 0x200c, instanceSpecification = 0x4001;
+  Word segment = 0, size = 5;
+  Bool isWords = NO;
+
+  ObjectMemory_locationBitsOf_put(class, location);
+  ObjectMemory_segmentBitsOf_put(class, segment);
+  ObjectMemory_sizeBitsOf_put(class, size);
+  ObjectMemory_storeWord_ofObject_withValue(InstanceSpecificationIndex, class, instanceSpecification);
+
+  isWords = Interpreter_isWords(class);
+  
+  Expect(isWords == YES);
+}
+
+Test(ExtractIndexableBitFromInstanceSpecification) {
+  ObjectPointer class = 0x3008, location = 0x200c, instanceSpecification = 0x2001;
+  Word segment = 0, size = 5;
+  Bool isIndexable = NO;
+
+  ObjectMemory_locationBitsOf_put(class, location);
+  ObjectMemory_segmentBitsOf_put(class, segment);
+  ObjectMemory_sizeBitsOf_put(class, size);
+  ObjectMemory_storeWord_ofObject_withValue(InstanceSpecificationIndex, class, instanceSpecification);
+
+  isIndexable = Interpreter_isIndexable(class);
+  
+  Expect(isIndexable == YES);
+}
+
+Test(ExtractFixedFieldCountFromInstanceSpecification) {
+  ObjectPointer class = 0x3008, location = 0x200c, instanceSpecification = MinusOnePointer;
+  Word segment = 0, size = 5, fixedFieldCount;
+ 
+  ObjectMemory_locationBitsOf_put(class, location);
+  ObjectMemory_segmentBitsOf_put(class, segment);
+  ObjectMemory_sizeBitsOf_put(class, size);
+  ObjectMemory_storeWord_ofObject_withValue(InstanceSpecificationIndex, class, instanceSpecification);
+
+  fixedFieldCount = Interpreter_fixedFieldsOf(class);
+  
+  Expect(fixedFieldCount == 0x07ff);
+}
+
 void ClassTests(struct TestResult *tr) {
   RunTest(TestHashOfDifferentObjectsIsDifferent);
   RunTest(FindingMethodInEmptyDictionaryFails);
@@ -183,4 +242,8 @@ void ClassTests(struct TestResult *tr) {
   RunTest(LookingUpMethodInClassFindsItInDictionary);
   RunTest(LookingUpMethodInSuperclassDictionary);
   RunTest(GetClassInstanceSpecification);
+  RunTest(ExtractPointerBitFromInstanceSpecification);
+  RunTest(ExtractWordBitFromInstanceSpecification);
+  RunTest(ExtractIndexableBitFromInstanceSpecification);
+  RunTest(ExtractFixedFieldCountFromInstanceSpecification);
 }

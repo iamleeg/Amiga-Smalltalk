@@ -362,3 +362,22 @@ void Interpreter_createActualMessage() {
 ObjectPointer Interpreter_instanceSpecificationOf(ObjectPointer classPointer) {
   return ObjectMemory_fetchPointer_ofObject(InstanceSpecificationIndex, classPointer);
 }
+
+Bool Interpreter_isPointers(ObjectPointer classPointer) {
+  Word pointersFlag = Interpreter_extractBits_to_of(0, 0, Interpreter_instanceSpecificationOf(classPointer));
+  return pointersFlag == 1;
+}
+
+Bool Interpreter_isWords(ObjectPointer classPointer) {
+  Word wordsFlag = Interpreter_extractBits_to_of(1, 1, Interpreter_instanceSpecificationOf(classPointer));
+  return wordsFlag == 1;  
+}
+
+Bool Interpreter_isIndexable(ObjectPointer classPointer) {
+  Word indexableFlag = Interpreter_extractBits_to_of(2, 2, Interpreter_instanceSpecificationOf(classPointer));
+  return indexableFlag == 1;
+}
+
+Word Interpreter_fixedFieldsOf(ObjectPointer classPointer) {
+  return Interpreter_extractBits_to_of(4, 14, Interpreter_instanceSpecificationOf(classPointer));
+}
