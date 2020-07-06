@@ -346,4 +346,35 @@ void Interpreter_createActualMessage();
  */
 ObjectPointer Interpreter_instanceSpecificationOf(ObjectPointer classPointer);
 
+/**
+ * Whether this class's instance fields are object pointers.
+ * @note If they are, then this class's instance fields must also be word- not byte-addressed.
+ */
+Bool Interpreter_isPointers(ObjectPointer classPointer);
+
+/**
+ * Whether this class's instance fields are addressed by word indices.
+ * If not, they are addressed by bytes.
+ * @note ST (p591) the instance specification of CompiledMethod does not accurate reflect the
+ *       structure of its instances since CompiledMethods are not homogeneous. The instance
+ *       specification says that the instances do not contain pointers and are addressed by
+ *       bytes. This is true of the bytecode section of a CompiledMethod only. The storage
+ *       manager needs to know that CompiledMethods are special and actually contain some
+ *       pointers. For all other classes, the instance specification is accurate.
+ */
+Bool Interpreter_isWords(ObjectPointer classPointer);
+
+/**
+ * Whether this class's instances have indexable fields beyond their fixed fields.
+ * @note if you wanted to implement a collection like Set or OrderedCollection, you might track
+ *       the count in a fixed field, then use indexed fields to refer to the content, via
+ *       the at: and at:put: messages.
+ */
+Bool Interpreter_isIndexable(ObjectPointer classPointer);
+
+/**
+ * The number of fixed fields owned by instances of this class.
+ */
+Word Interpreter_fixedFieldsOf(ObjectPointer classPointer);
+
 #endif
