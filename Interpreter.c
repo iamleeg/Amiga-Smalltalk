@@ -358,3 +358,7 @@ void Interpreter_createActualMessage() {
   Interpreter_push(message);
   argumentCount = 1;
 }
+
+ObjectPointer Interpreter_instanceSpecificationOf(ObjectPointer classPointer) {
+  return ObjectMemory_fetchPointer_ofObject(InstanceSpecificationIndex, classPointer);
+}

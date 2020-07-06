@@ -159,6 +159,20 @@ Test(LookingUpMethodInSuperclassDictionary) {
   Expect(newMethod == compiledMethod);
 }
 
+Test(GetClassInstanceSpecification) {
+  ObjectPointer class = 0x3008, location = 0x200c, instanceSpecification;
+  Word segment = 0, integer = MinusOnePointer, size = 5;
+
+  ObjectMemory_locationBitsOf_put(class, location);
+  ObjectMemory_segmentBitsOf_put(class, segment);
+  ObjectMemory_sizeBitsOf_put(class, size);
+  ObjectMemory_storeWord_ofObject_withValue(InstanceSpecificationIndex, class, integer);
+
+  instanceSpecification = Interpreter_instanceSpecificationOf(class);
+
+  Expect(instanceSpecification == MinusOnePointer);
+}
+
 void ClassTests(struct TestResult *tr) {
   RunTest(TestHashOfDifferentObjectsIsDifferent);
   RunTest(FindingMethodInEmptyDictionaryFails);
@@ -168,4 +182,5 @@ void ClassTests(struct TestResult *tr) {
   RunTest(FindingMethodInDictionaryWithMultipleWrongKeysFails);
   RunTest(LookingUpMethodInClassFindsItInDictionary);
   RunTest(LookingUpMethodInSuperclassDictionary);
+  RunTest(GetClassInstanceSpecification);
 }
