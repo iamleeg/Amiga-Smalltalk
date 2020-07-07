@@ -1,0 +1,39 @@
+# Makefile for GNU Make 3.81 and VBCC on macOS
+# Works for Alan ...  no other guarantees :-)
+
+CC=vc +aos68k
+CFLAGS=-I$(NDK)/include/include_h
+VASM=vasmm68k_mot
+VLINK=vlink
+LDFLAGS=-L$(NDK)/linker_libs -lamiga -lauto
+CONFIG=+aos68k
+RM=rm
+
+TESTAPP=ast_tests
+ERRORHOST=error_host
+
+SOURCE_FILES = ObjectMemory.o ObjectMemory_Storage.o ObjectMemory_FreeList.o ObjectMemory_Allocation.o ObjectMemory_RefCounting.o ObjectMemory_GC.o RealWordMemory.o Interpreter.o Interpreter_Error.o
+HEADER_FILES = ObjectMemory.h ObjectMemory_Constants.h ObjectMemory_Storage.h ObjectMemory_FreeList.h ObjectMemory_Allocation.h ObjectMemory_RefCounting.h ObjectMemory_GC.h RealWordMemory.h Types.h Interpreter.h
+HEADER_FILES2 = Interpreter_Constants.h Interpreter_Error.h
+#had to split this because the line was too long
+
+TEST_SOURCES = test_main.o FreeListTests.o ObjectMemoryTests.o RealWordMemoryTests.o AllocationTests.o RefCountingTests.o PrimitiveMethodTests.o InterpreterMemoryTests.o CompiledMethodTests.o ContextTests.o ClassTests.o
+TEST_HEADERS = tests.h FreeListTests.h ObjectMemoryTests.h RealWordMemoryTests.h AllocationTests.h RefCountingTests.h PrimitiveMethodTests.h InterpreterMemoryTests.h CompiledMethodTests.h ContextTests.h ClassTests.h
+
+ERROR_SOURCES = Interpreter_Error.o Error_Host.o
+ERROR_HEADERS = Interpreter_Error.h
+
+%.o: %.c
+	$(CC) -c -o $@ $< $(CFLAGS)
+
+$(TESTAPP): $(SOURCE_FILES) $(HEADER_FILES) $(HEADER_FILES2) $(TEST_SOURCES) $(TEST_HEADERS)
+	$(CC) -o $@ $(SOURCE_FILES) $(TEST_SOURCES) $(CLFLAGS) $(LDFLAGS)
+
+$(ERRORHOST): $(ERROR_SOURCES) $(ERROR_HEADERS)
+	$(CC) -o $@ $(ERROR_SOURCES) $(CFLAGS) $(LDFLAGS)
+
+all: clean $(TESTAPP) $(ERRORHOST)
+
+clean:
+	$(RM) $(TESTAPP)
+	$(RM) $(ERRORHOST)
