@@ -74,7 +74,7 @@ Test(BlockTransferOfFieldsBetweenObjects) {
 }
 
 Test(ExtractBitsFromInteger) {
-  Word pattern = 0xaaaa, masked, firstBitIndex = 1, lastBitIndex = 6, expected = 0x15;
+  short pattern = 0xaaaa, masked, firstBitIndex = 1, lastBitIndex = 6, expected = 0x15;
 
   masked = Interpreter_extractBits_to_of(firstBitIndex, lastBitIndex, pattern);
 
@@ -82,7 +82,7 @@ Test(ExtractBitsFromInteger) {
 }
 
 Test(ExtractHighByteOfInteger) {
-  Word pattern = 0xaa55;
+  short pattern = 0xaa55;
   Byte highByte, expected = 0xaa;
 
   highByte = Interpreter_highByteOf(pattern);
@@ -90,7 +90,7 @@ Test(ExtractHighByteOfInteger) {
 }
 
 Test(ExtractLowByteOfInteger) {
-  Word pattern = 0xaa55;
+  short pattern = 0xaa55;
   Byte lowByte, expected = 0x55;
 
   lowByte = Interpreter_lowByteOf(pattern);

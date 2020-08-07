@@ -158,11 +158,23 @@ void ObjectMemory_swapPointersOf_and(ObjectPointer firstPointer, ObjectPointer s
 }
 
 short ObjectMemory_integerValueOf(ObjectPointer objectPointer) {
-  return objectPointer/2;
+/* CHECK MSB by ANDing with 0x8000 */
+  Bool negative = (objectPointer & 0x8000) > 0;
+/* SHIFT right by dividing by 2 */
+  short result = objectPointer/2;
+
+/* IF OLD MSB WAS 1 , set new MSB to one by ORing with 0x8000 */
+  if( negative ) {
+    result = result | 0x8000;
+  }
+/* OTHERWISE LEAVE AS IS */
+  return result;
 }
 
 ObjectPointer ObjectMemory_integerObjectOf(short value) {
-  return (value << 1) + 1;
+  ObjectPointer result;
+  result = (value << 1) + 1;
+  return result;
 }
 
 Bool ObjectMemory_isIntegerValue(short valueWord) {

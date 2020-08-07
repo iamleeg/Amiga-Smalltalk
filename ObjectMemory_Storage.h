@@ -6,7 +6,7 @@
 /**
  * Test whether a pointer is a tagged integer.
  */
-Bool ObjectMemory_isIntegerObject(Word objectPointer);
+Bool ObjectMemory_isIntegerObject(ObjectPointer objectPointer);
 
 /**
  * Retrieve the first word of an object table entry.

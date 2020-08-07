@@ -81,13 +81,13 @@ void Interpreter_primitiveFail(void);
  * Convert the supplied integer into a SmallInteger object and store it in the object's field.
  * Fails if the integer cannot be stored in a SmallInteger (i.e. is higher magnitude than ±2^14)
  */
-void Interpreter_storeInteger_ofObject_withValue(Word fieldIndex, ObjectPointer objectPointer, Word integerValue);
+void Interpreter_storeInteger_ofObject_withValue(Word fieldIndex, ObjectPointer objectPointer, short integerValue);
 
 /**
  * Convert the SmallInteger object in the object's field to an integer value and return it.
  * Fails if the object pointer retrieved isn't an immediate integer.
  */
-Word Interpreter_fetchInteger_ofObject(Word fieldIndex, ObjectPointer objectPointer);
+short Interpreter_fetchInteger_ofObject(Word fieldIndex, ObjectPointer objectPointer);
 
 /**
  * Transfer ownership of a collection of pointers between objects, setting the source fields to nil.

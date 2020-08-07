@@ -666,6 +666,22 @@ Test(IntegerValueWithinRange) {
   Expect(isIntegerValue == YES);
 }
 
+Test(RoundTripInteger) {
+	short value = 123;
+	short retrieved = -1;
+	ObjectPointer pointer = ObjectMemory_integerObjectOf(value);
+	retrieved = ObjectMemory_integerValueOf(pointer);
+	Expect( retrieved == value );	
+}
+
+Test(RoundTripNegativeInteger) {
+	short value = -123;
+	short retrieved = -1;
+	ObjectPointer pointer = ObjectMemory_integerObjectOf(value);
+	retrieved = ObjectMemory_integerValueOf(pointer);
+	Expect( retrieved == value );	
+}
+
 void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(NonIntegerObjectIsNotIntegerObject);
   RunTest(IntegerObjectIsIntegerObject);
@@ -725,4 +741,7 @@ void ObjectMemoryTests(struct TestResult *tr) {
   RunTest(IntegerValueBelowRange);
   RunTest(IntegerValueAboveRange);
   RunTest(IntegerValueWithinRange);
+  RunTest(RoundTripInteger);
+  RunTest(RoundTripNegativeInteger);
+
 }
