@@ -77,7 +77,7 @@ void Interpreter_pushInteger(short integerValue) {
 }
 
 
-void Interpreter_storeInteger_ofObject_withValue(Word fieldIndex, ObjectPointer objectPointer, Word integerValue) {
+void Interpreter_storeInteger_ofObject_withValue(Word fieldIndex, ObjectPointer objectPointer, short integerValue) {
   ObjectPointer integerPointer;
   if (ObjectMemory_isIntegerValue(integerValue)) {
     integerPointer = ObjectMemory_integerObjectOf(integerValue);
@@ -87,7 +87,7 @@ void Interpreter_storeInteger_ofObject_withValue(Word fieldIndex, ObjectPointer 
   }
 }
 
-Word Interpreter_fetchInteger_ofObject(Word fieldIndex, ObjectPointer objectPointer) {
+short Interpreter_fetchInteger_ofObject(Word fieldIndex, ObjectPointer objectPointer) {
   ObjectPointer integerPointer = ObjectMemory_fetchPointer_ofObject(fieldIndex, objectPointer);
   if (ObjectMemory_isIntegerObject(integerPointer)) {
     return ObjectMemory_integerValueOf(integerPointer);

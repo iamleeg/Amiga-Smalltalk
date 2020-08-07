@@ -11,7 +11,7 @@ void ObjectMemory_cantBeIntegerObject(ObjectPointer op) {
   assert((op & 0x0001) == 0);
 }
 
-Bool ObjectMemory_isIntegerObject(Word objectPointer) {
+Bool ObjectMemory_isIntegerObject(ObjectPointer objectPointer) {
   return ((Bool)(objectPointer & 0x0001));
 }
 
