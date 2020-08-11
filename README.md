@@ -30,6 +30,28 @@ You need the AxRuntime, which is included in `vendor/`. Note that once you've in
 4. `make local-amigasmalltalktests`
 5. The tests are available in AROS as `:local/AmigaSmalltalk/AmigaSmalltalkTests`.
 
+### On Amiga
+
+You need these prerequisites:
+
+ - The AmigaOS 3.9 NDK (i.e. headers and libs)
+ - vbcc with the m68k backend
+ - amake
+
+You should be able to find things on [Aminet](http://www.aminet.net), though the NDK is a proprietary product so you're on your own there. If you don't have it, try the headers from AROS.
+
+Having installed vbcc and the NDK, add this in `S:User-Startup`:
+
+    assign NDK: HD0:path/to/NDK_3.9
+    setenv NDK NDK:
+
+Now you can make and run the tests:
+
+    1.HD0:Amiga-Smalltalk> amake -f Makefile.vbcc ast_tests
+    1.HD0:Amiga-Smalltalk> ast_tests
+
+So far this has been tested on A1200 (real and virtual).
+
 ### `error_host`
 
 `error_host` is a tool that simulates a VM error, to make sure that it displays the UI correctly. Just build and run to see an uninspiring error message :).
