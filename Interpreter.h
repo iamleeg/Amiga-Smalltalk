@@ -78,6 +78,16 @@ void Interpreter_initPrimitive(void);
 void Interpreter_primitiveFail(void);
 
 /**
+ * primitive to pop the stack and convert to an integer value
+ */
+short Interpreter_popInteger(void);
+
+/**
+ * primitive to push an integer value on the stack by converting to a SmallInteger
+ */
+void Interpreter_pushInteger(short integerValue); 
+
+/**
  * Convert the supplied integer into a SmallInteger object and store it in the object's field.
  * Fails if the integer cannot be stored in a SmallInteger (i.e. is higher magnitude than ±2^14)
  */
