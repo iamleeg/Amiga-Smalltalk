@@ -47,7 +47,7 @@ Word RealWordMemory_segment_word(Word s, Word w) {
 }
 
 void RealWordMemory_bit_indices_should_be_in_word_range(Word firstBitIndex, Word lastBitIndex) {
-  assert(firstBitIndex >= 0 && firstBitIndex <= 15);
+  assert(firstBitIndex <= 15);
   assert(lastBitIndex >= firstBitIndex && lastBitIndex <= 15);
 }
 
