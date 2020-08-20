@@ -76,6 +76,69 @@ void Interpreter_pushInteger(short integerValue) {
 	Interpreter_success_(YES);
 }
 
+/** 
+ * Page 671
+ * convert back and forth between SmallInteger and LargePositiveInteger
+ */
+ObjectPointer Interpreter_positive16BitIntegerFor(short integerValue) {
+	ObjectPointer result = NilPointer;
+	
+	/* if its negative, we fail */
+	if( integerValue < 0 ) {
+		Interpreter_primitiveFail();
+		return NilPointer; /* caller shouldn't rely on this */
+	}
+	
+	/* if its small enough we can just return get an Integer object version */
+	if( ObjectMemory_isIntegerValue(integerValue) ) {
+		return ObjectMemory_integerObjectOf(integerValue);
+	}
+	
+	/* Its too big so we create a LargePositiveInteger */
+	result = ObjectMemory_instantiateClass_withBytes(ClassLargePositiveIntegerPointer, 2);
+	ObjectMemory_storeByte_ofObject_withValue(0, result, Interpreter_lowByteOf(integerValue));
+	ObjectMemory_storeByte_ofObject_withValue(1, result, Interpreter_highByteOf(integerValue));
+	return result;
+}
+
+short Interpreter_positive16BitValueOf(ObjectPointer integerPointer) {
+	short result = 0;
+	/* if its a small integer, just return integerValue */
+	if( ObjectMemory_isIntegerObject(integerPointer) ) {
+		result = ObjectMemory_integerValueOf(integerPointer);
+		/* its negative fail, duplicated below */
+		if( result < 0 ) {
+			Interpreter_primitiveFail();
+			return 0; /* caller shouldn't rely on this */
+		} else {
+			return result;
+		}
+	}
+
+	/* otherwise if its not a large integer, we fail */
+	if( ObjectMemory_fetchClassOf(integerPointer) != ClassLargePositiveIntegerPointer ){
+		Interpreter_primitiveFail();
+		return 0; /* caller shouldn't rely on this */
+	}
+	
+	/* otherwise if it doesn't have exactly 2 bytes, we fail */
+	if( ObjectMemory_fetchByteLengthOf(integerPointer) != 2 ) {
+		Interpreter_primitiveFail();
+		return 0; /* caller shouldn't rely on this */
+	}
+
+	/* its a large integer, extract its value from high and low bytes*/
+	result = 256 * ObjectMemory_fetchByte_ofObject(1, integerPointer);
+	result += ObjectMemory_fetchByte_ofObject(0, integerPointer);
+	
+	/* its negative fail, duplicated above */
+	if( result < 0 ) {
+		Interpreter_primitiveFail();
+		return 0; /* caller shouldn't rely on this */
+	}
+	return result;
+}
+
 
 void Interpreter_storeInteger_ofObject_withValue(Word fieldIndex, ObjectPointer objectPointer, short integerValue) {
   ObjectPointer integerPointer;

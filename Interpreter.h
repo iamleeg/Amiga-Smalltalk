@@ -88,6 +88,16 @@ short Interpreter_popInteger(void);
 void Interpreter_pushInteger(short integerValue); 
 
 /**
+ * primitive to convert from an integer value to a LargePositiveInteger
+ */
+ObjectPointer Interpreter_positive16BitIntegerFor(short integerValue);
+
+/**
+ * primitive to convert from a LargePositiveInteger to an integer value
+ */
+short Interpreter_positive16BitValueOf(ObjectPointer integerPointer);
+
+/**
  * Convert the supplied integer into a SmallInteger object and store it in the object's field.
  * Fails if the integer cannot be stored in a SmallInteger (i.e. is higher magnitude than ±2^14)
  */

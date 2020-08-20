@@ -125,14 +125,155 @@ Test(PushAndPopInteger) {
 	Expect(integerValue == actual);
 }
 
+Test(GetPositive16BitIntegerForValueFailsWithNegative) {
+	short negativeIntegerValue=-123;
+	short fetchedInteger = -1;
+	ObjectPointer largePositiveIntegerPointer = NilPointer;
+	
+	activeContext = stubBlockContext();
+    Interpreter_fetchContextRegisters();
+
+	Interpreter_initPrimitive();
+	largePositiveIntegerPointer = Interpreter_positive16BitIntegerFor(negativeIntegerValue);
+	Expect(Interpreter_success() == NO );
+	Expect(largePositiveIntegerPointer == NilPointer);
+}
+
+Test(GetPositive16BitIntegerForValueWorksWithSmallInteger) {
+	short smallIntegerValue=16383;
+	short fetchedInteger = -1;
+	ObjectPointer largePositiveIntegerPointer = NilPointer;
+	
+	activeContext = stubBlockContext();
+    Interpreter_fetchContextRegisters();
+
+	Interpreter_initPrimitive();
+	largePositiveIntegerPointer = Interpreter_positive16BitIntegerFor(smallIntegerValue);
+	Expect(Interpreter_success() == YES);
+	Expect(largePositiveIntegerPointer != NilPointer);
+	fetchedInteger = ObjectMemory_integerValueOf(largePositiveIntegerPointer);
+	Expect(fetchedInteger == smallIntegerValue);
+}
+
+Test(GetPositive16BitIntegerForValueWorksWithLargeInteger) {
+	short largeIntegerValue=0x4001; /*16385*/
+	short fetchedInteger = -1;
+	ObjectPointer largePositiveIntegerPointer = NilPointer;
+	
+	activeContext = stubBlockContext();
+    Interpreter_fetchContextRegisters();
+
+	Interpreter_initPrimitive();
+	largePositiveIntegerPointer = Interpreter_positive16BitIntegerFor(largeIntegerValue);
+	Expect(Interpreter_success() == YES);
+	Expect(largePositiveIntegerPointer != NilPointer);
+	Expect(ObjectMemory_fetchClassOf(largePositiveIntegerPointer) == ClassLargePositiveIntegerPointer);
+	
+	Expect( 0x01 == ObjectMemory_fetchByte_ofObject(0, largePositiveIntegerPointer)); 
+	Expect( 0x40 == ObjectMemory_fetchByte_ofObject(1, largePositiveIntegerPointer)); 
+}
+
+Test(GetPositive16BitValueWorksWithSmallInteger) {
+	short integerValue = 123;
+	short resultValue = -1;
+	ObjectPointer integerPointer = ObjectMemory_integerObjectOf(integerValue);
+
+	activeContext = stubBlockContext();
+    Interpreter_fetchContextRegisters();
+
+	Interpreter_initPrimitive();
+
+	resultValue = Interpreter_positive16BitValueOf(integerPointer);
+
+	Expect(Interpreter_success() == YES);
+	Expect(resultValue == integerValue);
+}
+
+Test(GetPositive16BitValueWorksWithLargeInteger) {
+	short integerValue = 16385;
+	short resultValue = -1;
+	ObjectPointer integerPointer = Interpreter_positive16BitIntegerFor(integerValue);
+	
+	activeContext = stubBlockContext();
+    Interpreter_fetchContextRegisters();
+
+	Interpreter_initPrimitive();
+
+	resultValue = Interpreter_positive16BitValueOf(integerPointer);
+
+	Expect(Interpreter_success() == YES);
+	Expect(resultValue == integerValue);
+}
+
+Test(GetPositive16BitValueFailsWithNegative) {
+	short integerValue = -123;
+	short resultValue = -1;
+	ObjectPointer integerPointer = ObjectMemory_integerObjectOf(integerValue);
+	ObjectPointer integerPointer2 = ObjectMemory_integerObjectOf(123);
+	
+	activeContext = stubBlockContext();
+    Interpreter_fetchContextRegisters();
+
+	Interpreter_initPrimitive();
+	resultValue = Interpreter_positive16BitValueOf(integerPointer);
+	
+	Expect(Interpreter_success() == NO);
+	Expect(resultValue == 0);
+}
+
+Test(GetPositive16BitValueFailsWithOtherClass) {
+	short integerValue = 16385;
+	short resultValue = -1;
+	ObjectPointer integerPointer = NilPointer;
+	
+	activeContext = stubBlockContext();
+    Interpreter_fetchContextRegisters();
+
+	/* make it a selector pointer instead */
+	integerPointer = ObjectMemory_instantiateClass_withBytes(ClassSelectorPointer, 2);
+
+	Interpreter_initPrimitive();
+	resultValue = Interpreter_positive16BitValueOf(integerPointer);
+	Expect(Interpreter_success() == NO);
+	Expect(resultValue == 0);
+}
+
+Test(GetPositive16BitValueFailsWithWrongBytes) {
+	short integerValue = 16385;
+	short resultValue = -1;
+	ObjectPointer integerPointer = NilPointer;
+	
+	activeContext = stubBlockContext();
+    Interpreter_fetchContextRegisters();
+
+	/* make it three bytes instead */
+	integerPointer = ObjectMemory_instantiateClass_withBytes(ClassLargePositiveIntegerPointer, 3);
+	ObjectMemory_storeByte_ofObject_withValue(0, integerPointer, 0);
+	ObjectMemory_storeByte_ofObject_withValue(1, integerPointer, Interpreter_lowByteOf(integerValue));
+	ObjectMemory_storeByte_ofObject_withValue(2, integerPointer, Interpreter_highByteOf(integerValue));
+
+	Interpreter_initPrimitive();
+	resultValue = Interpreter_positive16BitValueOf(integerPointer);
+	Expect(Interpreter_success() == NO);
+	Expect(resultValue == 0);
+}
+
 void InterpreterMemoryTests(struct TestResult *tr) {
-  RunTest(PushAndPop);
+/*  RunTest(PushAndPop);
   RunTest(PushAndPopInteger);
-  RunTest(RoundTripIntegerThroughObjectMemory);
+  RunTest(GetPositive16BitIntegerForValueFailsWithNegative);
+  RunTest(GetPositive16BitIntegerForValueWorksWithSmallInteger);
+  RunTest(GetPositive16BitIntegerForValueWorksWithLargeInteger);*/
+  RunTest(GetPositive16BitValueWorksWithSmallInteger);
+  RunTest(GetPositive16BitValueFailsWithNegative);
+  RunTest(GetPositive16BitValueWorksWithLargeInteger);
+  RunTest(GetPositive16BitValueFailsWithOtherClass);
+  RunTest(GetPositive16BitValueFailsWithWrongBytes); 
+/*  RunTest(RoundTripIntegerThroughObjectMemory);
   RunTest(FailToStoreOutOfRangeInteger);
   RunTest(FailToFetchNonIntegerValue);
   RunTest(BlockTransferOfFieldsBetweenObjects);
   RunTest(ExtractBitsFromInteger);
   RunTest(ExtractHighByteOfInteger);
-  RunTest(ExtractLowByteOfInteger);
+  RunTest(ExtractLowByteOfInteger);*/
 }
