@@ -259,21 +259,21 @@ Test(GetPositive16BitValueFailsWithWrongBytes) {
 }
 
 void InterpreterMemoryTests(struct TestResult *tr) {
-/*  RunTest(PushAndPop);
+  RunTest(PushAndPop);
   RunTest(PushAndPopInteger);
   RunTest(GetPositive16BitIntegerForValueFailsWithNegative);
   RunTest(GetPositive16BitIntegerForValueWorksWithSmallInteger);
-  RunTest(GetPositive16BitIntegerForValueWorksWithLargeInteger);*/
+  RunTest(GetPositive16BitIntegerForValueWorksWithLargeInteger);
   RunTest(GetPositive16BitValueWorksWithSmallInteger);
   RunTest(GetPositive16BitValueFailsWithNegative);
   RunTest(GetPositive16BitValueWorksWithLargeInteger);
   RunTest(GetPositive16BitValueFailsWithOtherClass);
   RunTest(GetPositive16BitValueFailsWithWrongBytes); 
-/*  RunTest(RoundTripIntegerThroughObjectMemory);
+  RunTest(RoundTripIntegerThroughObjectMemory);
   RunTest(FailToStoreOutOfRangeInteger);
   RunTest(FailToFetchNonIntegerValue);
   RunTest(BlockTransferOfFieldsBetweenObjects);
   RunTest(ExtractBitsFromInteger);
   RunTest(ExtractHighByteOfInteger);
-  RunTest(ExtractLowByteOfInteger);*/
+  RunTest(ExtractLowByteOfInteger);
 }
