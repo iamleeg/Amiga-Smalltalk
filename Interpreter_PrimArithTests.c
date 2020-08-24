@@ -2,6 +2,7 @@
 #include "Interpreter.h"
 #include "Interpreter_PrimArith.h"
 
+extern ObjectPointer stubBlockContext(void);
 
 /*  PRIMITIVE ADD --------------------------------------------------------------------- */ 
 Test(PrimitiveAddBasic) {
@@ -747,6 +748,296 @@ Test(PrimitiveDivideFailsIfArgumentNotInteger) {
 
 }
 
+/*  PRIMITIVE EQUALS ---------------------------------------------------------------- */ 
+Test(PrimitiveEqualTrueWorks) {
+	Bool localSuccess = NO;
+	ObjectPointer resultBool = NilPointer;
+
+	activeContext = stubBlockContext();
+    Interpreter_fetchContextRegisters();
+    
+/* put two numbers on the stack */
+	Interpreter_initPrimitive();
+    Interpreter_pushInteger(10);
+    Expect(Interpreter_success() == YES );
+
+	Interpreter_initPrimitive();
+    Interpreter_pushInteger(10);
+    Expect(Interpreter_success() == YES );
+    
+/* call equals */
+/* 10 == 10 */
+
+	Interpreter_initPrimitive();
+    localSuccess = Interpreter_primitiveEqual();
+	Expect( Interpreter_success() == YES );
+
+/* assert success */
+	Expect( localSuccess == YES );
+	
+	resultBool = Interpreter_popStack(); 
+	
+/* assert  result == TRUE */
+	Expect( resultBool != NilPointer );
+	Expect( resultBool == TruePointer );
+}
+
+Test(PrimitiveEqualFalseWorks) {
+	Bool localSuccess = NO;
+	ObjectPointer resultBool = NilPointer;
+
+	activeContext = stubBlockContext();
+    Interpreter_fetchContextRegisters();
+    
+/* put two numbers on the stack */
+	Interpreter_initPrimitive();
+    Interpreter_pushInteger(10);
+    Expect(Interpreter_success() == YES );
+
+	Interpreter_initPrimitive();
+    Interpreter_pushInteger(20);
+    Expect(Interpreter_success() == YES );
+    
+/* call equals */
+/* 10 == 20 */
+
+	Interpreter_initPrimitive();
+    localSuccess = Interpreter_primitiveEqual();
+	Expect( Interpreter_success() == YES );
+
+/* assert success */
+	Expect( localSuccess == YES );
+	
+	resultBool = Interpreter_popStack();
+	
+/* assert  result == FALSE */
+	Expect( resultBool != NilPointer );
+	Expect( resultBool == FalsePointer );
+}
+
+Test(PrimitiveEqualFailsIfReceiverNotInteger) {
+	Bool localSuccess = NO;
+	ObjectPointer resultObject = NilPointer;
+
+	activeContext = stubBlockContext();
+    Interpreter_fetchContextRegisters();
+    
+/* put two numbers on the stack */
+	Interpreter_initPrimitive();
+    Interpreter_push(Interpreter_positive16BitIntegerFor(16500));
+    Expect(Interpreter_success() == YES );
+
+	Interpreter_initPrimitive();
+    Interpreter_pushInteger(10);
+    Expect(Interpreter_success() == YES );
+    
+/* call equals */
+/* 16500 == 10 */
+
+	Interpreter_initPrimitive();
+    localSuccess = Interpreter_primitiveEqual();
+	Expect( Interpreter_success() == NO );
+
+/* assert success */
+	Expect( localSuccess == NO );
+	
+/* assert stack unchanged */
+	resultObject = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
+	Expect( resultObject != NilPointer );
+	Expect( ObjectMemory_isIntegerObject( resultObject ) );
+	Expect( 10 == ObjectMemory_integerValueOf( resultObject) ); 
+
+	resultObject = Interpreter_popStack(); 
+	Expect( resultObject != NilPointer );
+	Expect( !ObjectMemory_isIntegerObject( resultObject ) );
+	Expect( 16500 == Interpreter_positive16BitValueOf( resultObject) ); 
+
+}
+
+Test(PrimitiveEqualFailsIfArgumentNotInteger) {
+	Bool localSuccess = NO;
+	ObjectPointer resultObject = NilPointer;
+
+	activeContext = stubBlockContext();
+    Interpreter_fetchContextRegisters();
+    
+/* put two numbers on the stack */
+	Interpreter_initPrimitive();
+    Interpreter_pushInteger(10);
+    Expect(Interpreter_success() == YES );
+    
+	Interpreter_initPrimitive();
+    Interpreter_push(Interpreter_positive16BitIntegerFor(16500));
+    Expect(Interpreter_success() == YES );
+
+/* call equals */
+/* 10 == 16500 */
+
+	Interpreter_initPrimitive();
+    localSuccess = Interpreter_primitiveEqual();
+	Expect( Interpreter_success() == NO );
+
+/* assert success */
+	Expect( localSuccess == NO );
+	
+/* assert stack unchanged */
+	resultObject = Interpreter_popStack(); 
+	Expect( resultObject != NilPointer );
+	Expect( !ObjectMemory_isIntegerObject( resultObject ) );
+	Expect( 16500 == Interpreter_positive16BitValueOf( resultObject) ); 
+
+	resultObject = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
+	Expect( resultObject != NilPointer );
+	Expect( ObjectMemory_isIntegerObject( resultObject ) );
+	Expect( 10 == ObjectMemory_integerValueOf( resultObject) ); 
+}
+
+
+/*  PRIMITIVE NOTEQUAL ---------------------------------------------------------------- */ 
+Test(PrimitiveNotEqualTrueWorks) {
+	Bool localSuccess = NO;
+	ObjectPointer resultBool = NilPointer;
+
+	activeContext = stubBlockContext();
+    Interpreter_fetchContextRegisters();
+    
+/* put two numbers on the stack */
+	Interpreter_initPrimitive();
+    Interpreter_pushInteger(10);
+    Expect(Interpreter_success() == YES );
+
+	Interpreter_initPrimitive();
+    Interpreter_pushInteger(20);
+    Expect(Interpreter_success() == YES );
+    
+/* call notequal */
+/* 10 != 20 */
+
+	Interpreter_initPrimitive();
+    localSuccess = Interpreter_primitiveNotEqual();
+	Expect( Interpreter_success() == YES );
+
+/* assert success */
+	Expect( localSuccess == YES );
+	
+	resultBool = Interpreter_popStack(); 
+	
+/* assert  result == TRUE */
+	Expect( resultBool != NilPointer );
+	Expect( resultBool == TruePointer );
+}
+
+Test(PrimitiveNotEqualFalseWorks) {
+	Bool localSuccess = NO;
+	ObjectPointer resultBool = NilPointer;
+
+	activeContext = stubBlockContext();
+    Interpreter_fetchContextRegisters();
+    
+/* put two numbers on the stack */
+	Interpreter_initPrimitive();
+    Interpreter_pushInteger(10);
+    Expect(Interpreter_success() == YES );
+
+	Interpreter_initPrimitive();
+    Interpreter_pushInteger(10);
+    Expect(Interpreter_success() == YES );
+    
+/* call note1ual */
+/* 10 != 10 */
+
+	Interpreter_initPrimitive();
+    localSuccess = Interpreter_primitiveNotEqual();
+	Expect( Interpreter_success() == YES );
+
+/* assert success */
+	Expect( localSuccess == YES );
+	
+	resultBool = Interpreter_popStack(); 
+	
+/* assert  result == FALSE */
+	Expect( resultBool != NilPointer );
+	Expect( resultBool == FalsePointer );
+}
+
+Test(PrimitiveNotEqualFailsIfReceiverNotInteger) {
+	Bool localSuccess = NO;
+	ObjectPointer resultObject = NilPointer;
+
+	activeContext = stubBlockContext();
+    Interpreter_fetchContextRegisters();
+    
+/* put two numbers on the stack */
+	Interpreter_initPrimitive();
+    Interpreter_push(Interpreter_positive16BitIntegerFor(16500));
+    Expect(Interpreter_success() == YES );
+
+	Interpreter_initPrimitive();
+    Interpreter_pushInteger(10);
+    Expect(Interpreter_success() == YES );
+    
+/* call notequal */
+/* 16500 != 10 */
+
+	Interpreter_initPrimitive();
+    localSuccess = Interpreter_primitiveNotEqual();
+	Expect( Interpreter_success() == NO );
+
+/* assert success */
+	Expect( localSuccess == NO );
+	
+/* assert stack unchanged */
+	resultObject = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
+	Expect( resultObject != NilPointer );
+	Expect( ObjectMemory_isIntegerObject( resultObject ) );
+	Expect( 10 == ObjectMemory_integerValueOf( resultObject) ); 
+
+	resultObject = Interpreter_popStack(); 
+	Expect( resultObject != NilPointer );
+	Expect( !ObjectMemory_isIntegerObject( resultObject ) );
+	Expect( 16500 == Interpreter_positive16BitValueOf( resultObject) ); 
+
+}
+
+Test(PrimitiveNotEqualFailsIfArgumentNotInteger) {
+	Bool localSuccess = NO;
+	ObjectPointer resultObject = NilPointer;
+
+	activeContext = stubBlockContext();
+    Interpreter_fetchContextRegisters();
+    
+/* put two numbers on the stack */
+	Interpreter_initPrimitive();
+    Interpreter_pushInteger(10);
+    Expect(Interpreter_success() == YES );
+    
+	Interpreter_initPrimitive();
+    Interpreter_push(Interpreter_positive16BitIntegerFor(16500));
+    Expect(Interpreter_success() == YES );
+
+/* call notequal */
+/* 10 != 16500 */
+
+	Interpreter_initPrimitive();
+    localSuccess = Interpreter_primitiveNotEqual();
+	Expect( Interpreter_success() == NO );
+
+/* assert success */
+	Expect( localSuccess == NO );
+	
+/* assert stack unchanged */
+	resultObject = Interpreter_popStack(); 
+	Expect( resultObject != NilPointer );
+	Expect( !ObjectMemory_isIntegerObject( resultObject ) );
+	Expect( 16500 == Interpreter_positive16BitValueOf( resultObject) ); 
+
+	resultObject = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
+	Expect( resultObject != NilPointer );
+	Expect( ObjectMemory_isIntegerObject( resultObject ) );
+	Expect( 10 == ObjectMemory_integerValueOf( resultObject) ); 
+}
+
+
 
 void InterpreterArithmeticPrimitiveTests(struct TestResult *tr) {
 	RunTest(PrimitiveAddBasic);
@@ -770,4 +1061,12 @@ void InterpreterArithmeticPrimitiveTests(struct TestResult *tr) {
 /*	RunTest(PrimitiveDivideFailsIfAnswerNotInteger);*/
 	RunTest(PrimitiveDivideFailsIfReceiverNotInteger);
 	RunTest(PrimitiveDivideFailsIfArgumentNotInteger);
+	RunTest(PrimitiveEqualTrueWorks);
+	RunTest(PrimitiveEqualFalseWorks);
+	RunTest(PrimitiveEqualFailsIfReceiverNotInteger);
+	RunTest(PrimitiveEqualFailsIfArgumentNotInteger);
+	RunTest(PrimitiveNotEqualTrueWorks);
+	RunTest(PrimitiveNotEqualFalseWorks);
+	RunTest(PrimitiveNotEqualFailsIfReceiverNotInteger);
+	RunTest(PrimitiveNotEqualFailsIfArgumentNotInteger);
 }
