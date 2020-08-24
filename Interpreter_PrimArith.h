@@ -1,4 +1,7 @@
-#include "types.h"
+#ifndef AMIGA_SMALLTALK_INTERPRETERPRIMARITH_H
+#define AMIGA_SMALLTALK_INTERPRETERPRIMARITH_H
+
+#include "Types.h"
 
 Bool Interpreter_dispatchArithmeticPrimitives( int primitiveIndex );
 Bool Interpreter_dispatchIntegerPrimitives( int primitiveIndex );
@@ -21,3 +24,5 @@ Bool Interpreter_primitiveBitOr(void);
 Bool Interpreter_primitiveBitXor(void);
 Bool Interpreter_primitiveBitShift(void);
 Bool Interpreter_primitiveMakePoint(void);
+
+#endif

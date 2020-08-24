@@ -4,6 +4,8 @@
 #include "ObjectMemory.h"
 #include "RealWordMemory.h"
 
+extern ObjectPointer stubBlockContext(void);
+
 Test(RoundTripIntegerThroughObjectMemory) {
   Word integerValue = 12, fetchedInteger, fieldIndex = 2, segment = (3 % HeapSegmentCount);
   ObjectPointer objectPointer = 0x1000, location = 0x2000;

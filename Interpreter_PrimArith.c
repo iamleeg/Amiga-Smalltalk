@@ -88,11 +88,33 @@ return NO;
 }
 
 Bool Interpreter_primitiveEqual(void) {
-return NO;
+	short integerArgument = Interpreter_popInteger();
+	short integerReceiver = Interpreter_popInteger();
+	Bool boolResult = NO;
+	if( Interpreter_success() == YES ) {
+		boolResult = (integerReceiver == integerArgument);
+	}
+	if( Interpreter_success() == YES ) {
+		Interpreter_push(boolResult ? TruePointer : FalsePointer);
+	} else {
+		Interpreter_unPop(2);
+	}
+	return Interpreter_success();
 }
 
 Bool Interpreter_primitiveNotEqual(void) {
-return NO;
+	short integerArgument = Interpreter_popInteger();
+	short integerReceiver = Interpreter_popInteger();
+	Bool boolResult = NO;
+	if( Interpreter_success() == YES ) {
+		boolResult = (integerReceiver != integerArgument);
+	}
+	if( Interpreter_success() == YES ) {
+		Interpreter_push(boolResult ? TruePointer : FalsePointer);
+	} else {
+		Interpreter_unPop(2);
+	}
+	return Interpreter_success();
 }
 
 Bool Interpreter_primitiveMultiply(void) {
