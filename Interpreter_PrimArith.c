@@ -183,6 +183,9 @@ Bool Interpreter_primitiveDivide(void) {
 	short integerResult = 0;
 	short integerRemainder = 0;
 
+	/* cant divide by 0 */
+	Interpreter_success_(integerArgument != 0);
+	
 	/* We only succeed of an integer division can happen cleanly */
 	if( Interpreter_success() == YES ) {
 		integerRemainder = integerReceiver % integerArgument;
@@ -202,16 +205,96 @@ Bool Interpreter_primitiveDivide(void) {
 	return Interpreter_success();
 }
 
+
+/* always rounded toward negative infinity */
+/* not sure how this works for negative numbers */
 Bool Interpreter_primitiveMod(void) {
-return NO;
+	short integerArgument = Interpreter_popInteger();
+	short integerReceiver = Interpreter_popInteger();
+	short integerResult = 0;
+	short integerRemainder = 0;
+
+	/* cant divide by 0 */
+	Interpreter_success_(integerArgument != 0);
+	
+	/* We only care about the remainder */
+	if( Interpreter_success() == YES ) {	
+		integerResult = integerReceiver % integerArgument;
+/*		printf( "received = %d, arg = %d, result = %d\n", integerReceiver, integerArgument, integerResult);*/
+		/* always rounded toward negative infinity */
+		if( integerReceiver < 0 ) {
+			if( integerArgument > 0 ) {	
+				integerResult += integerArgument;
+/*				printf("modified to %d\n", integerResult); */
+			}
+		} else {
+			if( integerArgument < 0 ) {
+				integerResult += integerArgument;
+/*				printf("modified to %d\n", integerResult);  */
+			}
+		}
+		
+		Interpreter_success_( ObjectMemory_isIntegerValue( integerResult ) );
+	}
+	
+	if( Interpreter_success() == YES ) {
+		Interpreter_pushInteger(integerResult);
+	} else {
+		Interpreter_unPop(2);
+	}
+	return Interpreter_success();
 }
 
+/* always rounded toward negative infinity */
+/* not sure how this works for negative numbers */
 Bool Interpreter_primitiveDiv(void) {
-return NO;
+	short integerArgument = Interpreter_popInteger();
+	short integerReceiver = Interpreter_popInteger();
+	short integerResult = 0;
+	short integerRemainder = 0;
+
+	/* cant divide by 0 */
+	Interpreter_success_(integerArgument != 0);
+	
+	/* We ignore the remainder */
+	if( Interpreter_success() == YES ) {	
+		integerResult = integerReceiver / integerArgument;
+		if( integerResult < 0 ) {
+			integerResult--; /* smalltalk rounds down always */
+		}
+		Interpreter_success_( ObjectMemory_isIntegerValue(integerResult ) );
+	}
+	
+	if( Interpreter_success() == YES ) {
+		Interpreter_pushInteger(integerResult);
+	} else {
+		Interpreter_unPop(2);
+	}
+	return Interpreter_success();
 }
 
+/* rounded to zero, like C, so an answer of -3.5 becomes -3, and +3.5 becomes +3 */
 Bool Interpreter_primitiveQuo(void) {
-return NO;
+	short integerArgument = Interpreter_popInteger();
+	short integerReceiver = Interpreter_popInteger();
+	short integerResult = 0;
+	short integerRemainder = 0;
+
+	/* cant divide by 0 */
+	Interpreter_success_(integerArgument != 0);
+	
+	/* We ignore the remainder */
+	if( Interpreter_success() == YES ) {	
+		integerResult = integerReceiver / integerArgument;
+		Interpreter_success_( ObjectMemory_isIntegerValue(integerResult ) );
+	}
+	
+	if( Interpreter_success() == YES ) {
+		Interpreter_pushInteger(integerResult);
+	} else {
+		Interpreter_unPop(2);
+	}
+	return Interpreter_success();
 }
 
 Bool Interpreter_primitiveBitAnd(void) {
