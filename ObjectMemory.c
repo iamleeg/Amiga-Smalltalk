@@ -80,7 +80,7 @@ void ObjectMemory_decreaseReferencesTo(ObjectPointer objectPointer) {
 
 ObjectPointer ObjectMemory_fetchClassOf(ObjectPointer objectPointer) {
   if (ObjectMemory_isIntegerObject(objectPointer)) {
-    return IntegerClass;
+    return ClassSmallInteger;
   } else {
     return ObjectMemory_classBitsOf(objectPointer);
   }

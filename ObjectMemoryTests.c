@@ -403,7 +403,7 @@ Test(FetchClassOfImmediateInteger) {
   ObjectPointer zeroPointer = 0x1, reportedClass;
 
   reportedClass = ObjectMemory_fetchClassOf(zeroPointer);
-  Expect(reportedClass == IntegerClass);
+  Expect(reportedClass == ClassSmallInteger);
 }
 
 Test(DiscoverWordLengthOfObject) {
