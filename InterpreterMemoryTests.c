@@ -232,7 +232,7 @@ Test(GetPositive16BitValueFailsWithOtherClass) {
     Interpreter_fetchContextRegisters();
 
 	/* make it a selector pointer instead */
-	integerPointer = ObjectMemory_instantiateClass_withBytes(ClassSelectorPointer, 2);
+	integerPointer = ObjectMemory_instantiateClass_withBytes(ClassMessagePointer, 2);
 
 	Interpreter_initPrimitive();
 	resultValue = Interpreter_positive16BitValueOf(integerPointer);

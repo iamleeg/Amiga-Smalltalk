@@ -52,15 +52,16 @@ enum {
    * The entry in the object table for the SmallInteger class.
    * Again, I've inferred the necessity of this constant.
    */
-  IntegerClass = 12,
+  ClassSmallInteger = 12,
   ClassStringPointer = 14,
   ClassArrayPointer = 16,
+  ClassFloatPointer = 20,
   ClassMethodContextPointer = 22,
   ClassBlockContextPointer = 24,
   ClassPointPointer = 26,
   ClassLargePositiveIntegerPointer = 28,
-  ClassMessagePointer = 30,
-  ClassSelectorPointer = 32,
+  ClassMessagePointer = 32,
+/*  ClassSelectorPointer = 32,  Could not find this mentioned anywhere */
   ClassCharacterPointer = 40,
   /*ST:  Selectors */
   DoesNotUnderstandSelector = 42,
