@@ -25,4 +25,6 @@ Bool Interpreter_primitiveBitXor(void);
 Bool Interpreter_primitiveBitShift(void);
 Bool Interpreter_primitiveMakePoint(void);
 
+Bool Interpreter_primitiveAsFloat(void);
+
 #endif
