@@ -280,6 +280,7 @@ Bool Interpreter_primitiveQuo(void) {
 	short integerReceiver = Interpreter_popInteger();
 	short integerResult = 0;
 	short integerRemainder = 0;
+	
 
 	/* cant divide by 0 */
 	Interpreter_success_(integerArgument != 0);
@@ -299,22 +300,98 @@ Bool Interpreter_primitiveQuo(void) {
 }
 
 Bool Interpreter_primitiveBitAnd(void) {
-return NO;
+	short integerArgument = Interpreter_popInteger();
+	short integerReceiver = Interpreter_popInteger();
+	short integerResult = 0;
+	
+	if( Interpreter_success() == YES ) {
+		integerResult = integerReceiver & integerArgument;	
+	}
+	
+	if( Interpreter_success() == YES ) {
+		Interpreter_pushInteger(integerResult);
+	} else {
+		Interpreter_unPop(2);
+	}
+	return Interpreter_success();
 }
 
 Bool Interpreter_primitiveBitOr(void) {
-return NO;
+	short integerArgument = Interpreter_popInteger();
+	short integerReceiver = Interpreter_popInteger();
+	short integerResult = 0;
+	
+	if( Interpreter_success() == YES ) {
+		integerResult = integerReceiver | integerArgument;	
+	}
+	
+	if( Interpreter_success() == YES ) {
+		Interpreter_pushInteger(integerResult);
+	} else {
+		Interpreter_unPop(2);
+	}
+	return Interpreter_success();
 }
 
 Bool Interpreter_primitiveBitXor(void) {
-return NO;
+	short integerArgument = Interpreter_popInteger();
+	short integerReceiver = Interpreter_popInteger();
+	short integerResult = 0;
+	
+	if( Interpreter_success() == YES ) {
+		integerResult = integerReceiver ^ integerArgument;	
+	}
+	
+	if( Interpreter_success() == YES ) {
+		Interpreter_pushInteger(integerResult);
+	} else {
+		Interpreter_unPop(2);
+	}
+	return Interpreter_success();
 }
 
 Bool Interpreter_primitiveBitShift(void) {
-return NO;
+	short integerArgument = Interpreter_popInteger();
+	short integerReceiver = Interpreter_popInteger();
+	short integerResult = 0;
+	
+	if( Interpreter_success() == YES ) {
+		if( integerArgument >= 0 ) {
+			integerResult = integerReceiver << integerArgument;
+		} else {
+			integerResult = integerReceiver >> (-1 * integerArgument);
+		}
+	}
+	
+	if( Interpreter_success() == YES ) {
+		Interpreter_pushInteger(integerResult);
+	} else {
+		Interpreter_unPop(2);
+	}
+	return Interpreter_success();
 }
 
+
+/* initializePointIndices - see page 625 - these seem to be "well known" but its not clear
+   in the existing code where to declare them...thoughts welcome I put them in Interpreter_Constants.h */
+
 Bool Interpreter_primitiveMakePoint(void) {
-return NO;
+	ObjectPointer argument = Interpreter_popStack();
+	ObjectPointer receiver = Interpreter_popStack();
+	ObjectPointer result = NilPointer;
+	
+	Interpreter_success_( ObjectMemory_isIntegerValue(receiver));
+	Interpreter_success_( ObjectMemory_isIntegerValue(argument));
+	
+	if( Interpreter_success() ) {
+		result = ObjectMemory_instantiateClass_withPointers(ClassPointPointer, ClassPointSize);
+		ObjectMemory_storePointer_ofObject_withValue(XIndex, result, receiver);
+		ObjectMemory_storePointer_ofObject_withValue(YIndex, result, argument); 
+		Interpreter_push(result);
+	} else {
+		Interpreter_unPop(2);
+	}
+
+	return Interpreter_success();
 }
 

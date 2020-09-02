@@ -17,6 +17,15 @@ enum {
   TwoPointer = 5
 };
 
+/** 
+ * Point Indices (p625)
+ */
+enum {
+	XIndex = 0,
+	YIndex = 1,
+	ClassPointSize = 2
+};
+
 /**
  * Guaranteed Pointers.
  */

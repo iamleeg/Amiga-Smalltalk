@@ -7,7 +7,9 @@
 #include "RefCountingTests.h"
 #include "PrimitiveMethodTests.h"
 #include "InterpreterMemoryTests.h"
-#include "Interpreter_PrimArithTests.h"
+#include "Interpreter_IntegerPrimTests.h"
+#include "Interpreter_IntegerArithTests.h"
+#include "Interpreter_IntegerCmpTests.h"
 #include "CompiledMethodTests.h"
 #include "ContextTests.h"
 #include "ClassTests.h"
@@ -28,7 +30,9 @@ int main(int argc, const char *argv[]) {
   RunSuite(RefCountingTests);
   RunSuite(PrimitiveMethodTests);
   RunSuite(InterpreterMemoryTests);
-  RunSuite(InterpreterArithmeticPrimitiveTests);
+  RunSuite(InterpreterIntegerPrimitiveArithmeticTests);
+  RunSuite(InterpreterIntegerPrimitiveComparisonTests);
+  RunSuite(InterpreterIntegerPrimitiveTests);
   RunSuite(CompiledMethodTests);
   RunSuite(ContextTests);
   RunSuite(ClassTests);
