@@ -3,20 +3,26 @@
 #include "ObjectMemory.h"
 #include "ObjectMemory_Allocation.h"
 
+/**
+ * Page 621
+ */
 Bool Interpreter_dispatchArithmeticPrimitives( int primitiveIndex ) {
 	if( primitiveIndex < 20 ) {
 		return Interpreter_dispatchIntegerPrimitives( primitiveIndex );
 	}
-/*	if( primitiveIndex < 40 ) {
+	if( primitiveIndex < 40 ) {
 		return Interpreter_dispatchLargeIntegerPrimitives( primitiveIndex );
 	}
 	if( primitiveIndex < 60 ) {
 		return Interpreter_dispatchFloatPrimitives( primitiveIndex );
-	}*/
+	}
 	return NO;
 }
 
-Bool Interpreter_dispatchIntegerPrimitives( int primitiveIndex ) {
+/**
+ * Page 621
+ */
+ Bool Interpreter_dispatchIntegerPrimitives( int primitiveIndex ) {
 	switch( primitiveIndex ) {
 		case 1: return Interpreter_primitiveAdd();
 		case 2: return Interpreter_primitiveSubtract();
@@ -40,6 +46,27 @@ Bool Interpreter_dispatchIntegerPrimitives( int primitiveIndex ) {
 	return NO;
 }
 
+/** 
+ *  Should be implemented in Smalltalk instead  page 625
+ */
+Bool Interpreter_dispatchLargeIntegerPrimitives( int primitiveIndex ) {
+	Interpreter_primitiveFail();
+	return NO;
+}
+/**
+ * Page 626
+ */
+Bool Interpreter_dispatchFloatPrimitives( int primitiveIndex ) {
+	switch( primitiveIndex ) {
+		case 40: return Interpreter_primitiveAsFloat();
+	}
+	return NO;
+}
+
+
+/**
+ * page 622
+ */
 Bool Interpreter_primitiveAdd(void) {
 	short integerArgument = Interpreter_popInteger();
 	short integerReceiver = Interpreter_popInteger();
@@ -56,6 +83,9 @@ Bool Interpreter_primitiveAdd(void) {
 	return Interpreter_success();
 }
 
+/**
+ * page 622
+ */
 Bool Interpreter_primitiveSubtract(void) {
 	short integerArgument = Interpreter_popInteger();
 	short integerReceiver = Interpreter_popInteger();
@@ -72,6 +102,9 @@ Bool Interpreter_primitiveSubtract(void) {
 	return Interpreter_success();
 }
 
+/**
+ * page 624
+ */
 Bool Interpreter_primitiveLessThan(void) {
 	short integerArgument = Interpreter_popInteger();
 	short integerReceiver = Interpreter_popInteger();
@@ -87,6 +120,9 @@ Bool Interpreter_primitiveLessThan(void) {
 	return Interpreter_success();
 }
 
+/**
+ * page 624
+ */
 Bool Interpreter_primitiveGreaterThan(void) {
 	short integerArgument = Interpreter_popInteger();
 	short integerReceiver = Interpreter_popInteger();
@@ -102,6 +138,9 @@ Bool Interpreter_primitiveGreaterThan(void) {
 	return Interpreter_success();
 }
 
+/**
+ * page 624
+ */
 Bool Interpreter_primitiveLessOrEqual(void) {
 	short integerArgument = Interpreter_popInteger();
 	short integerReceiver = Interpreter_popInteger();
@@ -117,6 +156,9 @@ Bool Interpreter_primitiveLessOrEqual(void) {
 	return Interpreter_success();
 }
 
+/**
+ * page 624
+ */
 Bool Interpreter_primitiveGreaterOrEqual(void) {
 	short integerArgument = Interpreter_popInteger();
 	short integerReceiver = Interpreter_popInteger();
@@ -132,6 +174,9 @@ Bool Interpreter_primitiveGreaterOrEqual(void) {
 	return Interpreter_success();
 }
 
+/**
+ * page 624
+ */
 Bool Interpreter_primitiveEqual(void) {
 	short integerArgument = Interpreter_popInteger();
 	short integerReceiver = Interpreter_popInteger();
@@ -147,6 +192,9 @@ Bool Interpreter_primitiveEqual(void) {
 	return Interpreter_success();
 }
 
+/**
+ * page 624
+ */
 Bool Interpreter_primitiveNotEqual(void) {
 	short integerArgument = Interpreter_popInteger();
 	short integerReceiver = Interpreter_popInteger();
@@ -162,6 +210,9 @@ Bool Interpreter_primitiveNotEqual(void) {
 	return Interpreter_success();
 }
 
+/**
+ * page 622
+ */
 Bool Interpreter_primitiveMultiply(void) {
 	short integerArgument = Interpreter_popInteger();
 	short integerReceiver = Interpreter_popInteger();
@@ -178,6 +229,9 @@ Bool Interpreter_primitiveMultiply(void) {
 	return Interpreter_success();
 }
 
+/**
+ * page 622
+ */
 Bool Interpreter_primitiveDivide(void) {
 	short integerArgument = Interpreter_popInteger();
 	short integerReceiver = Interpreter_popInteger();
@@ -206,6 +260,10 @@ Bool Interpreter_primitiveDivide(void) {
 	return Interpreter_success();
 }
 
+
+/**
+ * page 623
+ */
 
 /* always rounded toward negative infinity */
 /* not sure how this works for negative numbers */
@@ -246,6 +304,10 @@ Bool Interpreter_primitiveMod(void) {
 	return Interpreter_success();
 }
 
+/**
+ * page 623
+ */
+
 /* always rounded toward negative infinity */
 /* not sure how this works for negative numbers */
 Bool Interpreter_primitiveDiv(void) {
@@ -274,6 +336,9 @@ Bool Interpreter_primitiveDiv(void) {
 	return Interpreter_success();
 }
 
+/**
+ * page 623
+ */
 /* rounded to zero, like C, so an answer of -3.5 becomes -3, and +3.5 becomes +3 */
 Bool Interpreter_primitiveQuo(void) {
 	short integerArgument = Interpreter_popInteger();
@@ -299,6 +364,9 @@ Bool Interpreter_primitiveQuo(void) {
 	return Interpreter_success();
 }
 
+/**
+ * page 624
+ */
 Bool Interpreter_primitiveBitAnd(void) {
 	short integerArgument = Interpreter_popInteger();
 	short integerReceiver = Interpreter_popInteger();
@@ -316,6 +384,9 @@ Bool Interpreter_primitiveBitAnd(void) {
 	return Interpreter_success();
 }
 
+/**
+ * page 624
+ */
 Bool Interpreter_primitiveBitOr(void) {
 	short integerArgument = Interpreter_popInteger();
 	short integerReceiver = Interpreter_popInteger();
@@ -333,6 +404,9 @@ Bool Interpreter_primitiveBitOr(void) {
 	return Interpreter_success();
 }
 
+/**
+ * page 624
+ */
 Bool Interpreter_primitiveBitXor(void) {
 	short integerArgument = Interpreter_popInteger();
 	short integerReceiver = Interpreter_popInteger();
@@ -350,6 +424,9 @@ Bool Interpreter_primitiveBitXor(void) {
 	return Interpreter_success();
 }
 
+/**
+ * page 624
+ */
 Bool Interpreter_primitiveBitShift(void) {
 	short integerArgument = Interpreter_popInteger();
 	short integerReceiver = Interpreter_popInteger();
@@ -373,8 +450,8 @@ Bool Interpreter_primitiveBitShift(void) {
 
 
 /* initializePointIndices - see page 625 - these seem to be "well known" but its not clear
-   in the existing code where to declare them...thoughts welcome I put them in Interpreter_Constants.h */
-
+ *  in the existing code where to declare them...thoughts welcome... I put them in 
+ *  Interpreter_Constants.h */
 Bool Interpreter_primitiveMakePoint(void) {
 	ObjectPointer argument = Interpreter_popStack();
 	ObjectPointer receiver = Interpreter_popStack();
