@@ -407,6 +407,42 @@ Test(PrimitiveMakePointFailIfArgumentNonInteger) {
 	Expect( resultObject == first);
 }
 
+Test(PrimitiveAsFloatBasic) {
+	Bool localSuccess = NO;
+	ObjectPointer floatPointer = NilPointer;
+	activeContext = stubBlockContext();
+    Interpreter_fetchContextRegisters();
+    
+	Interpreter_initPrimitive();
+    Interpreter_pushInteger(123);
+	Expect( Interpreter_success() == YES );
+	
+    localSuccess = Interpreter_primitiveAsFloat();
+    Expect( localSuccess == YES );
+    floatPointer = Interpreter_stackTop();
+    Expect( ObjectMemory_fetchClassOf(floatPointer) == ClassFloatPointer );
+    Expect( 123.0 == Interpreter_popFloat() );
+}
+
+Test(PrimitiveAsFloatFailsIfReceiverNotInteger) {
+	Bool localSuccess = NO;
+	ObjectPointer resultPointer = NilPointer;
+	activeContext = stubBlockContext();
+    Interpreter_fetchContextRegisters();
+    
+	Interpreter_initPrimitive();
+    Interpreter_push(Interpreter_positive16BitIntegerFor(16500));
+	Expect( Interpreter_success() == YES );
+	
+    localSuccess = Interpreter_primitiveAsFloat();
+    Expect( localSuccess == NO );
+    Expect( Interpreter_success() == NO );
+    /* Expect Stack unchanged */
+    resultPointer = Interpreter_stackTop();
+    Expect( ObjectMemory_fetchClassOf(resultPointer) == ClassLargePositiveIntegerPointer );
+    Expect( 16500 == Interpreter_positive16BitValueOf( resultPointer ) );
+}
+
 
 void InterpreterIntegerPrimitiveTests(struct TestResult *tr) {	
 	RunTest(PrimitiveBitAndBasic);
@@ -424,4 +460,6 @@ void InterpreterIntegerPrimitiveTests(struct TestResult *tr) {
 	RunTest(PrimitiveBitShiftFailIfArgumentNonInteger);
 	RunTest(PrimitiveMakePointFailIfReceiverNonInteger);
 	RunTest(PrimitiveMakePointFailIfArgumentNonInteger);
+	RunTest(PrimitiveAsFloatBasic);
+	RunTest(PrimitiveAsFloatFailsIfReceiverNotInteger);
 }

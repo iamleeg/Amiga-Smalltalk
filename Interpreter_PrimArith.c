@@ -395,3 +395,22 @@ Bool Interpreter_primitiveMakePoint(void) {
 	return Interpreter_success();
 }
 
+/**
+ * Page 626
+ */
+Bool Interpreter_primitiveAsFloat(void) {
+	ObjectPointer receiver = Interpreter_popStack();
+	short integerReceiver = 0;
+	float floatReceiver = 0.0;
+	
+	Interpreter_success_( ObjectMemory_isIntegerValue(receiver));
+	if( Interpreter_success() ) {
+		integerReceiver = ObjectMemory_integerValueOf(receiver);
+		floatReceiver = integerReceiver * 1.0;
+		Interpreter_pushFloat(floatReceiver);
+	} else {
+		Interpreter_unPop(1);
+	}
+	return Interpreter_success();
+}
+
