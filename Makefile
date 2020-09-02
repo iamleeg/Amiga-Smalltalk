@@ -4,7 +4,7 @@ check: ast_tests
 .PHONY: check
 
 CFLAGS = -ggdb -D__AROS__ -I/usr/include/axrt
-LDFLAGS = -lexec -lintuition
+LDFLAGS = -lexec -lintuition -lmieee
 OBJ = -specs=/usr/lib/x86_64-linux-gnu/axrt.specs /usr/lib/x86_64-linux-gnu/startup.o /usr/lib/x86_64-linux-gnu/axrt.ld
 
 SOURCE_FILES = ObjectMemory.c ObjectMemory_Storage.c ObjectMemory_FreeList.c ObjectMemory_Allocation.c ObjectMemory_RefCounting.c ObjectMemory_GC.c RealWordMemory.c Interpreter.c Interpreter_Error.c Interpreter_PrimArith.c 

@@ -88,6 +88,16 @@ short Interpreter_popInteger(void);
 void Interpreter_pushInteger(short integerValue); 
 
 /**
+ * primitive to pop the stack and convert to an float value
+ */
+float Interpreter_popFloat(void);
+
+/**
+ * primitive to push an integer value on the stack by converting to a SmallInteger
+ */
+void Interpreter_pushFloat(float floatValue); 
+
+/**
  * primitive to convert from an integer value to a LargePositiveInteger
  */
 ObjectPointer Interpreter_positive16BitIntegerFor(short integerValue);
