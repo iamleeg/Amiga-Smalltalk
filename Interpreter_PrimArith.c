@@ -1,6 +1,7 @@
 #include "Interpreter.h"
 #include "Interpreter_PrimArith.h"
-#include <stdio.h>
+#include "ObjectMemory.h"
+#include "ObjectMemory_Allocation.h"
 
 Bool Interpreter_dispatchArithmeticPrimitives( int primitiveIndex ) {
 	if( primitiveIndex < 20 ) {
@@ -45,7 +46,7 @@ Bool Interpreter_primitiveAdd(void) {
 	short integerResult = 0;
 	if( Interpreter_success() == YES ) {
 		integerResult = integerReceiver + integerArgument;
-		Interpreter_success_( ObjectMemory_isIntegerValue(integerResult ) );
+		Interpreter_success_( ObjectMemory_isIntegerValue( integerResult ) );
 	}
 	if( Interpreter_success() == YES ) {
 		Interpreter_pushInteger(integerResult);

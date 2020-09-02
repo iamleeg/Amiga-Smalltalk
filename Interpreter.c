@@ -77,7 +77,7 @@ void Interpreter_pushInteger(short integerValue) {
 }
 
 /** 
- * Page 671
+ * Page 617
  * convert back and forth between SmallInteger and LargePositiveInteger
  */
 ObjectPointer Interpreter_positive16BitIntegerFor(short integerValue) {
