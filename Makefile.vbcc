@@ -5,7 +5,7 @@ CC=vc +aos68k
 CFLAGS=-I$(NDK)/include/include_h
 VASM=vasmm68k_mot
 VLINK=vlink
-LDFLAGS=-L$(NDK)/linker_libs -lamiga -lauto
+LDFLAGS=-L$(NDK)/linker_libs -lamiga -lauto -lmieee
 CONFIG=+aos68k
 
 TESTAPP=ast_tests

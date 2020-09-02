@@ -76,6 +76,45 @@ void Interpreter_pushInteger(short integerValue) {
 	Interpreter_success_(YES);
 }
 
+/** convenience mechanisms for Float arithmetic, not specified in the Blue Book */
+void Interpreter_pushFloat(float floatValue)
+{
+    unsigned int intValue = *(unsigned int*)&floatValue;
+    ObjectPointer floatPointer = ObjectMemory_instantiateClass_withWords(ClassFloatPointer, 2);
+    Word firstWord;
+    Word secondWord;
+
+	firstWord = (Word)intValue & 0xffff;
+	secondWord = (Word)(intValue >> 16);
+	
+    ObjectMemory_storeWord_ofObject_withValue(0, floatPointer, firstWord);
+    ObjectMemory_storeWord_ofObject_withValue(1, floatPointer, secondWord);
+
+    Interpreter_push(floatPointer);
+    Interpreter_success_(YES);
+}
+
+/** convenience mechanisms for Float arithmetic, not specified in the Blue Book */
+float Interpreter_popFloat(void)
+{
+	unsigned int intValue = 0;
+	Word firstWord;
+    Word secondWord;
+	
+    ObjectPointer floatPointer = Interpreter_popStack();
+    Interpreter_success_(ObjectMemory_fetchClassOf(floatPointer) == ClassFloatPointer);
+    if( Interpreter_success() ) {
+	    firstWord =  ObjectMemory_fetchWord_ofObject(0, floatPointer);
+	    secondWord = ObjectMemory_fetchWord_ofObject(1, floatPointer);
+		intValue = (secondWord<<16) | firstWord;
+        return *(float*)&intValue;    
+    } else {
+    	Interpreter_primitiveFail();
+    	return 0.0;
+    }	    
+}
+
+
 /** 
  * Page 617
  * convert back and forth between SmallInteger and LargePositiveInteger

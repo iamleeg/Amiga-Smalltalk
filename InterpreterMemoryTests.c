@@ -127,6 +127,21 @@ Test(PushAndPopInteger) {
 	Expect(integerValue == actual);
 }
 
+Test(PushAndPopFloat) {
+	float floatValue = 1.23;
+	float actual = 0.0;
+	
+	activeContext = stubBlockContext();
+    Interpreter_fetchContextRegisters();
+
+	Interpreter_initPrimitive();
+	Interpreter_pushFloat(floatValue);
+	Expect(Interpreter_success() == YES);
+	actual = Interpreter_popFloat();
+	Expect(Interpreter_success() == YES);
+	Expect(floatValue == actual);
+}
+
 Test(GetPositive16BitIntegerForValueFailsWithNegative) {
 	short negativeIntegerValue=-123;
 	short fetchedInteger = -1;
@@ -263,6 +278,7 @@ Test(GetPositive16BitValueFailsWithWrongBytes) {
 void InterpreterMemoryTests(struct TestResult *tr) {
   RunTest(PushAndPop);
   RunTest(PushAndPopInteger);
+  RunTest(PushAndPopFloat);
   RunTest(GetPositive16BitIntegerForValueFailsWithNegative);
   RunTest(GetPositive16BitIntegerForValueWorksWithSmallInteger);
   RunTest(GetPositive16BitIntegerForValueWorksWithLargeInteger);
