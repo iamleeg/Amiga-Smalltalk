@@ -79,18 +79,7 @@ void Interpreter_pushInteger(short integerValue) {
 /** convenience mechanisms for Float arithmetic, not specified in the Blue Book */
 void Interpreter_pushFloat(float floatValue)
 {
-    unsigned int intValue = *(unsigned int*)&floatValue;
-    ObjectPointer floatPointer = ObjectMemory_instantiateClass_withWords(ClassFloatPointer, 2);
-    Word firstWord;
-    Word secondWord;
-
-	firstWord = (Word)intValue & 0xffff;
-	secondWord = (Word)(intValue >> 16);
-	
-    ObjectMemory_storeWord_ofObject_withValue(0, floatPointer, firstWord);
-    ObjectMemory_storeWord_ofObject_withValue(1, floatPointer, secondWord);
-
-    Interpreter_push(floatPointer);
+    Interpreter_push(ObjectMemory_floatObjectOf(floatValue));
     Interpreter_success_(YES);
 }
 
@@ -103,15 +92,7 @@ float Interpreter_popFloat(void)
 	
     ObjectPointer floatPointer = Interpreter_popStack();
     Interpreter_success_(ObjectMemory_fetchClassOf(floatPointer) == ClassFloatPointer);
-    if( Interpreter_success() ) {
-	    firstWord =  ObjectMemory_fetchWord_ofObject(0, floatPointer);
-	    secondWord = ObjectMemory_fetchWord_ofObject(1, floatPointer);
-		intValue = (secondWord<<16) | firstWord;
-        return *(float*)&intValue;    
-    } else {
-    	Interpreter_primitiveFail();
-    	return 0.0;
-    }	    
+    return ObjectMemory_floatValueOf(floatPointer);
 }
 
 

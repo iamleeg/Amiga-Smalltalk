@@ -128,18 +128,32 @@ Test(PushAndPopInteger) {
 }
 
 Test(PushAndPopFloat) {
-	float floatValue = 1.23;
-	float actual = 0.0;
+	float floatValue1 = 1.23;
+	float actual1 = 999.0;
+
+	float floatValue2 = 0.0;
+	float actual2 = 999.0;
 	
 	activeContext = stubBlockContext();
     Interpreter_fetchContextRegisters();
 
 	Interpreter_initPrimitive();
-	Interpreter_pushFloat(floatValue);
+	Interpreter_pushFloat(floatValue1);
 	Expect(Interpreter_success() == YES);
-	actual = Interpreter_popFloat();
+	
+	Interpreter_initPrimitive();
+	Interpreter_pushFloat(floatValue2);
 	Expect(Interpreter_success() == YES);
-	Expect(floatValue == actual);
+	
+	Interpreter_initPrimitive();
+	actual2 = Interpreter_popFloat();
+	Expect(Interpreter_success() == YES);
+	Expect(floatValue2 == actual2);
+	
+	Interpreter_initPrimitive();
+	actual1 = Interpreter_popFloat();
+	Expect(Interpreter_success() == YES);
+	Expect(floatValue1 == actual1);
 }
 
 Test(GetPositive16BitIntegerForValueFailsWithNegative) {

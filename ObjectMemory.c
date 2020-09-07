@@ -180,3 +180,22 @@ ObjectPointer ObjectMemory_integerObjectOf(short value) {
 Bool ObjectMemory_isIntegerValue(short valueWord) {
   return ((valueWord < 16384) && (valueWord >= -16384)) ? YES : NO;
 }
+
+ObjectPointer ObjectMemory_floatObjectOf(float floatValue) {
+    unsigned int intValue = *(unsigned int*)&floatValue;
+    ObjectPointer floatPointer = ObjectMemory_instantiateClass_withWords(ClassFloatPointer, 2);
+    Word firstWord = (Word)intValue & 0xffff;
+    Word secondWord = (Word)(intValue >> 16);
+	
+    ObjectMemory_storeWord_ofObject_withValue(0, floatPointer, firstWord);
+    ObjectMemory_storeWord_ofObject_withValue(1, floatPointer, secondWord);
+    return floatPointer;
+}
+
+
+float ObjectMemory_floatValueOf(ObjectPointer floatPointer) {
+	Word firstWord =  ObjectMemory_fetchWord_ofObject(0, floatPointer);
+	Word secondWord = ObjectMemory_fetchWord_ofObject(1, floatPointer);
+	unsigned int intValue = (secondWord<<16) | firstWord;
+    return *(float*)&intValue;    
+}
