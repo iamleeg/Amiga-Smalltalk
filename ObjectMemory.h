@@ -135,6 +135,13 @@ ObjectPointer ObjectMemory_integerObjectOf(short value);
  */
 Bool ObjectMemory_isIntegerValue(short valueWord);
 
+/** 
+ * Added by alan as convenience methods.  Not in the blue book directly
+ */
+ObjectPointer ObjectMemory_floatObjectOf(float floatValue);
+float ObjectMemory_floatValueOf(ObjectPointer floatPointer);
+
+
 /* Include routines from other categories */
 #include "ObjectMemory_Storage.h"
 #include "ObjectMemory_FreeList.h"
