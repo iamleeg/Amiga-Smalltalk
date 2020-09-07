@@ -9,6 +9,7 @@
 #include "InterpreterMemoryTests.h"
 #include "Interpreter_IntegerPrimTests.h"
 #include "Interpreter_IntegerArithTests.h"
+#include "Interpreter_FloatArithTests.h"
 #include "Interpreter_IntegerCmpTests.h"
 #include "CompiledMethodTests.h"
 #include "ContextTests.h"
@@ -31,6 +32,7 @@ int main(int argc, const char *argv[]) {
   RunSuite(PrimitiveMethodTests);
   RunSuite(InterpreterMemoryTests);
   RunSuite(InterpreterIntegerPrimitiveArithmeticTests);
+  RunSuite(InterpreterFloatPrimitiveArithmeticTests);
   RunSuite(InterpreterIntegerPrimitiveComparisonTests);
   RunSuite(InterpreterIntegerPrimitiveTests);
   RunSuite(CompiledMethodTests);

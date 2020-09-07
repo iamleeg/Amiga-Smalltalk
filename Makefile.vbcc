@@ -19,8 +19,8 @@ INTERP_HEADERFILES = Interpreter.h Interpreter_Constants.h Interpreter_PrimArith
 
 SHARED_HEADERFILES = Types.h
 
-TEST_SOURCES = test_main.o FreeListTests.o ObjectMemoryTests.o RealWordMemoryTests.o AllocationTests.o RefCountingTests.o PrimitiveMethodTests.o InterpreterMemoryTests.o Interpreter_IntegerPrimTests.o Interpreter_IntegerArithTests.o Interpreter_IntegerCmpTests.o CompiledMethodTests.o ContextTests.o ClassTests.o
-TEST_HEADERS = tests.h FreeListTests.h ObjectMemoryTests.h RealWordMemoryTests.h AllocationTests.h RefCountingTests.h PrimitiveMethodTests.h InterpreterMemoryTests.h Interpreter_IntegerPrimTests.h Interpreter_IntegerArithTests.h Interpreter_IntegerCmpTests.h CompiledMethodTests.h ContextTests.h ClassTests.h
+TEST_SOURCES = test_main.o FreeListTests.o ObjectMemoryTests.o RealWordMemoryTests.o AllocationTests.o RefCountingTests.o PrimitiveMethodTests.o InterpreterMemoryTests.o Interpreter_IntegerPrimTests.o Interpreter_IntegerArithTests.o Interpreter_FloatArithTests.o Interpreter_IntegerCmpTests.o CompiledMethodTests.o ContextTests.o ClassTests.o
+TEST_HEADERS = tests.h FreeListTests.h ObjectMemoryTests.h RealWordMemoryTests.h AllocationTests.h RefCountingTests.h PrimitiveMethodTests.h InterpreterMemoryTests.h Interpreter_IntegerPrimTests.h Interpreter_IntegerArithTests.h Interpreter_FloatArithTests.h Interpreter_IntegerCmpTests.h CompiledMethodTests.h ContextTests.h ClassTests.h
 
 ERROR_SOURCES = Interpreter_Error.o Error_Host.o
 ERROR_HEADERS = Interpreter_Error.h

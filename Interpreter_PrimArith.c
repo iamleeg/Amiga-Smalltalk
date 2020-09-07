@@ -491,3 +491,197 @@ Bool Interpreter_primitiveAsFloat(void) {
 	return Interpreter_success();
 }
 
+Bool Interpreter_primitiveFloatAdd(void) {
+	float argument = Interpreter_popFloat();
+	float receiver = Interpreter_popFloat();
+	float result = 0.0;
+	if( Interpreter_success() ) {
+		result = receiver + argument;
+		Interpreter_pushFloat( result );
+	} else {
+		Interpreter_unPop(2);
+	}
+	return Interpreter_success();
+}
+
+Bool Interpreter_primitiveFloatSubtract(void) {
+	float argument = Interpreter_popFloat();
+	float receiver = Interpreter_popFloat();
+	float result = 0.0;
+	if( Interpreter_success() ) {
+		result = receiver - argument;
+		Interpreter_pushFloat( result );
+	} else {
+		Interpreter_unPop(2);
+	}
+	return Interpreter_success();
+}
+
+Bool Interpreter_primitiveFloatLessThan(void) {
+	float argument = Interpreter_popFloat();
+	float receiver = Interpreter_popFloat();
+	if( Interpreter_success() ) {
+		if( receiver < argument ) {
+			Interpreter_push( TruePointer );
+		} else {
+			Interpreter_push( FalsePointer );
+		}
+	} else {
+		Interpreter_unPop(2);
+	}
+	return Interpreter_success();
+}
+
+Bool Interpreter_primitiveFloatGreaterThan(void) {
+	float argument = Interpreter_popFloat();
+	float receiver = Interpreter_popFloat();
+	if( Interpreter_success() ) {
+		if( receiver > argument ) {
+			Interpreter_push( TruePointer );
+		} else {
+			Interpreter_push( FalsePointer );
+		}
+	} else {
+		Interpreter_unPop(2);
+	}
+	return Interpreter_success();
+}
+
+Bool Interpreter_primitiveFloatLessOrEqual(void) {
+	float argument = Interpreter_popFloat();
+	float receiver = Interpreter_popFloat();
+	if( Interpreter_success() ) {
+		if( receiver <= argument ) {
+			Interpreter_push( TruePointer );
+		} else {
+			Interpreter_push( FalsePointer );
+		}
+	} else {
+		Interpreter_unPop(2);
+	}
+	return Interpreter_success();
+
+}
+
+Bool Interpreter_primitiveFloatGreaterOrEqual(void) {
+	float argument = Interpreter_popFloat();
+	float receiver = Interpreter_popFloat();
+	if( Interpreter_success() ) {
+		if( receiver >= argument ) {
+			Interpreter_push( TruePointer );
+		} else {
+			Interpreter_push( FalsePointer );
+		}
+	} else {
+		Interpreter_unPop(2);
+	}
+	return Interpreter_success();
+
+}
+
+Bool Interpreter_primitiveFloatEqual(void) {
+	float argument = Interpreter_popFloat();
+	float receiver = Interpreter_popFloat();
+	if( Interpreter_success() ) {
+		if( receiver == argument ) {
+			Interpreter_push( TruePointer );
+		} else {
+			Interpreter_push( FalsePointer );
+		}
+	} else {
+		Interpreter_unPop(2);
+	}
+	return Interpreter_success();
+}
+
+Bool Interpreter_primitiveFloatNotEqual(void) {
+	float argument = Interpreter_popFloat();
+	float receiver = Interpreter_popFloat();
+	if( Interpreter_success() ) {
+		if( receiver != argument ) {
+			Interpreter_push( TruePointer );
+		} else {
+			Interpreter_push( FalsePointer );
+		}
+	} else {
+		Interpreter_unPop(2);
+	}
+	return Interpreter_success();
+
+}
+
+Bool Interpreter_primitiveFloatMultiply(void) {
+	float argument = Interpreter_popFloat();
+	float receiver = Interpreter_popFloat();
+	float result = 0.0;
+	if( Interpreter_success() ) {
+		result = receiver * argument;
+		Interpreter_pushFloat( result );
+	} else {
+		Interpreter_unPop(2);
+	}
+	return Interpreter_success();
+}
+
+Bool Interpreter_primitiveFloatDivide(void) {
+	float argument = 99.0;
+	float receiver = 99.0;
+	float result = 0.0;
+	
+	argument = Interpreter_popFloat();
+	receiver = Interpreter_popFloat();
+	
+	if( Interpreter_success() ) {
+		Interpreter_success_(argument > 0.0 || argument < 0.0);
+	}
+	
+	if( Interpreter_success() ) {
+		result = receiver / argument;
+		Interpreter_pushFloat( result );
+	} else {
+		Interpreter_unPop(2);
+	}
+	return Interpreter_success();
+}
+
+Bool Interpreter_primitiveTruncated(void) {
+	short result = 0;
+	float receiver = Interpreter_popFloat();
+	
+	if( Interpreter_success() ) {
+		result = (short)receiver;
+		Interpreter_success_( ObjectMemory_isIntegerValue(result) );
+	}
+		
+	if( Interpreter_success() ) {
+		Interpreter_pushInteger(result);
+	} else {
+		Interpreter_unPop(1);
+	}
+
+	return Interpreter_success();
+}
+
+Bool Interpreter_primitiveFractionalPart(void) {
+	float result = 0;
+	float receiver = Interpreter_popFloat();
+	if( Interpreter_success() ) {
+		result = receiver - (short)receiver;
+		Interpreter_pushFloat( result );
+	} else {
+		Interpreter_unPop(1);
+	}		
+
+	return Interpreter_success();
+}
+
+Bool Interpreter_primitiveExponent(void) {
+	Interpreter_primitiveFail();
+	return NO;
+}
+
+Bool Interpreter_primitiveTimesTwoPower(void) {
+	Interpreter_primitiveFail();
+	return NO;
+}
+

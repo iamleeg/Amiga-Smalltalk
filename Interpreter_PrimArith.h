@@ -29,4 +29,19 @@ Bool Interpreter_primitiveMakePoint(void);
 
 Bool Interpreter_primitiveAsFloat(void);
 
+Bool Interpreter_primitiveFloatAdd(void);
+Bool Interpreter_primitiveFloatSubtract(void);
+Bool Interpreter_primitiveFloatLessThan(void);
+Bool Interpreter_primitiveFloatGreaterThan(void);
+Bool Interpreter_primitiveFloatLessOrEqual(void);
+Bool Interpreter_primitiveFloatGreaterOrEqual(void);
+Bool Interpreter_primitiveFloatEqual(void);
+Bool Interpreter_primitiveFloatNotEqual(void);
+Bool Interpreter_primitiveFloatMultiply(void);
+Bool Interpreter_primitiveFloatDivide(void);
+Bool Interpreter_primitiveTruncated(void);
+Bool Interpreter_primitiveFractionalPart(void);
+Bool Interpreter_primitiveExponent(void);
+Bool Interpreter_primitiveTimesTwoPower(void);
+
 #endif
