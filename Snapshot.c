@@ -1,5 +1,5 @@
 #include "Snapshot.h"
-#include "types.h"
+#include "Types.h"
 #include "ObjectMemory.h"
 #include <exec/types.h>
 #include <proto/dos.h>
