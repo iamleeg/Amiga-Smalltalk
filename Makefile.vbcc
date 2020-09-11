@@ -11,10 +11,10 @@ CONFIG=+aos68k
 TESTAPP=ast_tests
 ERRORHOST=error_host
 
-OM_SOURCEFILES =  ObjectMemory.o ObjectMemory_Storage.o ObjectMemory_FreeList.o ObjectMemory_Allocation.o ObjectMemory_RefCounting.o ObjectMemory_GC.o RealWordMemory.o
+OM_SOURCEFILES =  ObjectMemory.o ObjectMemory_Storage.o ObjectMemory_FreeList.o ObjectMemory_Allocation.o ObjectMemory_RefCounting.o ObjectMemory_GC.o RealWordMemory.o Snapshot.o
 INTERP_SOURCEFILES =  Interpreter.o Interpreter_Error.o Interpreter_PrimArith.o
 
-OM_HEADERFILES = ObjectMemory.h ObjectMemory_Constants.h ObjectMemory_Storage.h ObjectMemory_FreeList.h ObjectMemory_Allocation.h ObjectMemory_RefCounting.h ObjectMemory_GC.h RealWordMemory.h 
+OM_HEADERFILES = ObjectMemory.h ObjectMemory_Constants.h ObjectMemory_Storage.h ObjectMemory_FreeList.h ObjectMemory_Allocation.h ObjectMemory_RefCounting.h ObjectMemory_GC.h RealWordMemory.h  Snapshot.h
 INTERP_HEADERFILES = Interpreter.h Interpreter_Constants.h Interpreter_PrimArith.h Interpreter_Error.h 
 
 SHARED_HEADERFILES = Types.h

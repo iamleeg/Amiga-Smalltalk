@@ -199,3 +199,15 @@ float ObjectMemory_floatValueOf(ObjectPointer floatPointer) {
 	unsigned int intValue = (secondWord<<16) | firstWord;
     return *(float*)&intValue;    
 }
+
+
+/** 
+ * Is objectPointer pointing to a valid object ?
+ * Mentioned on Page 636 as part of primitiveAsObject
+ * but not really defined anywhere.  Needed it as part of
+ * the snapshot POC, none of which is tested.
+ */
+ Bool ObjectMemory_hasObject(ObjectPointer objectPointer) {
+ 	return ( ObjectMemory_freeBitOf(objectPointer) == 0 &&
+ 			 ObjectMemory_countBitsOf(objectPointer) != 0 );
+ }

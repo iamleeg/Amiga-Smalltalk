@@ -142,6 +142,11 @@ ObjectPointer ObjectMemory_floatObjectOf(float floatValue);
 float ObjectMemory_floatValueOf(ObjectPointer floatPointer);
 
 
+/** 
+ * Is objectPointer pointing to a valid object ?
+ */
+ Bool ObjectMemory_hasObject(ObjectPointer objectPointer);
+
 /* Include routines from other categories */
 #include "ObjectMemory_Storage.h"
 #include "ObjectMemory_FreeList.h"
