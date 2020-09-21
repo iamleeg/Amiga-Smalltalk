@@ -26,7 +26,7 @@ struct TestResult {
   t(&failed); \
   if (failed == 0) { \
     tr->passed++; \
-    /*printf("PASS " #t "\n");*/ \
+    printf("PASS " #t "\n"); \
   } else { \
     tr->failed++; \
     printf("FAIL " #t "\n"); \
