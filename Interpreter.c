@@ -86,9 +86,7 @@ void Interpreter_pushFloat(float floatValue)
 /** convenience mechanisms for Float arithmetic, not specified in the Blue Book */
 float Interpreter_popFloat(void)
 {
-	unsigned int intValue = 0;
-	Word firstWord;
-    Word secondWord;
+    unsigned int intValue = 0;
 	
     ObjectPointer floatPointer = Interpreter_popStack();
     Interpreter_success_(ObjectMemory_fetchClassOf(floatPointer) == ClassFloatPointer);
