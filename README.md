@@ -52,6 +52,22 @@ Now you can make and run the tests:
 
 So far this has been tested on A1200 (real and virtual).
 
+### On a Mac
+
+You need these prerequisites:
+
+ - The AmigaOS 3.9 NDK (i.e. headers and libs)
+ - a working gcc/make, either from Xcode or elsewhere)
+ - vbcc with the m68k backend (see [lallafa](http://lallafa.de/blog/2011/08/vbcc-0-9b-an-amiga-cross-compiler-for-mac-os-x/))
+
+Now you can make the tests with
+
+    make -f Makefile.vbcc ast_tests
+    
+For bonus points, and if you have FS-UAE already working (giving you an Amiga `SYS:` in a folder on your Mac) you can use `vamos` from the amazing [lallafa amitools suite](http://lallafa.de/blog/amiga-projects/amitools/vamos/).  Once you have a `~/.vamosrc` configured to point to an Amiga `SYS:` you can run the tests with 
+
+    vamos -v -m8192 ast_tests
+
 ### `error_host`
 
 `error_host` is a tool that simulates a VM error, to make sure that it displays the UI correctly. Just build and run to see an uninspiring error message :).
