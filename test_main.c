@@ -15,10 +15,13 @@
 #include "ContextTests.h"
 #include "ClassTests.h"
 
+#include "Snapshot.h"
+
 #include "tests.h"
 
 int main(int argc, const char *argv[]) {
   struct TestResult result;
+  Bool snapresult = NO;
 
   result.ran = 0;
   result.passed = 0;
@@ -38,6 +41,10 @@ int main(int argc, const char *argv[]) {
   RunSuite(CompiledMethodTests);
   RunSuite(ContextTests);
   RunSuite(ClassTests);
+  
+  printf("LAST OBJECT = %u", ObjectMemory_lastUsedObjectPointer());
+  snapresult = ObjectMemory_saveSnapshot("SYS:snapshot.img");
+  printf("SNAPSHOT %u\n", snapresult);
   
   printf("Tests completed.\n");
   printf("%d tests ran.\n", result.ran);
