@@ -20,14 +20,37 @@
 #include "tests.h"
 
 int main(int argc, const char *argv[]) {
+  Bool snapresult = 126;
   struct TestResult result;
-  Bool snapresult = NO;
+    ObjectPointer anObject;
+  	if (!ObjectMemory_new()) { 
+    	fprintf(stderr, "Unable to allocate heap space for the VM\n"); 
+    	return 1; 
+  	}  else {
+    	fprintf(stderr, "ObjectMempry Allocatied\n"); 
+  	}
+  
+  printf("LAST OBJECT1 = %u", ObjectMemory_lastUsedObjectPointer());
+  /* create a simple object */
+  anObject = ObjectMemory_instantiateClass_withBytes(ClassLargePositiveIntegerPointer, 2);
+  printf("STORE1  %lu\n", anObject);
+  ObjectMemory_storeByte_ofObject_withValue(0, anObject, Interpreter_lowByteOf(17000));
+  printf("STORE2\n");
+  ObjectMemory_storeByte_ofObject_withValue(1, anObject, Interpreter_highByteOf(17000));
+  
+  ObjectMemory_increaseReferencesTo(anObject);
+  
+  printf("HAS %d\n", ObjectMemory_hasObject(anObject) );
+  printf("FREE(0) == %d", ObjectMemory_freeBitOf(anObject) == 0 );
+  printf("COUNT(!0) == %d", ObjectMemory_countBitsOf(anObject) != 0 );
 
   result.ran = 0;
   result.passed = 0;
   result.failed = 0;
   
-  RunSuite(AllocationTests);
+  printf("S4\n");
+  
+/*  RunSuite(AllocationTests);
   RunSuite(FreeListTests);
   RunSuite(ObjectMemoryTests);
   RunSuite(RealWordMemoryTests);
@@ -40,16 +63,19 @@ int main(int argc, const char *argv[]) {
   RunSuite(InterpreterIntegerPrimitiveTests);
   RunSuite(CompiledMethodTests);
   RunSuite(ContextTests);
-  RunSuite(ClassTests);
+  RunSuite(ClassTests);*/
   
-  printf("LAST OBJECT = %u", ObjectMemory_lastUsedObjectPointer());
+  
+  printf("LAST OBJECT2 = %u", ObjectMemory_lastUsedObjectPointer());
+  printf("HELLO");
   snapresult = ObjectMemory_saveSnapshot("SYS:snapshot.img");
   printf("SNAPSHOT %u\n", snapresult);
   
-  printf("Tests completed.\n");
+/*  printf("Tests completed.\n");
   printf("%d tests ran.\n", result.ran);
   printf("%d tests passed.\n", result.passed);
   printf("%d tests failed.\n", result.failed);
   
-  return (result.failed != 0);
+  return (result.failed != 0);*/
+  return snapresult;
 }

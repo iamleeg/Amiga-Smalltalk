@@ -1,9 +1,13 @@
 #include "Snapshot.h"
 #include "Types.h"
 #include "ObjectMemory.h"
+#include "ObjectMemory_FreeList.h"
+#include "RealWordMemory.h"
+#include <assert.h>
 #include <exec/types.h>
 #include <proto/dos.h>
 #include <dos/dos.h>
+#include <stdio.h>
 
 /*
  * -- SAVE -------------------------------------------------------------------------------
@@ -20,6 +24,7 @@ Bool _padToPage(BPTR filehandle) {
 	while( pads-- > 0 ) {
 		Write(filehandle, (APTR)&zero, sizeof(zero));
 	}
+	Flush(filehandle);
 	return YES;
 }
 
@@ -66,21 +71,26 @@ LONG _writeObjects(BPTR filehandle, WORD storedObjectTableLength) {
 		if(!ObjectMemory_hasObject(anObject)) continue;
 		
 		objectSize = (WORD)ObjectMemory_sizeBitsOf(anObject);
+		printf("\nO[%lu]", anObject);
+		printf("[%d]", objectSize);
 		header[0] = objectSize;
 		header[1] = (WORD)ObjectMemory_fetchClassOf(anObject);
 		if( Write(filehandle, (APTR)&header, sizeof(header)) != sizeof(header) ) {
+			printf("H");
 			return 0;
 		}
 		wordLengthOfObject = ObjectMemory_fetchWordLengthOf(anObject);
+		printf("[%d]", wordLengthOfObject);
 		for(wordIndex = 0; wordIndex < wordLengthOfObject; wordIndex++) {
 			word = ObjectMemory_fetchWord_ofObject( wordIndex, anObject);
 			if( Write(filehandle, (APTR)&word, sizeof(word)) != sizeof(word) ) {
+				printf("W");
 				return 0;
 			}
 		}
 		objectSpaceLength += objectSize;
 	}
-	
+	printf("\nOSLEN = %ld\n", objectSpaceLength);
 	return objectSpaceLength;
 }
 
@@ -91,6 +101,9 @@ Bool _writeObjectTable(BPTR filehandle, WORD storedObjectTableLength) {
     WORD oldOTLocation = 0;
     WORD objectSize = 0;
     WORD words[2] = {0};
+    
+    int written = 0;
+    
     for( objectPointer = 0; objectPointer < storedObjectTableLength; objectPointer += 2)
     {
         oldOTValue = ObjectMemory_ot(objectPointer);
@@ -136,8 +149,11 @@ Bool _writeObjectTable(BPTR filehandle, WORD storedObjectTableLength) {
         ObjectMemory_locationBitsOf_put(objectPointer, oldOTLocation);
         
         /* Write this entry */
-        if (Write(filehandle, (APTR) &words, sizeof(words)) != sizeof(words))
+        written = Write(filehandle, (APTR) &words, sizeof(words));
+        if (written != sizeof(words)) {
+        	printf("[%d != %lu]", written, sizeof(words) );
             return NO;
+        }
     }
     return YES;
 }
@@ -147,22 +163,27 @@ Bool _saveObjects(BPTR filehandle) {
 	LONG storedObjectTableLength = ObjectMemory_lastUsedObjectPointer() + 2;
 
 	if(!_saveSnapshotHeader(filehandle)) {
+	printf("header");
 		return NO;
 	}
 	
 	if(!_padToPage(filehandle)) {
+	printf("pad1");
 		return NO;
 	}
 	objectSpaceLength = _writeObjects(filehandle, storedObjectTableLength);
 	if(objectSpaceLength == 0) {
+	printf("objects");
 		return NO;
 	}	
 
 	if(!_padToPage(filehandle)) {
+	printf("pad2");
 		return NO;
 	}
 	
 	if(!_writeObjectTable(filehandle, storedObjectTableLength)) {
+	printf("table");
 		return NO;
 	}
     
@@ -170,17 +191,22 @@ Bool _saveObjects(BPTR filehandle) {
     Seek(filehandle, 0, OFFSET_BEGINNING);
     Write( filehandle, (APTR)&objectSpaceLength, sizeof(objectSpaceLength) );
     Write( filehandle, (APTR)&storedObjectTableLength, sizeof(storedObjectTableLength) );
+    Flush( filehandle );
 	
 	return YES;
 }
 
 Bool ObjectMemory_saveSnapshot(CONST_STRPTR filename) {
-	BPTR snapshotFile = Open(filename, MODE_READWRITE);
 	Bool result = NO;
-	if( snapshotFile != NULL ) {;
+	BPTR snapshotFile = 0;
+	printf("[START]");
+	snapshotFile = Open(filename, MODE_READWRITE);
+	if( snapshotFile != (BPTR)NULL ) {
+		printf("[fileok]");
 		result = _saveObjects(snapshotFile);
 		Close( snapshotFile );
 	}
+		printf("[END]");
 	return result;
 }
 
@@ -190,7 +216,7 @@ Bool ObjectMemory_saveSnapshot(CONST_STRPTR filename) {
 /*
  * -- LOAD -------------------------------------------------------------------------------
  */
-Bool ObjectMemory_loadObjectTable(BPTR filehandle) {
+Bool _loadObjectTable(BPTR filehandle) {
     /* First two 32-bit values have the object space length and object table lengths in words */
     LONG objectTableLength = -1;
     LONG fileSize = -1;
@@ -236,71 +262,88 @@ Bool ObjectMemory_loadObjectTable(BPTR filehandle) {
     return YES;
 }
 
-Bool ObjectMemory_loadObjects(BPTR filehandle) {
-#ifdef NOPE
-   static const int SegmentHeapSpaceSize = HeapSpaceStop + 1;
+Bool _loadObjects(BPTR filehandle) {
+   int SegmentHeapSpaceSize = HeapSpaceStop + 1;
     
-    // Track amount of free space available for objects in each segment
-    int heapSpaceRemaining[HeapSegmentCount];
+    int* heapSpaceRemaining;
+    int segment = FirstHeapSegment;
+    int destinationSegment = FirstHeapSegment;
+    int destinationWord = 0;
+    ObjectPointer objectPointer = NilPointer;
+    int objectImageWordAddress = 0;
+    WORD objectSize;
+    int extraSpace = 0;
+    int space = 0;
     
-    for(int segment = FirstHeapSegment; segment <= LastHeapSegment; segment++)
+    WORD classBits = 0;
+    int wordIndex = 0;
+    WORD word = 0;
+    
+    int freeChunkSize = 0;
+    int freeChunkLocation = 0;
+    
+    int size = 0;
+    
+    heapSpaceRemaining = (int*)malloc(sizeof(int) * HeapSegmentCount);
+    
+    /* Track amount of free space available for objects in each segment */
+
+    for(segment = FirstHeapSegment; segment <= LastHeapSegment; segment++)
         heapSpaceRemaining[segment - FirstHeapSegment] = SegmentHeapSpaceSize;
     
-    // Load objects from the virtual image into the heap segments
-    // being careful to not split an object across a segment boundary
-    int destinationSegment = FirstHeapSegment, destinationWord = 0;
+    /* Load objects from the virtual image into the heap segments
+       being careful to not split an object across a segment boundary */
     
-    for(int objectPointer = 2; objectPointer < ObjectTableSize; objectPointer += 2)
+    for(objectPointer = 2; objectPointer < ObjectTableSize; objectPointer += 2)
     {
-        if (freeBitOf(objectPointer)) continue;
-        // A free chunk has it's COUNT field set to zero but the free bit is clear
-        assert (countBitsOf(objectPointer) != 0); // SANITY Make sure a freeChunk wasn't saved!
+        if (ObjectMemory_freeBitOf(objectPointer)) continue;
+        /* A free chunk has it's COUNT field set to zero but the free bit is clear */
+        assert (ObjectMemory_countBitsOf(objectPointer) != 0); /* SANITY Make sure a freeChunk wasn't saved!*/ 
         
-        // On disk objects are stored contiguously as if a large 20-bit WORD addressed space
-        // In this scheme, the OT segment and locations combine to form a WORD address
-        const int objectImageWordAddress = (segmentBitsOf(objectPointer) << 16)
-        + locationBitsOf(objectPointer);
+        /* On disk objects are stored contiguously as if a large 20-bit WORD addressed space
+        // In this scheme, the OT segment and locations combine to form a WORD address */
+        objectImageWordAddress = (ObjectMemory_segmentBitsOf(objectPointer) << 16) + ObjectMemory_locationBitsOf(objectPointer);
         
-        fileSystem->seek_to(fd, ObjectSpaceBaseInImage + objectImageWordAddress * sizeof(std::uint16_t));
+        Seek(filehandle, 512 + objectImageWordAddress * sizeof(WORD), OFFSET_BEGINNING);
         
-        std::uint16_t objectSize;
-        fileSystem->read(fd, (char *) &objectSize, sizeof(objectSize));
+        Read(filehandle, (APTR) &objectSize, sizeof(objectSize));
         
         
-        // Account for the extra word used by HugeSize objects
-        int extraSpace = objectSize < HugeSize || pointerBitOf(objectPointer) == 0 ? 0 : 1;
-        int space = objectSize + extraSpace; // space in memory
+        /* Account for the extra word used by HugeSize objects */
+        extraSpace = objectSize < HugeSize || ObjectMemory_pointerBitOf(objectPointer) == 0 ? 0 : 1;
+        space = objectSize + extraSpace; /* space in memory */
         
         if (space > heapSpaceRemaining[destinationSegment - FirstHeapSegment])
         {
-            // No room left in the current segment, move to next
+            /* No room left in the current segment, move to next */
             destinationSegment++;
-            if (destinationSegment == HeapSegmentCount) return NO; // Full
+            if (destinationSegment == HeapSegmentCount) {
+            	free(heapSpaceRemaining);
+            	return NO; /* Full */
+            }
             destinationWord = 0;
         }
         
-        // Update OT entry so that it references the object location in ObjectMemory vs the disk image
-        segmentBitsOf_put(objectPointer, destinationSegment);
-        locationBitsOf_put(objectPointer, destinationWord);
+        /* Update OT entry so that it references the object location in ObjectMemory vs the disk image */
+        ObjectMemory_segmentBitsOf_put(objectPointer, destinationSegment);
+        ObjectMemory_locationBitsOf_put(objectPointer, destinationWord);
         
-        // Store the object in the image into word memory
-        // First comes the size...
+        /* Store the object in the image into word memory
+        // First comes the size...*/
         
-        sizeBitsOf_put(objectPointer, objectSize );
+        ObjectMemory_sizeBitsOf_put(objectPointer, objectSize );
         
-        // Next is the class...
-        std::uint16_t classBits;
-        fileSystem->read(fd,(char *) &classBits, sizeof(classBits));
+        /* Next is the class... */
+        Read(filehandle, (APTR) &classBits, sizeof(classBits));
         
-        classBitsOf_put(objectPointer, classBits);
+        ObjectMemory_classBitsOf_put(objectPointer, classBits);
         
-        // Followed by the fields...
-        for(int wordIndex = 0; wordIndex < objectSize-HeaderSize; wordIndex++)
+        /* Followed by the fields... */
+        for(wordIndex = 0; wordIndex < objectSize-HeaderSize; wordIndex++)
         {
-            std::uint16_t word;
-            fileSystem->read(fd,(char *) &word, sizeof(word));
-            // use heap chunk
-            storeWord_ofObject_withValue(wordIndex, objectPointer, word);
+            Read(filehandle, (APTR) &word, sizeof(word));
+            /* use heap chunk */
+            ObjectMemory_storeWord_ofObject_withValue(wordIndex, objectPointer, word);
         }
         
         destinationWord += space;
@@ -308,43 +351,48 @@ Bool ObjectMemory_loadObjects(BPTR filehandle) {
         heapSpaceRemaining[destinationSegment - FirstHeapSegment] -= space;
     }
     
-    // Initialize the free chunk lists for each heap segment with the sentinel
-    for(int segment = FirstHeapSegment; segment <= LastHeapSegment; segment++)
+    /* Initialize the free chunk lists for each heap segment with the sentinel */
+    for(segment = FirstHeapSegment; segment <= LastHeapSegment; segment++)
     {
-        for(int size = HeaderSize; size <= BigSize; size++)
-            resetFreeChunkList_inSegment(size, segment);
+        for(size = HeaderSize; size <= BigSize; size++)
+            ObjectMemory_resetFreeChunkList_inSegment(size, segment);
     }
     
+    /* freeWords = 0; */
+    
     /*
-    //freeWords = 0;
     // Place any remaining space in each segment onto it's free chunk list, which is
     // is a linked list of object pointers.
     // The chunks are linked using the class field of an object. The size field of
     // the object contains the actual size of the free chunk.*/
-    for(int segment = FirstHeapSegment; segment <= LastHeapSegment; segment++)
+    for(segment = FirstHeapSegment; segment <= LastHeapSegment; segment++)
     {
-        int freeChunkSize = heapSpaceRemaining[segment - FirstHeapSegment];
-        freeWords += freeChunkSize;
+        freeChunkSize = heapSpaceRemaining[segment - FirstHeapSegment];
+        /*freeWords += freeChunkSize;*/
         if (freeChunkSize >= HeaderSize)
         {
-            int freeChunkLocation = SegmentHeapSpaceSize - freeChunkSize;
-            // G&R pg 665 - each free chunk has an OT entry
-            currentSegment = segment; // Set special segment register
-            int objectPointer = obtainPointer_location(freeChunkSize, freeChunkLocation);
-            toFreeChunkList_add(std::min(freeChunkSize, (int) BigSize), objectPointer);
+            freeChunkLocation = SegmentHeapSpaceSize - freeChunkSize;
+            /* G&R pg 665 - each free chunk has an OT entry */
+            currentSegment = segment; /* Set special segment register */
+            objectPointer = ObjectMemory_obtainPointer_location(freeChunkSize, freeChunkLocation);
+            if( freeChunkSize > BigSize ) {
+            	freeChunkSize = BigSize;
+            }
+            ObjectMemory_toFreeChunkList_add(freeChunkSize, objectPointer);
         }
     }
     
     currentSegment = FirstHeapSegment;
-#endif
+    
+    free(heapSpaceRemaining);
     return YES;
 }
 
 Bool ObjectMemory_loadSnapshot(CONST_STRPTR filename) {
 	BPTR snapshotfile = Open(filename, MODE_OLDFILE);
 	Bool result = NO;
-	if( snapshotfile != NULL ) {
-		result = ObjectMemory_loadObjectTable(snapshotfile) && ObjectMemory_loadObjects(snapshotfile);
+	if( snapshotfile != (BPTR)NULL ) {
+		result = _loadObjectTable(snapshotfile) && _loadObjects(snapshotfile);
 		Close(snapshotfile);
 	}
 	return result;
