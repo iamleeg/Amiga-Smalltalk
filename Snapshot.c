@@ -231,6 +231,7 @@ Bool _loadObjectTable(BPTR filehandle) {
     if (Seek(filehandle, objectTableLength * -2, OFFSET_END) == -1) /* Reposition to start of object table */
         return NO;
 
+
     for(objectPointer = 0; objectPointer < objectTableLength; objectPointer+=2)
     {
         WORD words[2];
@@ -243,6 +244,7 @@ Bool _loadObjectTable(BPTR filehandle) {
     ObjectMemory_headOfFreePointerList_put(NilPointer);
     
     /* Initialize the remaining entries as free */
+
     for(objectPointer = objectTableLength; objectPointer < ObjectTableSize; objectPointer += 2)
     {
         ObjectMemory_ot_put(objectPointer, 0);
@@ -254,9 +256,12 @@ Bool _loadObjectTable(BPTR filehandle) {
     // Build the OT entry free list, Go backwards so we have lower entries first on free list.
     // Why? Makes the OT easier to see in debugger.
     // Note we skip oop 0, which is considered reserved and invalid. (page 2, Xerox Virtual Image booklet) */
-    for(objectPointer = ObjectTableSize-2; objectPointer >= 2; objectPointer -= 2)
+    
+    /* in the dbanay code, its OTSize-2, but we have an odd OTSize so needs to be -1 */
+    for(objectPointer = ObjectTableSize-1; objectPointer >= 2; objectPointer -= 2) {
         if (ObjectMemory_freeBitOf(objectPointer))
             ObjectMemory_toFreePointerListAdd(objectPointer);
+    }
     
     
     return YES;
@@ -392,7 +397,7 @@ Bool ObjectMemory_loadSnapshot(CONST_STRPTR filename) {
 	BPTR snapshotfile = Open(filename, MODE_OLDFILE);
 	Bool result = NO;
 	if( snapshotfile != (BPTR)NULL ) {
-		result = _loadObjectTable(snapshotfile) && _loadObjects(snapshotfile);
+		result = _loadObjectTable(snapshotfile) /*&& _loadObjects(snapshotfile)*/;
 		Close(snapshotfile);
 	}
 	return result;

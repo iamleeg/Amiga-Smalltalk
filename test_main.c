@@ -30,26 +30,17 @@ int main(int argc, const char *argv[]) {
     	fprintf(stderr, "ObjectMempry Allocatied\n"); 
   	}
   
-  printf("LAST OBJECT1 = %u", ObjectMemory_lastUsedObjectPointer());
   /* create a simple object */
-  anObject = ObjectMemory_instantiateClass_withBytes(ClassLargePositiveIntegerPointer, 2);
-  printf("STORE1  %lu\n", anObject);
+ /* anObject = ObjectMemory_instantiateClass_withBytes(ClassLargePositiveIntegerPointer, 2);
   ObjectMemory_storeByte_ofObject_withValue(0, anObject, Interpreter_lowByteOf(17000));
-  printf("STORE2\n");
   ObjectMemory_storeByte_ofObject_withValue(1, anObject, Interpreter_highByteOf(17000));
+  ObjectMemory_increaseReferencesTo(anObject);*/
   
-  ObjectMemory_increaseReferencesTo(anObject);
-  
-  printf("HAS %d\n", ObjectMemory_hasObject(anObject) );
-  printf("FREE(0) == %d", ObjectMemory_freeBitOf(anObject) == 0 );
-  printf("COUNT(!0) == %d", ObjectMemory_countBitsOf(anObject) != 0 );
 
   result.ran = 0;
   result.passed = 0;
   result.failed = 0;
-  
-  printf("S4\n");
-  
+    
 /*  RunSuite(AllocationTests);
   RunSuite(FreeListTests);
   RunSuite(ObjectMemoryTests);
@@ -65,11 +56,19 @@ int main(int argc, const char *argv[]) {
   RunSuite(ContextTests);
   RunSuite(ClassTests);*/
   
-  
-  printf("LAST OBJECT2 = %u", ObjectMemory_lastUsedObjectPointer());
-  printf("HELLO");
+ /* 
   snapresult = ObjectMemory_saveSnapshot("SYS:snapshot.img");
   printf("SNAPSHOT %u\n", snapresult);
+  */
+  
+  
+  
+  printf("LAST OBJECT1 %lu", ObjectMemory_lastUsedObjectPointer());
+  snapresult = ObjectMemory_loadSnapshot("SYS:snapshot.img");
+  printf("SNAPSHOT %u\n", snapresult);
+  printf("LAST OBJECT2 %lu", ObjectMemory_lastUsedObjectPointer()); 
+  
+  
   
 /*  printf("Tests completed.\n");
   printf("%d tests ran.\n", result.ran);
@@ -77,5 +76,5 @@ int main(int argc, const char *argv[]) {
   printf("%d tests failed.\n", result.failed);
   
   return (result.failed != 0);*/
-  return snapresult;
+  return !snapresult;
 }
