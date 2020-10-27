@@ -19,12 +19,11 @@
 Bool _padToPage(BPTR filehandle) {
 	LONG pos = Seek(filehandle, 0, OFFSET_CURRENT);
 	LONG desired = ((pos + 512 -1 ) / 512) * 512;
-	LONG zero = 0L;
+	WORD zero = 0L;
 	LONG pads = (desired - pos) / sizeof(zero);
 	while( pads-- > 0 ) {
 		Write(filehandle, (APTR)&zero, sizeof(zero));
 	}
-	Flush(filehandle);
 	return YES;
 }
 
@@ -66,8 +65,8 @@ LONG _writeObjects(BPTR filehandle, WORD storedObjectTableLength) {
 	WORD wordIndex = 0;
 	Word word = 0;
 
-	
-	for( anObject = 2; anObject < storedObjectTableLength; anObject += 2) {
+	printf("WRITING OBJECTS, POSITION = %ld\n", Seek(filehandle, 0, OFFSET_CURRENT));
+	for( anObject = FirstUnusedObjectPointer; anObject < storedObjectTableLength; anObject += 2) {
 		if(!ObjectMemory_hasObject(anObject)) continue;
 		
 		objectSize = (WORD)ObjectMemory_sizeBitsOf(anObject);
@@ -75,16 +74,16 @@ LONG _writeObjects(BPTR filehandle, WORD storedObjectTableLength) {
 		printf("[%d]", objectSize);
 		header[0] = objectSize;
 		header[1] = (WORD)ObjectMemory_fetchClassOf(anObject);
+		printf("WRITING AN OBJECT, POSITION = %ld\n", Seek(filehandle, 0, OFFSET_CURRENT));
 		if( Write(filehandle, (APTR)&header, sizeof(header)) != sizeof(header) ) {
-			printf("H");
 			return 0;
 		}
 		wordLengthOfObject = ObjectMemory_fetchWordLengthOf(anObject);
 		printf("[%d]", wordLengthOfObject);
 		for(wordIndex = 0; wordIndex < wordLengthOfObject; wordIndex++) {
 			word = ObjectMemory_fetchWord_ofObject( wordIndex, anObject);
+			printf("{%d:%ld}", wordIndex, word);
 			if( Write(filehandle, (APTR)&word, sizeof(word)) != sizeof(word) ) {
-				printf("W");
 				return 0;
 			}
 		}
@@ -103,8 +102,9 @@ Bool _writeObjectTable(BPTR filehandle, WORD storedObjectTableLength) {
     WORD words[2] = {0};
     
     int written = 0;
-    
-    for( objectPointer = 0; objectPointer < storedObjectTableLength; objectPointer += 2)
+    printf("WRITING OBJECT TABLE, POSITION = %ld\n", Seek(filehandle, 0, OFFSET_CURRENT));
+
+    for( objectPointer = FirstUnusedObjectPointer; objectPointer < storedObjectTableLength; objectPointer += 2)
     {
         oldOTValue = ObjectMemory_ot(objectPointer);
         oldOTLocation = ObjectMemory_locationBitsOf(objectPointer);
@@ -166,27 +166,35 @@ Bool _saveObjects(BPTR filehandle) {
 	printf("header");
 		return NO;
 	}
+	printf("WROTE HEADER, POSITION = %ld\n", Seek(filehandle, 0, OFFSET_CURRENT));
+
 	
 	if(!_padToPage(filehandle)) {
 	printf("pad1");
 		return NO;
 	}
+	printf("PADDED POSITION = %ld\n", Seek(filehandle, 0, OFFSET_CURRENT));
+
 	objectSpaceLength = _writeObjects(filehandle, storedObjectTableLength);
 	if(objectSpaceLength == 0) {
 	printf("objects");
 		return NO;
 	}	
+	printf("WROTE OBJECTS = %ld\n", Seek(filehandle, 0, OFFSET_CURRENT));
 
 	if(!_padToPage(filehandle)) {
 	printf("pad2");
 		return NO;
 	}
+	printf("PADDED POSITION = %ld\n", Seek(filehandle, 0, OFFSET_CURRENT));
 	
 	if(!_writeObjectTable(filehandle, storedObjectTableLength)) {
 	printf("table");
 		return NO;
 	}
+	printf("WROTE TABLE = %ld\n", Seek(filehandle, 0, OFFSET_CURRENT));
     
+	printf("WROTE OSLENGTH = %ld\n", objectSpaceLength);
     /* Now we can go back fill in the values for the image header. */
     Seek(filehandle, 0, OFFSET_BEGINNING);
     Write( filehandle, (APTR)&objectSpaceLength, sizeof(objectSpaceLength) );
@@ -218,21 +226,35 @@ Bool ObjectMemory_saveSnapshot(CONST_STRPTR filename) {
  */
 Bool _loadObjectTable(BPTR filehandle) {
     /* First two 32-bit values have the object space length and object table lengths in words */
+    LONG objectSpaceLength = -1;
     LONG objectTableLength = -1;
     LONG fileSize = -1;
     ObjectPointer objectPointer = NilPointer;
     
+
+    
+    if (Seek(filehandle, 0, OFFSET_BEGINNING) == -1) /* Skip over object space length */
+        return NO;
+        
+    if (Read(filehandle, (APTR)&objectSpaceLength, sizeof(objectSpaceLength)) != sizeof(objectSpaceLength))
+        return NO;
+
     if (Seek(filehandle, 4, OFFSET_BEGINNING) == -1) /* Skip over object space length */
         return NO;
         
     if (Read(filehandle, (APTR)&objectTableLength, sizeof(objectTableLength)) != sizeof(objectTableLength))
         return NO;
             
+            
+    printf("LOADED OBJECT SPACE LENGTH %ld\n", objectSpaceLength);
+    printf("LOADED OBJECT TABLE LENGTH %ld\n", objectTableLength);
+    
     if (Seek(filehandle, objectTableLength * -2, OFFSET_END) == -1) /* Reposition to start of object table */
         return NO;
 
+    printf("READING OBJECT TABLE, POSITION = %ld\n", Seek(filehandle, 0, OFFSET_CURRENT));
 
-    for(objectPointer = 0; objectPointer < objectTableLength; objectPointer+=2)
+    for(objectPointer = FirstUnusedObjectPointer; objectPointer < objectTableLength; objectPointer+=2)
     {
         WORD words[2];
         if (Read(filehandle, (APTR)&words, sizeof(words)) != sizeof(words))
@@ -299,7 +321,7 @@ Bool _loadObjects(BPTR filehandle) {
     /* Load objects from the virtual image into the heap segments
        being careful to not split an object across a segment boundary */
     
-    for(objectPointer = 2; objectPointer < ObjectTableSize; objectPointer += 2)
+    for(objectPointer = FirstUnusedObjectPointer; objectPointer < ObjectTableSize; objectPointer += 2)
     {
         if (ObjectMemory_freeBitOf(objectPointer)) continue;
         /* A free chunk has it's COUNT field set to zero but the free bit is clear */
@@ -310,6 +332,7 @@ Bool _loadObjects(BPTR filehandle) {
         objectImageWordAddress = (ObjectMemory_segmentBitsOf(objectPointer) << 16) + ObjectMemory_locationBitsOf(objectPointer);
         
         Seek(filehandle, 512 + objectImageWordAddress * sizeof(WORD), OFFSET_BEGINNING);
+        printf("READING AN OBJECT FROM POSITION %ld\n", Seek(filehandle, 0, OFFSET_CURRENT));
         
         Read(filehandle, (APTR) &objectSize, sizeof(objectSize));
         
@@ -397,7 +420,7 @@ Bool ObjectMemory_loadSnapshot(CONST_STRPTR filename) {
 	BPTR snapshotfile = Open(filename, MODE_OLDFILE);
 	Bool result = NO;
 	if( snapshotfile != (BPTR)NULL ) {
-		result = _loadObjectTable(snapshotfile) /*&& _loadObjects(snapshotfile)*/;
+		result = _loadObjectTable(snapshotfile) && _loadObjects(snapshotfile);
 		Close(snapshotfile);
 	}
 	return result;
