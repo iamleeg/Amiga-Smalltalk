@@ -10,6 +10,7 @@ CONFIG=+aos68k
 
 TESTAPP=ast_tests
 ERRORHOST=error_host
+MAINAPP=ast
 
 OM_SOURCEFILES =  ObjectMemory.o ObjectMemory_Storage.o ObjectMemory_FreeList.o ObjectMemory_Allocation.o ObjectMemory_RefCounting.o ObjectMemory_GC.o RealWordMemory.o Snapshot.o
 INTERP_SOURCEFILES =  Interpreter.o Interpreter_Error.o Interpreter_PrimArith.o
@@ -25,6 +26,8 @@ TEST_HEADERS = tests.h FreeListTests.h ObjectMemoryTests.h RealWordMemoryTests.h
 ERROR_SOURCES = Interpreter_Error.o Error_Host.o
 ERROR_HEADERS = Interpreter_Error.h
 
+APP_SOURCES = ast_main.o
+
 %.o: %.c
 	$(CC) -c -o $@ $< $(CFLAGS)
 
@@ -33,6 +36,9 @@ $(TESTAPP): $(OM_SOURCEFILES)  $(INTERP_SOURCEFILES) $(OM_HEADERFILES) $(INTERP_
 
 $(ERRORHOST): $(ERROR_SOURCES) $(ERROR_HEADERS)
 	$(CC) -o $@ $(ERROR_SOURCES) $(CFLAGS) $(LDFLAGS)
-
-all: $(TESTAPP) $(ERRORHOST)
+	
+$(MAINAPP): $(OM_SOURCEFILES)  $(INTERP_SOURCEFILES) $(OM_HEADERFILES) $(INTERP_HEADERFILES) $(SHARED_HEADERFILES) $(APP_SOURCES)
+	$(CC) -o $@ $(OM_SOURCEFILES) $(APP_SOURCES) $(INTERP_SOURCEFILES)  $(CFLAGS) $(LDFLAGS)
+	
+all: $(TESTAPP) $(ERRORHOST) $(MAINAPP)
 
