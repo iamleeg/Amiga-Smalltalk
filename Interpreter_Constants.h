@@ -73,7 +73,7 @@ enum {
   /**
    * The ObjectMemory needs to know not to add the above pointers to the free pointer list on initialisation.
    */
-  FirstUnusedObjectPointer = 52
+  FirstUnusedObjectPointer = 54
 };
 
 /**
