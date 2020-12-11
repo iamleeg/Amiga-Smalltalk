@@ -9,13 +9,16 @@ LDFLAGS=-L$(NDK)/linker_libs -lamiga -lauto -lmieee
 CONFIG=+aos68k
 
 TESTAPP=ast_tests
+SNAPAPP=snapshot
 ERRORHOST=error_host
 
 OM_SOURCEFILES =  ObjectMemory.o ObjectMemory_Storage.o ObjectMemory_FreeList.o ObjectMemory_Allocation.o ObjectMemory_RefCounting.o ObjectMemory_GC.o RealWordMemory.o
 INTERP_SOURCEFILES =  Interpreter.o Interpreter_Error.o Interpreter_PrimArith.o
+SNAP_SOURCEFILES = ObjectMemory_Snapshot.c
 
 OM_HEADERFILES = ObjectMemory.h ObjectMemory_Constants.h ObjectMemory_Storage.h ObjectMemory_FreeList.h ObjectMemory_Allocation.h ObjectMemory_RefCounting.h ObjectMemory_GC.h RealWordMemory.h 
 INTERP_HEADERFILES = Interpreter.h Interpreter_Constants.h Interpreter_PrimArith.h Interpreter_Error.h 
+SNAP_HEADERFILES = ObjectMemory_Snapshot.h
 
 SHARED_HEADERFILES = Types.h
 
@@ -28,11 +31,14 @@ ERROR_HEADERS = Interpreter_Error.h
 %.o: %.c
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-$(TESTAPP): $(OM_SOURCEFILES)  $(INTERP_SOURCEFILES) $(OM_HEADERFILES) $(INTERP_HEADERFILES) $(SHARED_HEADERFILES) $(TEST_SOURCES) $(TEST_HEADERS)
+$(TESTAPP): $(OM_SOURCEFILES)  $(INTERP_SOURCEFILES)  $(OM_HEADERFILES) $(INTERP_HEADERFILES) $(SHARED_HEADERFILES) $(TEST_SOURCES) $(TEST_HEADERS)
 	$(CC) -o $@ $(OM_SOURCEFILES)  $(INTERP_SOURCEFILES) $(TEST_SOURCES) $(CFLAGS) $(LDFLAGS)
+
+$(SNAPAPP): $(OM_SOURCEFILES)  $(INTERP_SOURCEFILES) $(SNAP_SOURCEFILES) $(OM_HEADERFILES) $(INTERP_HEADERFILES) $(SNAP_HEADERFILES) $(SHARED_HEADERFILES)
+	$(CC) -o $@ $(OM_SOURCEFILES)  $(INTERP_SOURCEFILES) $(SNAP_SOURCEFILES) $(CFLAGS) $(LDFLAGS)
 
 $(ERRORHOST): $(ERROR_SOURCES) $(ERROR_HEADERS)
 	$(CC) -o $@ $(ERROR_SOURCES) $(CFLAGS) $(LDFLAGS)
 
-all: $(TESTAPP) $(ERRORHOST)
+all: $(TESTAPP) $(SNAPAPP) $(ERRORHOST)
 
