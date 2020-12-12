@@ -15,6 +15,12 @@ Bool ObjectMemory_isIntegerObject(ObjectPointer objectPointer) {
   return ((Bool)(objectPointer & 0x0001));
 }
 
+
+Bool ObjectMemory_hasObject( ObjectPointer objectPointer) {
+	ObjectMemory_cantBeIntegerObject(objectPointer); 
+    return ObjectMemory_freeBitOf(objectPointer) == 0 && ObjectMemory_countBitsOf(objectPointer) != 0;
+}
+
 Word ObjectMemory_ot(ObjectPointer objectPointer) {
   ObjectMemory_cantBeIntegerObject(objectPointer);
   return RealWordMemory_segment_word(ObjectTableSegment,

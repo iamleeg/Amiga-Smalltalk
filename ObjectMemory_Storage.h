@@ -9,6 +9,11 @@
 Bool ObjectMemory_isIntegerObject(ObjectPointer objectPointer);
 
 /**
+ * Does an ObjectPointer point to a valid Object (freebit == 0 , countBits > 0)
+ */
+Bool ObjectMemory_hasObject(ObjectPointer objectPointer);
+
+/**
  * Retrieve the first word of an object table entry.
  */
 Word ObjectMemory_ot(ObjectPointer objectPointer);
