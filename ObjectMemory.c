@@ -25,6 +25,7 @@ Bool ObjectMemory_new(void) {
   /* All predefined objects get an initial reference count */
   for (objectPointer = 0; objectPointer < FirstUnusedObjectPointer; objectPointer += 2) {
     ObjectMemory_countBitsOf_put(objectPointer, 1);
+    ObjectMemory_sizeBitsOf_put(objectPointer, HeaderSize); 
   }
   /* But NilPointer cannot be released */
   ObjectMemory_countBitsOf_put(NilPointer, 128);
