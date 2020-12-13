@@ -46,8 +46,8 @@ BOOL write_header(BPTR filehandle, LONG objectSize, LONG tableSize) {
 
 BOOL write_interchange(BPTR filehandle) {
 	UBYTE interchange[2];
-	interchange[0] = (UBYTE)0xAA;
-	interchange[1] = (UBYTE)0xBB;
+	interchange[0] = (UBYTE)0xAA; /* should eventually be 0 but easier to see*/
+	interchange[1] = (UBYTE)0xBB; /* should eventualty be 0 but easier to see*/
 	Write( filehandle, interchange, sizeof(interchange) );
 	return TRUE;	
 }
@@ -78,27 +78,28 @@ LONG write_objects(BPTR filehandle) {
 			total_size += write_object( filehandle, iterator );
 		}
     }
-    printf("\n total size (%ld)\n", total_size);
+    printf("\n total size (%ld) in WORDS\n", total_size);
 
 	return total_size;
 }
 
-ULONG write_object(BPTR filehandle, ObjectPointer object) {
-	WORDBITS size = ObjectMemory_sizeBitsOf( object );
+ULONG write_object(BPTR filehandle, ObjectPointer objectPointer) {
+     
+	WORD size = ObjectMemory_sizeBitsOf( objectPointer );
 	Write( filehandle, &size, sizeof(size) );
 	
-	UWORD classPointer = ObjectMemory_fetchClassOf( object );
+	UWORD classPointer = ObjectMemory_fetchClassOf( objectPointer );
 	Write( filehandle, &classPointer, sizeof(classPointer) );
 	
-/*
-//.  WRITE 16-bit sizeBitsOf
-//   WRITE 16-bit fetchClassOf
-//.  WRITE each 16-bit fetchWordOfObject
-//    objectsLength += sizeBitsOf ?? (The should be same as 16-bit x 2 (header) + count of fetchWords
-// objectLength goes inplaceholder[0]
-*/
-
-	return sizeof(size) + sizeof(classPointer);
+	UWORD wordLengthOfObject = ObjectMemory_fetchWordLengthOf(objectPointer);
+	for(UWORD wordIndex = 0; wordIndex < wordLengthOfObject; wordIndex++ )
+	{
+		UWORD word = (UWORD)ObjectMemory_fetchWord_ofObject(wordIndex, objectPointer);
+		Write( filehandle, &word, sizeof(word) );
+	}
+	
+	/* return the number of WORDs written (not bytes) */
+	return size;
 }
 
 int main(int argc, char **argv) {
