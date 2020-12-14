@@ -147,8 +147,8 @@ void write_object_table_entry( BPTR filehandle, ObjectPointer objectPointer, ULO
         }
         
         if (ObjectMemory_freeBitOf(objectPointer)) {
-			/* manual.pdf - page 3: free entries have freeBit set and other bits 
-			   in both words are 0. */
+			/* http://www.wolczko.com/st80/ (booklet) - page 3: 
+			   free entries have freeBit set and other bits in both words are 0. */
 			ObjectMemory_ot_put(objectPointer, 0);
 			ObjectMemory_freeBitOf_put(objectPointer, 1);
 			ObjectMemory_locationBitsOf_put(objectPointer, 0);
