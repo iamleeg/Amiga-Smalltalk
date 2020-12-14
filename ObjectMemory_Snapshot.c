@@ -12,20 +12,30 @@ BOOL write_interchange(BPTR filehandle);
 BOOL pad_to_512(BPTR filehandle);
 LONG write_objects(BPTR filehandle);
 ULONG write_object(BPTR filehandle, ObjectPointer objectPointer);
+LONG write_object_table(BPTR filehandle);
+void write_object_table_entry(BPTR filehandle, ObjectPointer objectPointer, ULONG objectImageWordAddress);
+ObjectPointer last_used_objectpointer(void);
 
 BOOL save_snapshot(STRPTR name) {
 	BOOL result = TRUE;
 	BPTR current_dir = CurrentDir( 0 );
 	BPTR file = Open( name, MODE_NEWFILE );
+	
 	result = result && write_header( file, 0xDEADBEEF, 0xDEADBEEF ); /* placeholder */
 	result = result && write_interchange( file );
+
 	result = result && pad_to_512( file );
 	
 	LONG object_size = write_objects( file );
-	
 	result = result && (object_size >= 0);
 
-	write_header( file, object_size, 0xCAFEBABE ); /* real values */
+	result = result && pad_to_512( file );
+
+	LONG object_table_size = write_object_table( file );
+	result = result && (object_table_size >= 0);
+	
+	write_header( file, object_size, object_table_size ); /* real values */
+	
 	Close( file );
 	UnLock( current_dir );
 	return result;
@@ -83,6 +93,17 @@ LONG write_objects(BPTR filehandle) {
 	return total_size;
 }
 
+ObjectPointer last_used_objectpointer(void) {
+	ObjectPointer lastUsedObjectPointer = NilPointer;
+    for(int objectPointer = 2; objectPointer < ObjectTableSize; objectPointer += 2)
+    {
+         if( ObjectMemory_hasObject( objectPointer ) )
+            lastUsedObjectPointer = objectPointer;
+    }
+    return lastUsedObjectPointer;
+}
+    
+
 ULONG write_object(BPTR filehandle, ObjectPointer objectPointer) {
      
 	WORD size = ObjectMemory_sizeBitsOf( objectPointer );
@@ -100,6 +121,55 @@ ULONG write_object(BPTR filehandle, ObjectPointer objectPointer) {
 	
 	/* return the number of WORDs written (not bytes) */
 	return size;
+}
+
+LONG write_object_table(BPTR filehandle) {
+	ULONG objectImageWordAddress = 0;
+	ObjectPointer iterator = NilPointer;
+	UWORD storedObjectTableLength = (UWORD)last_used_objectpointer() + 2; 
+	for( iterator = 0; iterator < storedObjectTableLength; iterator +=2 ) {
+		write_object_table_entry( filehandle, iterator, objectImageWordAddress );
+		objectImageWordAddress += ObjectMemory_sizeBitsOf(iterator);
+	}
+	
+	return (LONG)storedObjectTableLength;
+}
+
+void write_object_table_entry( BPTR filehandle, ObjectPointer objectPointer, ULONG objectImageWordAddress ) {
+	UWORD old_ot_value = ObjectMemory_ot(objectPointer);
+	UWORD old_ot_location = ObjectMemory_locationBitsOf(objectPointer);
+	
+	if( objectPointer >= 2) {
+		if (!ObjectMemory_freeBitOf(objectPointer) && ObjectMemory_countBitsOf(objectPointer) == 0) {
+			/* This entry was for a free chunk of memory, but we don't save free
+			   space in the image. Store as a an available OT entry by setting free bit */
+			ObjectMemory_freeBitOf_put(objectPointer, 1);
+        }
+        
+        if (ObjectMemory_freeBitOf(objectPointer)) {
+			/* manual.pdf - page 3: free entries have freeBit set and other bits 
+			   in both words are 0. */
+			ObjectMemory_ot_put(objectPointer, 0);
+			ObjectMemory_freeBitOf_put(objectPointer, 1);
+			ObjectMemory_locationBitsOf_put(objectPointer, 0);
+        } else {
+			/* Modify the location of the object table entry... we do this once 
+			   we no longer process this object table entry */
+			ObjectMemory_segmentBitsOf_put(objectPointer, objectImageWordAddress >> 16);
+			ObjectMemory_locationBitsOf_put(objectPointer, objectImageWordAddress & 0xffff);
+		}
+	}
+	
+	/* Assemble object table entry record */
+	UWORD words[2];
+	words[0] = ObjectMemory_ot(objectPointer);
+	words[1] = ObjectMemory_locationBitsOf(objectPointer);
+	
+	Write( filehandle, words, sizeof(words) );
+
+	// Restore OT entry
+	ObjectMemory_ot_put(objectPointer, old_ot_value);
+	ObjectMemory_locationBitsOf_put(objectPointer, old_ot_location);
 }
 
 int main(int argc, char **argv) {
