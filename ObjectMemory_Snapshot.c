@@ -20,18 +20,20 @@ BOOL save_snapshot(STRPTR name) {
 	BOOL result = TRUE;
 	BPTR current_dir = CurrentDir( 0 );
 	BPTR file = Open( name, MODE_NEWFILE );
+	LONG object_size = 0L;
+	LONG object_table_size = 0L;
 	
 	result = result && write_header( file, 0xDEADBEEF, 0xDEADBEEF ); /* placeholder */
 	result = result && write_interchange( file );
 
 	result = result && pad_to_512( file );
 	
-	LONG object_size = write_objects( file );
+	object_size = write_objects( file );
 	result = result && (object_size >= 0);
 
 	result = result && pad_to_512( file );
 
-	LONG object_table_size = write_object_table( file );
+	object_table_size = write_object_table( file );
 	result = result && (object_table_size >= 0);
 	
 	write_header( file, object_size, object_table_size ); /* real values */
@@ -43,9 +45,11 @@ BOOL save_snapshot(STRPTR name) {
 
 BOOL write_header(BPTR filehandle, LONG objectSize, LONG tableSize) {
 	LONG header[2];
+	ULONG oldpos = 0L;
+
 	header[0] = objectSize;
 	header[1] = tableSize;
-	ULONG oldpos = Seek( filehandle, 0, OFFSET_CURRENT );
+	oldpos = Seek( filehandle, 0, OFFSET_CURRENT );
 	Seek( filehandle, 0, OFFSET_BEGINNING );
 	Write( filehandle, header, sizeof(header) );
 	if( oldpos > 0 ) {
@@ -63,14 +67,19 @@ BOOL write_interchange(BPTR filehandle) {
 }
 
 BOOL pad_to_512(BPTR filehandle) {
-	// get current position
-	ULONG pos = Seek( filehandle, 0, OFFSET_CURRENT );
-	// desired  = ((pos + 512 - 1) / 512) * 512;
-	ULONG desired = ((pos + 512 - 1) / 512) * 512;
-	// count desired - current_pos
-	ULONG count = desired - pos;
-	// write $COUNT zerobytes
-	APTR bytes = (APTR) AllocMem(count, MEMF_CLEAR);	
+	ULONG pos = 0L;
+	ULONG desired = 0L;
+	ULONG count = 0L;
+	APTR bytes = NULL;
+	
+	/* get current position */
+	pos = Seek( filehandle, 0, OFFSET_CURRENT );
+	/* desired  = ((pos + 512 - 1) / 512) * 512; */
+	desired = ((pos + 512 - 1) / 512) * 512;
+	/* count desired - current_pos */
+	count = desired - pos;
+	/* write $COUNT zerobytes */
+	bytes = (APTR) AllocMem(count, MEMF_CLEAR);	
 	Write( filehandle, bytes, count );
 	FreeMem( bytes, count );
 	return TRUE;
@@ -79,7 +88,7 @@ BOOL pad_to_512(BPTR filehandle) {
 LONG write_objects(BPTR filehandle) {
 	ObjectPointer iterator = NilPointer;
 	
-	// FOR EACH OBJECT
+	/* FOR EACH OBJECT */
 	LONG total_size = 0;
     printf("\n\n");
 	for(iterator = 2; iterator < ObjectTableSize; iterator += 2) {
@@ -95,10 +104,11 @@ LONG write_objects(BPTR filehandle) {
 
 ObjectPointer last_used_objectpointer(void) {
 	ObjectPointer lastUsedObjectPointer = NilPointer;
-    for(int objectPointer = 2; objectPointer < ObjectTableSize; objectPointer += 2)
+	ObjectPointer iterator = NilPointer;
+    for(iterator = 2; iterator < ObjectTableSize; iterator += 2)
     {
-         if( ObjectMemory_hasObject( objectPointer ) )
-            lastUsedObjectPointer = objectPointer;
+         if( ObjectMemory_hasObject( iterator ) )
+            lastUsedObjectPointer = iterator;
     }
     return lastUsedObjectPointer;
 }
@@ -106,14 +116,19 @@ ObjectPointer last_used_objectpointer(void) {
 
 ULONG write_object(BPTR filehandle, ObjectPointer objectPointer) {
      
-	WORD size = ObjectMemory_sizeBitsOf( objectPointer );
+	WORD size = 0;
+	UWORD classPointer = 0;
+	UWORD wordLengthOfObject = 0;
+	UWORD wordIndex = 0;
+	
+	size = ObjectMemory_sizeBitsOf( objectPointer );
 	Write( filehandle, &size, sizeof(size) );
 	
-	UWORD classPointer = ObjectMemory_fetchClassOf( objectPointer );
+	classPointer = ObjectMemory_fetchClassOf( objectPointer );
 	Write( filehandle, &classPointer, sizeof(classPointer) );
 	
-	UWORD wordLengthOfObject = ObjectMemory_fetchWordLengthOf(objectPointer);
-	for(UWORD wordIndex = 0; wordIndex < wordLengthOfObject; wordIndex++ )
+	wordLengthOfObject = ObjectMemory_fetchWordLengthOf(objectPointer);
+	for( wordIndex = 0; wordIndex < wordLengthOfObject; wordIndex++ )
 	{
 		UWORD word = (UWORD)ObjectMemory_fetchWord_ofObject(wordIndex, objectPointer);
 		Write( filehandle, &word, sizeof(word) );
@@ -138,6 +153,7 @@ LONG write_object_table(BPTR filehandle) {
 void write_object_table_entry( BPTR filehandle, ObjectPointer objectPointer, ULONG objectImageWordAddress ) {
 	UWORD old_ot_value = ObjectMemory_ot(objectPointer);
 	UWORD old_ot_location = ObjectMemory_locationBitsOf(objectPointer);
+	UWORD tableentry[2];
 	
 	if( objectPointer >= 2) {
 		if (!ObjectMemory_freeBitOf(objectPointer) && ObjectMemory_countBitsOf(objectPointer) == 0) {
@@ -161,13 +177,12 @@ void write_object_table_entry( BPTR filehandle, ObjectPointer objectPointer, ULO
 	}
 	
 	/* Assemble object table entry record */
-	UWORD words[2];
-	words[0] = ObjectMemory_ot(objectPointer);
-	words[1] = ObjectMemory_locationBitsOf(objectPointer);
+	tableentry[0] = ObjectMemory_ot(objectPointer);
+	tableentry[1] = ObjectMemory_locationBitsOf(objectPointer);
 	
-	Write( filehandle, words, sizeof(words) );
+	Write( filehandle, tableentry, sizeof(tableentry) );
 
-	// Restore OT entry
+	/* Restore OT entry */
 	ObjectMemory_ot_put(objectPointer, old_ot_value);
 	ObjectMemory_locationBitsOf_put(objectPointer, old_ot_location);
 }
