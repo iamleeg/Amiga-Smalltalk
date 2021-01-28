@@ -14,7 +14,7 @@ extern Byte HeapSegmentCount;
 /**
  * The index of the first heap segment.
 */
-#define FirstHeapSegment 0
+#define FirstHeapSegment 1
 /**
  * The index of the last heap segment.
  */
