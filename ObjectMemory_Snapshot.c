@@ -282,8 +282,8 @@ BOOL load_objects(BPTR file) {
 		//assert( ObjectMemory_countBitsOf(iterator) != 0 );
 				
 		/* see write_object_table_entry.  This is like the location(in words) in the object section of thee file */
-		UWORD objectImageWordAddress = (ObjectMemory_segmentBitsOf(iterator) << 16) + ObjectMemory_locationBitsOf(iterator);
-		UWORD objectImageByteAddress = objectImageWordAddress * 2;
+		ULONG objectImageWordAddress = (ObjectMemory_segmentBitsOf(iterator) << 16) + ObjectMemory_locationBitsOf(iterator);
+		ULONG objectImageByteAddress = objectImageWordAddress * 2;
 		Seek( file, StartOfImageObjectSpace + objectImageByteAddress, OFFSET_BEGINNING );
 
 		/* OK we are at the right place in the file */
