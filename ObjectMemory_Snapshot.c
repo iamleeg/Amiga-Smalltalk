@@ -161,7 +161,10 @@ LONG write_object_table(BPTR filehandle) {
 	UWORD storedObjectTableLength = (UWORD)last_used_objectpointer() + 2; 
 	for( iterator = 0; iterator < storedObjectTableLength; iterator +=2 ) {
 		write_object_table_entry( filehandle, iterator, objectImageWordAddress );
-		objectImageWordAddress += ObjectMemory_sizeBitsOf(iterator);
+
+		if( (iterator >= 2) && (ObjectMemory_freeBitOf(iterator) == 0) ) {
+			objectImageWordAddress += ObjectMemory_sizeBitsOf(iterator);
+		}
 	}
 	
 	return (LONG)storedObjectTableLength;
