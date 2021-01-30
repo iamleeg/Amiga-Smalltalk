@@ -12,7 +12,7 @@
 /**
  * The length of the object table.
  */
-#define ObjectTableSize 0x7FFF
+#define ObjectTableSize 0x9FFF
 /**
  * A size that's too big to fit in a single byte.
  */
