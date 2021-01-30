@@ -79,8 +79,8 @@ BOOL write_header(BPTR filehandle, LONG objectSize, LONG tableSize) {
 
 BOOL write_interchange(BPTR filehandle) {
 	UBYTE interchange[2];
-	interchange[0] = (UBYTE)0xAA; /* should eventually be 0 but easier to see*/
-	interchange[1] = (UBYTE)0xBB; /* should eventualty be 0 but easier to see*/
+	interchange[0] = (UBYTE)0x00; 
+	interchange[1] = (UBYTE)0x00; 
 	Write( filehandle, interchange, sizeof(interchange) );
 	return TRUE;	
 }
