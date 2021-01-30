@@ -374,8 +374,12 @@ BOOL load_objects(BPTR file) {
 int main(int argc, char **argv) {
     ObjectMemory_new();
     load_snapshot( "SYS:image80.st" );
-/*    save_snapshot( "SYS:image80-2.st");*/
+    save_snapshot( "SYS:image85.st");
 	ObjectMemory_delete();
+    ObjectMemory_new();
+    load_snapshot( "SYS:image85.st" );
+    save_snapshot( "SYS:image90.st");
+    ObjectMemory_delete();
 	
 	return 0;
 }
