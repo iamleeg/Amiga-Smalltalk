@@ -17,12 +17,19 @@
 
 #include "tests.h"
 
+int runverbose = 1;
+
+const char* vers      = "\\0$VER: ast_tests 1.0.0";
+const char* min_stack = "$STACK:16384";
+
 int main(int argc, const char *argv[]) {
   struct TestResult result;
 
   result.ran = 0;
   result.passed = 0;
   result.failed = 0;
+  
+  if( argc > 1 ) runverbose = 0;
   
   RunSuite(AllocationTests);
   RunSuite(FreeListTests);
@@ -39,7 +46,7 @@ int main(int argc, const char *argv[]) {
   RunSuite(ContextTests);
   RunSuite(ClassTests);
   
-  printf("Tests completed.\n");
+  printf("\nTests completed.\n");
   printf("%d tests ran.\n", result.ran);
   printf("%d tests passed.\n", result.passed);
   printf("%d tests failed.\n", result.failed);
