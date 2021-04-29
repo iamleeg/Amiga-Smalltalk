@@ -5,6 +5,8 @@
 
 #include "ObjectMemory.h"
 
+extern int runverbose;
+
 struct TestResult {
   int ran;
   int passed;
@@ -26,7 +28,7 @@ struct TestResult {
   t(&failed); \
   if (failed == 0) { \
     tr->passed++; \
-    printf("PASS " #t "\n"); \
+    if(runverbose) printf("PASS " #t "\n"); else printf("."); \
   } else { \
     tr->failed++; \
     printf("FAIL " #t "\n"); \
