@@ -112,9 +112,6 @@ Bool Interpreter_specialSelectorPrimitiveResponse(void);
 Bool Interpreter_arithmeticSelectorPrimitive(void);
 Bool Interpreter_commonSelectorPrimitive(void);
 
-/** Page 653 - System primitives required for above, will move to new file when I get there*/
-void Interpreter_primitiveEquivalent();
-void Interpreter_primitiveClass();
 
 
 /**

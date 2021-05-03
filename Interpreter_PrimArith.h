@@ -4,10 +4,10 @@
 #include "Types.h"
 
 
-Bool Interpreter_dispatchArithmeticPrimitives( int primitiveIndex );
-Bool Interpreter_dispatchIntegerPrimitives( int primitiveIndex );
-Bool Interpreter_dispatchLargeIntegerPrimitives( int primitiveIndex );
-Bool Interpreter_dispatchFloatPrimitives( int primitiveIndex );
+void Interpreter_dispatchArithmeticPrimitives( int primitiveIndex );
+void Interpreter_dispatchIntegerPrimitives( int primitiveIndex );
+void Interpreter_dispatchLargeIntegerPrimitives( int primitiveIndex );
+void Interpreter_dispatchFloatPrimitives( int primitiveIndex );
 
 Bool Interpreter_primitiveAdd(void);
 Bool Interpreter_primitiveSubtract(void);

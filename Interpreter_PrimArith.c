@@ -8,75 +8,71 @@
 /**
  * Page 621
  */
-Bool Interpreter_dispatchArithmeticPrimitives( int primitiveIndex ) {
+void Interpreter_dispatchArithmeticPrimitives( int primitiveIndex ) {
 	if( primitiveIndex < 20 ) {
-		return Interpreter_dispatchIntegerPrimitives( primitiveIndex );
+		Interpreter_dispatchIntegerPrimitives( primitiveIndex );
 	}
 	if( primitiveIndex < 40 ) {
-		return Interpreter_dispatchLargeIntegerPrimitives( primitiveIndex );
+		Interpreter_dispatchLargeIntegerPrimitives( primitiveIndex );
 	}
 	if( primitiveIndex < 60 ) {
-		return Interpreter_dispatchFloatPrimitives( primitiveIndex );
+		Interpreter_dispatchFloatPrimitives( primitiveIndex );
 	}
-	return NO;
 }
 
 /**
  * Page 621
  */
- Bool Interpreter_dispatchIntegerPrimitives( int primitiveIndex ) {
+ void Interpreter_dispatchIntegerPrimitives( int primitiveIndex ) {
 	switch( primitiveIndex ) {
-		case 1: return Interpreter_primitiveAdd();
-		case 2: return Interpreter_primitiveSubtract();
-		case 3: return Interpreter_primitiveLessThan();
-		case 4: return Interpreter_primitiveGreaterThan();
-		case 5: return Interpreter_primitiveLessOrEqual();
-		case 6: return Interpreter_primitiveGreaterOrEqual();
-		case 7: return Interpreter_primitiveEqual();
-		case 8: return Interpreter_primitiveNotEqual();
-		case 9: return Interpreter_primitiveMultiply();
-		case 10: return Interpreter_primitiveDivide();
-		case 11: return Interpreter_primitiveMod();
-		case 12: return Interpreter_primitiveDiv();
-		case 13: return Interpreter_primitiveQuo();
-		case 14: return Interpreter_primitiveBitAnd();
-		case 15: return Interpreter_primitiveBitOr();
-		case 16: return Interpreter_primitiveBitXor();
-		case 17: return Interpreter_primitiveBitShift();	
-		case 18: return Interpreter_primitiveMakePoint();	
+		case 1:  Interpreter_primitiveAdd();
+		case 2:  Interpreter_primitiveSubtract();
+		case 3:  Interpreter_primitiveLessThan();
+		case 4:  Interpreter_primitiveGreaterThan();
+		case 5:  Interpreter_primitiveLessOrEqual();
+		case 6:  Interpreter_primitiveGreaterOrEqual();
+		case 7:  Interpreter_primitiveEqual();
+		case 8:  Interpreter_primitiveNotEqual();
+		case 9:  Interpreter_primitiveMultiply();
+		case 10:  Interpreter_primitiveDivide();
+		case 11:  Interpreter_primitiveMod();
+		case 12:  Interpreter_primitiveDiv();
+		case 13:  Interpreter_primitiveQuo();
+		case 14:  Interpreter_primitiveBitAnd();
+		case 15:  Interpreter_primitiveBitOr();
+		case 16:  Interpreter_primitiveBitXor();
+		case 17:  Interpreter_primitiveBitShift();	
+		case 18:  Interpreter_primitiveMakePoint();	
 	}
-	return NO;
 }
 
 /** 
  *  Should be implemented in Smalltalk instead  page 625
  */
-Bool Interpreter_dispatchLargeIntegerPrimitives( int primitiveIndex ) {
+void Interpreter_dispatchLargeIntegerPrimitives( int primitiveIndex ) {
 	Interpreter_primitiveFail();
-	return NO;
 }
 /**
  * Page 626
  */
-Bool Interpreter_dispatchFloatPrimitives( int primitiveIndex ) {
+void Interpreter_dispatchFloatPrimitives( int primitiveIndex ) {
 	switch( primitiveIndex ) {
-		case 40: return Interpreter_primitiveAsFloat();
-		case 41: return Interpreter_primitiveFloatAdd();
-		case 42: return Interpreter_primitiveFloatSubtract();
-		case 43: return Interpreter_primitiveFloatLessThan();
-		case 44: return Interpreter_primitiveFloatGreaterThan();
-		case 45: return Interpreter_primitiveFloatLessOrEqual();
-		case 46: return Interpreter_primitiveFloatGreaterOrEqual();
-		case 47: return Interpreter_primitiveFloatEqual();
-		case 48: return Interpreter_primitiveFloatNotEqual();
-		case 49: return Interpreter_primitiveFloatMultiply();
-		case 50: return Interpreter_primitiveFloatDivide();
-		case 51: return Interpreter_primitiveTruncated();
-		case 52: return Interpreter_primitiveFractionalPart();
-		case 53: return Interpreter_primitiveExponent();
-		case 54: return Interpreter_primitiveTimesTwoPower();
+		case 40:  Interpreter_primitiveAsFloat();
+		case 41:  Interpreter_primitiveFloatAdd();
+		case 42:  Interpreter_primitiveFloatSubtract();
+		case 43:  Interpreter_primitiveFloatLessThan();
+		case 44:  Interpreter_primitiveFloatGreaterThan();
+		case 45:  Interpreter_primitiveFloatLessOrEqual();
+		case 46:  Interpreter_primitiveFloatGreaterOrEqual();
+		case 47:  Interpreter_primitiveFloatEqual();
+		case 48:  Interpreter_primitiveFloatNotEqual();
+		case 49:  Interpreter_primitiveFloatMultiply();
+		case 50:  Interpreter_primitiveFloatDivide();
+		case 51:  Interpreter_primitiveTruncated();
+		case 52:  Interpreter_primitiveFractionalPart();
+		case 53:  Interpreter_primitiveExponent();
+		case 54:  Interpreter_primitiveTimesTwoPower();
 	}
-	return NO;
 }
 
 

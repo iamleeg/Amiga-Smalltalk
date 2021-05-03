@@ -1,6 +1,7 @@
 #include "Interpreter.h"
 #include "Interpreter_Error.h"
 #include "Interpreter_PrimArith.h"
+#include "Interpreter_PrimSystem.h"
 #include "ObjectMemory.h"
 
 /**
@@ -199,21 +200,6 @@ Bool Interpreter_arithmeticSelectorPrimitive(void) {
 		}
 	}
 	return Interpreter_success();
-}
-
-void Interpreter_primitiveEquivalent() {
-   ObjectPointer otherObject = Interpreter_popStack();
-   ObjectPointer receiver = Interpreter_popStack();
-
-    if (receiver == otherObject)
-        Interpreter_push(TruePointer);
-    else
-        Interpreter_push(FalsePointer);
-}
-
-void Interpreter_primitiveClass() {
-	ObjectPointer anObject = Interpreter_popStack();
-    Interpreter_push(ObjectMemory_fetchClassOf(anObject));
 }
 
 
