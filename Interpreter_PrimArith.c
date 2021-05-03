@@ -3,6 +3,8 @@
 #include "ObjectMemory.h"
 #include "ObjectMemory_Allocation.h"
 
+
+
 /**
  * Page 621
  */
@@ -59,6 +61,20 @@ Bool Interpreter_dispatchLargeIntegerPrimitives( int primitiveIndex ) {
 Bool Interpreter_dispatchFloatPrimitives( int primitiveIndex ) {
 	switch( primitiveIndex ) {
 		case 40: return Interpreter_primitiveAsFloat();
+		case 41: return Interpreter_primitiveFloatAdd();
+		case 42: return Interpreter_primitiveFloatSubtract();
+		case 43: return Interpreter_primitiveFloatLessThan();
+		case 44: return Interpreter_primitiveFloatGreaterThan();
+		case 45: return Interpreter_primitiveFloatLessOrEqual();
+		case 46: return Interpreter_primitiveFloatGreaterOrEqual();
+		case 47: return Interpreter_primitiveFloatEqual();
+		case 48: return Interpreter_primitiveFloatNotEqual();
+		case 49: return Interpreter_primitiveFloatMultiply();
+		case 50: return Interpreter_primitiveFloatDivide();
+		case 51: return Interpreter_primitiveTruncated();
+		case 52: return Interpreter_primitiveFractionalPart();
+		case 53: return Interpreter_primitiveExponent();
+		case 54: return Interpreter_primitiveTimesTwoPower();
 	}
 	return NO;
 }
@@ -675,11 +691,13 @@ Bool Interpreter_primitiveFractionalPart(void) {
 	return Interpreter_success();
 }
 
+/** optional */
 Bool Interpreter_primitiveExponent(void) {
 	Interpreter_primitiveFail();
 	return NO;
 }
 
+/** optional */
 Bool Interpreter_primitiveTimesTwoPower(void) {
 	Interpreter_primitiveFail();
 	return NO;

@@ -107,6 +107,16 @@ ObjectPointer Interpreter_positive16BitIntegerFor(short integerValue);
  */
 short Interpreter_positive16BitValueOf(ObjectPointer integerPointer);
 
+/** Page 619 */
+Bool Interpreter_specialSelectorPrimitiveResponse(void);
+Bool Interpreter_arithmeticSelectorPrimitive(void);
+Bool Interpreter_commonSelectorPrimitive(void);
+
+/** Page 653 - System primitives required for above, will move to new file when I get there*/
+void Interpreter_primitiveEquivalent();
+void Interpreter_primitiveClass();
+
+
 /**
  * Convert the supplied integer into a SmallInteger object and store it in the object's field.
  * Fails if the integer cannot be stored in a SmallInteger (i.e. is higher magnitude than ±2^14)

@@ -1,5 +1,6 @@
 #include "Interpreter.h"
 #include "Interpreter_Error.h"
+#include "Interpreter_PrimArith.h"
 #include "ObjectMemory.h"
 
 /**
@@ -21,6 +22,7 @@ ObjectPointer messageSelector = NilPointer;
 Word argumentCount = 0;
 ObjectPointer newMethod = NilPointer;
 Word primitiveIndex = 0;
+Byte currentBytecode = 0;
 
 /**
  * Page 616.
@@ -157,6 +159,95 @@ short Interpreter_positive16BitValueOf(ObjectPointer integerPointer) {
 	return result;
 }
 
+/** 
+ * Page 618
+ */
+Bool Interpreter_specialSelectorPrimitiveResponse(void) {
+	Interpreter_initPrimitive();
+	if( currentBytecode >= 176 && currentBytecode <= 191 ) {
+		Interpreter_arithmeticSelectorPrimitive();
+	} else if( currentBytecode >= 192 && currentBytecode <= 207 ) {
+		Interpreter_commonSelectorPrimitive();
+	}
+	return Interpreter_success();
+}
+
+/** 
+ * Page 619 
+*/
+Bool Interpreter_arithmeticSelectorPrimitive(void) {
+	Interpreter_success_(ObjectMemory_isIntegerObject(Interpreter_stackValue(1)));
+	if( Interpreter_success() ) {
+		switch(currentBytecode) {
+		case 176: Interpreter_success_(Interpreter_primitiveAdd());
+		case 177: Interpreter_success_(Interpreter_primitiveSubtract());
+		case 178: Interpreter_success_(Interpreter_primitiveLessThan());
+		case 179: Interpreter_success_(Interpreter_primitiveGreaterThan());
+		case 180: Interpreter_success_(Interpreter_primitiveLessOrEqual());
+		case 181: Interpreter_success_(Interpreter_primitiveGreaterOrEqual());
+		case 182: Interpreter_success_(Interpreter_primitiveEqual());
+		case 183: Interpreter_success_(Interpreter_primitiveNotEqual());
+		case 184: Interpreter_success_(Interpreter_primitiveMultiply());
+		case 185: Interpreter_success_(Interpreter_primitiveDivide());
+		case 186: Interpreter_success_(Interpreter_primitiveMod());
+		case 187: Interpreter_success_(Interpreter_primitiveMakePoint());
+		case 188: Interpreter_success_(Interpreter_primitiveBitShift());
+		case 189: Interpreter_success_(Interpreter_primitiveDiv());
+		case 190: Interpreter_success_(Interpreter_primitiveBitAnd());
+		case 191: Interpreter_success_(Interpreter_primitiveBitOr());
+		default: Interpreter_primitiveFail();
+		}
+	}
+	return Interpreter_success();
+}
+
+void Interpreter_primitiveEquivalent() {
+   ObjectPointer otherObject = Interpreter_popStack();
+   ObjectPointer receiver = Interpreter_popStack();
+
+    if (receiver == otherObject)
+        Interpreter_push(TruePointer);
+    else
+        Interpreter_push(FalsePointer);
+}
+
+void Interpreter_primitiveClass() {
+	ObjectPointer anObject = Interpreter_popStack();
+    Interpreter_push(ObjectMemory_fetchClassOf(anObject));
+}
+
+
+
+/** 
+ * Page 619
+ * leaving half done for now as I dont quite understand what its doing yet.
+ * equiv and class arent really primitives in that they put stuff on the stack and dont set success
+ * so not sure what I'm doig with success etc for this function
+ */
+Bool Interpreter_commonSelectorPrimitive(void) {
+	// magic number verbatim, but will want to try and explain it 
+	Word argumentCount = Interpreter_fetchInteger_ofObject((((currentBytecode-176)*2)+1), SpecialSelectorsPointer);
+	ObjectPointer receiverClass = ObjectMemory_fetchClassOf(Interpreter_stackValue(argumentCount));
+	
+	switch(currentBytecode) {
+		case 198:
+			 Interpreter_primitiveEquivalent();
+		case 199:
+			Interpreter_primitiveClass();
+		case 200:
+			// I think its checking the class is either ClassMethodCOntextPointer or ClassBlockContextCopy
+			// and if so, its returning primitiveblockcopy and setting success
+			break;
+		case 201:
+		case 202:
+		// check its a blockcontect
+		// if so, call primitivevalue and set success
+			break;
+		default:
+			Interpreter_primitiveFail();
+	}
+	return Interpreter_success();
+}
 
 void Interpreter_storeInteger_ofObject_withValue(Word fieldIndex, ObjectPointer objectPointer, short integerValue) {
   ObjectPointer integerPointer;
