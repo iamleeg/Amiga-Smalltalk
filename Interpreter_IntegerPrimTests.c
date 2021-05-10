@@ -6,7 +6,6 @@ extern ObjectPointer stubBlockContext(void);
 void putTwoNumbersOnStack(ObjectPointer receiver, ObjectPointer argument);
 
 Test(PrimitiveBitAndBasic) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -24,12 +23,8 @@ Test(PrimitiveBitAndBasic) {
 /* call AND */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveBitAnd();
+    Interpreter_primitiveBitAnd();
 	Expect( Interpreter_success() == YES );
-
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultShortInteger = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	
 /* assert correct result */
@@ -41,7 +36,6 @@ Test(PrimitiveBitAndBasic) {
 }
 
 Test(PrimitiveBitOrBasic) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -59,12 +53,8 @@ Test(PrimitiveBitOrBasic) {
 /* call AND */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveBitOr();
+    Interpreter_primitiveBitOr();
 	Expect( Interpreter_success() == YES );
-
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultShortInteger = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	
 /* assert correct result */
@@ -75,7 +65,6 @@ Test(PrimitiveBitOrBasic) {
 }
 
 Test(PrimitiveBitXorBasic) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -93,12 +82,8 @@ Test(PrimitiveBitXorBasic) {
 /* call XOR */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveBitXor();
+    Interpreter_primitiveBitXor();
 	Expect( Interpreter_success() == YES );
-
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultShortInteger = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	
 /* assert correct result */
@@ -109,7 +94,6 @@ Test(PrimitiveBitXorBasic) {
 }
 
 Test(PrimitiveBitShiftBasic) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -127,12 +111,8 @@ Test(PrimitiveBitShiftBasic) {
 /* call SHIFT*/
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveBitShift();
+    Interpreter_primitiveBitShift();
 	Expect( Interpreter_success() == YES );
-
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultShortInteger = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	
 /* assert correct result */
@@ -143,7 +123,6 @@ Test(PrimitiveBitShiftBasic) {
 }
 
 Test(PrimitiveMakePointBasic) {
-	Bool localSuccess = NO;
 	ObjectPointer result = NilPointer;
 	
 	ObjectPointer xResult = NilPointer;
@@ -165,12 +144,8 @@ Test(PrimitiveMakePointBasic) {
 /* 2 @ 1 => (2,1) */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveMakePoint();
+    Interpreter_primitiveMakePoint();
 	Expect( Interpreter_success() == YES );
-
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	result = Interpreter_popStack(); 
 	
 /* assert  result == (2,1) */
@@ -198,16 +173,14 @@ void putTwoNumbersOnStack(ObjectPointer receiver, ObjectPointer argument) {
 
 
 Test(PrimitiveBitAndFailIfReceiverNonInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer first = Interpreter_positive16BitIntegerFor(16500);
 	ObjectPointer second = ObjectMemory_integerObjectOf(10);
 	ObjectPointer resultObject = NilPointer;
 	putTwoNumbersOnStack(first, second);
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveBitAnd();
+    Interpreter_primitiveBitAnd();
     /* assert fail */
-	Expect( localSuccess == NO );
 	Expect( Interpreter_success() == NO );
 	
 	/* assert stack unchanged */
@@ -219,16 +192,14 @@ Test(PrimitiveBitAndFailIfReceiverNonInteger) {
 }
 
 Test(PrimitiveBitAndFailIfArgumentNonInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer first = ObjectMemory_integerObjectOf(10);
 	ObjectPointer second = Interpreter_positive16BitIntegerFor(16500);
 	ObjectPointer resultObject = NilPointer;
 	putTwoNumbersOnStack(first, second);
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveBitAnd();
+    Interpreter_primitiveBitAnd();
     /* assert fail */
-	Expect( localSuccess == NO );
 	Expect( Interpreter_success() == NO );
 	
 	/* assert stack unchanged */
@@ -240,16 +211,14 @@ Test(PrimitiveBitAndFailIfArgumentNonInteger) {
 }
 
 Test(PrimitiveBitOrFailIfReceiverNonInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer first = Interpreter_positive16BitIntegerFor(16500);
 	ObjectPointer second = ObjectMemory_integerObjectOf(10);
 	ObjectPointer resultObject = NilPointer;
 	putTwoNumbersOnStack(first, second);
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveBitOr();
+    Interpreter_primitiveBitOr();
     /* assert fail */
-	Expect( localSuccess == NO );
 	Expect( Interpreter_success() == NO );
 	
 	/* assert stack unchanged */
@@ -261,16 +230,14 @@ Test(PrimitiveBitOrFailIfReceiverNonInteger) {
 }
 
 Test(PrimitiveBitOrFailIfArgumentNonInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer first = ObjectMemory_integerObjectOf(10);
 	ObjectPointer second = Interpreter_positive16BitIntegerFor(16500);
 	ObjectPointer resultObject = NilPointer;
 	putTwoNumbersOnStack(first, second);
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveBitOr();
+    Interpreter_primitiveBitOr();
     /* assert fail */
-	Expect( localSuccess == NO );
 	Expect( Interpreter_success() == NO );
 	
 	/* assert stack unchanged */
@@ -282,16 +249,14 @@ Test(PrimitiveBitOrFailIfArgumentNonInteger) {
 }
 
 Test(PrimitiveBitXorFailIfReceiverNonInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer first = Interpreter_positive16BitIntegerFor(16500);
 	ObjectPointer second = ObjectMemory_integerObjectOf(10);
 	ObjectPointer resultObject = NilPointer;
 	putTwoNumbersOnStack(first, second);
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveBitXor();
+    Interpreter_primitiveBitXor();
     /* assert fail */
-	Expect( localSuccess == NO );
 	Expect( Interpreter_success() == NO );
 	
 	/* assert stack unchanged */
@@ -303,16 +268,14 @@ Test(PrimitiveBitXorFailIfReceiverNonInteger) {
 }
 
 Test(PrimitiveBitXorFailIfArgumentNonInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer first = ObjectMemory_integerObjectOf(10);
 	ObjectPointer second = Interpreter_positive16BitIntegerFor(16500);
 	ObjectPointer resultObject = NilPointer;
 	putTwoNumbersOnStack(first, second);
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveBitXor();
+    Interpreter_primitiveBitXor();
     /* assert fail */
-	Expect( localSuccess == NO );
 	Expect( Interpreter_success() == NO );
 	
 	/* assert stack unchanged */
@@ -324,16 +287,14 @@ Test(PrimitiveBitXorFailIfArgumentNonInteger) {
 }
 
 Test(PrimitiveBitShiftFailIfReceiverNonInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer first = Interpreter_positive16BitIntegerFor(16500);
 	ObjectPointer second = ObjectMemory_integerObjectOf(2);
 	ObjectPointer resultObject = NilPointer;
 	putTwoNumbersOnStack(first, second);
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveBitShift();
+    Interpreter_primitiveBitShift();
     /* assert fail */
-	Expect( localSuccess == NO );
 	Expect( Interpreter_success() == NO );
 	
 	/* assert stack unchanged */
@@ -345,16 +306,14 @@ Test(PrimitiveBitShiftFailIfReceiverNonInteger) {
 }
 
 Test(PrimitiveBitShiftFailIfArgumentNonInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer first = ObjectMemory_integerObjectOf(2);
 	ObjectPointer second = Interpreter_positive16BitIntegerFor(16500);
 	ObjectPointer resultObject = NilPointer;
 	putTwoNumbersOnStack(first, second);
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveBitShift();
+    Interpreter_primitiveBitShift();
     /* assert fail */
-	Expect( localSuccess == NO );
 	Expect( Interpreter_success() == NO );
 	
 	/* assert stack unchanged */
@@ -366,16 +325,14 @@ Test(PrimitiveBitShiftFailIfArgumentNonInteger) {
 }
 
 Test(PrimitiveMakePointFailIfReceiverNonInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer first = Interpreter_positive16BitIntegerFor(16500);
 	ObjectPointer second = ObjectMemory_integerObjectOf(2);
 	ObjectPointer resultObject = NilPointer;
 	putTwoNumbersOnStack(first, second);
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveBitShift();
+    Interpreter_primitiveBitShift();
     /* assert fail */
-	Expect( localSuccess == NO );
 	Expect( Interpreter_success() == NO );
 	
 	/* assert stack unchanged */
@@ -387,16 +344,14 @@ Test(PrimitiveMakePointFailIfReceiverNonInteger) {
 }
 
 Test(PrimitiveMakePointFailIfArgumentNonInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer first = ObjectMemory_integerObjectOf(2);
 	ObjectPointer second = Interpreter_positive16BitIntegerFor(16500);
 	ObjectPointer resultObject = NilPointer;
 	putTwoNumbersOnStack(first, second);
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveBitShift();
+    Interpreter_primitiveBitShift();
     /* assert fail */
-	Expect( localSuccess == NO );
 	Expect( Interpreter_success() == NO );
 	
 	/* assert stack unchanged */
@@ -408,7 +363,6 @@ Test(PrimitiveMakePointFailIfArgumentNonInteger) {
 }
 
 Test(PrimitiveAsFloatBasic) {
-	Bool localSuccess = NO;
 	ObjectPointer floatPointer = NilPointer;
 	activeContext = stubBlockContext();
     Interpreter_fetchContextRegisters();
@@ -417,15 +371,14 @@ Test(PrimitiveAsFloatBasic) {
     Interpreter_pushInteger(123);
 	Expect( Interpreter_success() == YES );
 	
-    localSuccess = Interpreter_primitiveAsFloat();
-    Expect( localSuccess == YES );
+    Interpreter_primitiveAsFloat();
+    Expect( Interpreter_success() == YES );
     floatPointer = Interpreter_stackTop();
     Expect( ObjectMemory_fetchClassOf(floatPointer) == ClassFloatPointer );
     Expect( 123.0 == Interpreter_popFloat() );
 }
 
 Test(PrimitiveAsFloatFailsIfReceiverNotInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer resultPointer = NilPointer;
 	activeContext = stubBlockContext();
     Interpreter_fetchContextRegisters();
@@ -434,8 +387,7 @@ Test(PrimitiveAsFloatFailsIfReceiverNotInteger) {
     Interpreter_push(Interpreter_positive16BitIntegerFor(16500));
 	Expect( Interpreter_success() == YES );
 	
-    localSuccess = Interpreter_primitiveAsFloat();
-    Expect( localSuccess == NO );
+    Interpreter_primitiveAsFloat();
     Expect( Interpreter_success() == NO );
     /* Expect Stack unchanged */
     resultPointer = Interpreter_stackTop();

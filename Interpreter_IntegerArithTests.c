@@ -9,7 +9,6 @@ extern ObjectPointer stubBlockContext(void);
 /*  ----------------------------------------------------------------------------------- */ 
 
 Test(PrimitiveAddBasic) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -26,12 +25,9 @@ Test(PrimitiveAddBasic) {
     
 /* call add */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveAdd();
+    Interpreter_primitiveAdd();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultShortInteger = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	
 /* assert correct result */
@@ -42,7 +38,6 @@ Test(PrimitiveAddBasic) {
 }
 
 Test(PrimitiveAddFailsIfAlreadyFailed) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -60,13 +55,9 @@ Test(PrimitiveAddFailsIfAlreadyFailed) {
 /* call add */
 	Interpreter_initPrimitive();
 	Interpreter_primitiveFail();
-    localSuccess = Interpreter_primitiveAdd();
+    Interpreter_primitiveAdd();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
-	
 /* assert stack unchanged */
 	resultShortInteger = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	Expect( resultShortInteger != NilPointer );
@@ -80,7 +71,6 @@ Test(PrimitiveAddFailsIfAlreadyFailed) {
 }
 
 Test(PrimitiveAddFailsIfAnswerNotInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -98,12 +88,8 @@ Test(PrimitiveAddFailsIfAnswerNotInteger) {
 /* call add */
 	Interpreter_initPrimitive();
 	Interpreter_primitiveFail();
-    localSuccess = Interpreter_primitiveAdd();
+    Interpreter_primitiveAdd();
 	Expect( Interpreter_success() == NO );
-
-/* assert success */
-	Expect( localSuccess == NO );
-	
 	
 /* assert stack unchanged */
 	resultShortInteger = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
@@ -118,7 +104,6 @@ Test(PrimitiveAddFailsIfAnswerNotInteger) {
 }
 
 Test(PrimitiveAddFailsIfReceiverNotInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer resultObject = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -136,11 +121,8 @@ Test(PrimitiveAddFailsIfReceiverNotInteger) {
 /* call add */
 	Interpreter_initPrimitive();
 	Interpreter_primitiveFail();
-    localSuccess = Interpreter_primitiveAdd();
+    Interpreter_primitiveAdd();
 	Expect( Interpreter_success() == NO );
-
-/* assert success */
-	Expect( localSuccess == NO );
 	
 /* assert stack unchanged */
 	resultObject = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
@@ -155,7 +137,6 @@ Test(PrimitiveAddFailsIfReceiverNotInteger) {
 }
 
 Test(PrimitiveAddFailsIfArgumentNotInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer resultObject = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -173,12 +154,9 @@ Test(PrimitiveAddFailsIfArgumentNotInteger) {
 /* call add */
 	Interpreter_initPrimitive();
 	Interpreter_primitiveFail();
-    localSuccess = Interpreter_primitiveAdd();
+    Interpreter_primitiveAdd();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 /* assert stack unchanged */
 	resultObject = Interpreter_popStack(); 
 	Expect( resultObject != NilPointer );
@@ -197,7 +175,6 @@ Test(PrimitiveAddFailsIfArgumentNotInteger) {
 /*  ----------------------------------------------------------------------------------- */ 
 
 Test(PrimitiveSubtractBasic) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -214,12 +191,9 @@ Test(PrimitiveSubtractBasic) {
     
 /* call subtract */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveSubtract();
+    Interpreter_primitiveSubtract();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultShortInteger = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	
 /* assert correct result */
@@ -230,7 +204,6 @@ Test(PrimitiveSubtractBasic) {
 }
 
 Test(PrimitiveSubtractFailsIfAlreadyFailed) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -248,13 +221,9 @@ Test(PrimitiveSubtractFailsIfAlreadyFailed) {
 /* call subtract */
 	Interpreter_initPrimitive();
 	Interpreter_primitiveFail();
-    localSuccess = Interpreter_primitiveSubtract();
+    Interpreter_primitiveSubtract();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
-	
 /* assert stack unchanged */
 	resultShortInteger = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	Expect( resultShortInteger != NilPointer );
@@ -268,7 +237,6 @@ Test(PrimitiveSubtractFailsIfAlreadyFailed) {
 }
 
 Test(PrimitiveSubtractFailsIfAnswerNotInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -286,13 +254,9 @@ Test(PrimitiveSubtractFailsIfAnswerNotInteger) {
 /* call subtract */
 	Interpreter_initPrimitive();
 	Interpreter_primitiveFail();
-    localSuccess = Interpreter_primitiveSubtract();
+    Interpreter_primitiveSubtract();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
-	
 /* assert stack unchanged */
 	resultShortInteger = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	Expect( resultShortInteger != NilPointer );
@@ -306,7 +270,6 @@ Test(PrimitiveSubtractFailsIfAnswerNotInteger) {
 }
 
 Test(PrimitiveSubtractFailsIfReceiverNotInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer resultObject = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -324,12 +287,9 @@ Test(PrimitiveSubtractFailsIfReceiverNotInteger) {
 /* call subtract */
 	Interpreter_initPrimitive();
 	Interpreter_primitiveFail();
-    localSuccess = Interpreter_primitiveSubtract();
+    Interpreter_primitiveSubtract();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 /* assert stack unchanged */
 	resultObject = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	Expect( resultObject != NilPointer );
@@ -343,7 +303,6 @@ Test(PrimitiveSubtractFailsIfReceiverNotInteger) {
 }
 
 Test(PrimitiveSubtractFailsIfArgumentNotInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer resultObject = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -361,12 +320,9 @@ Test(PrimitiveSubtractFailsIfArgumentNotInteger) {
 /* call add */
 	Interpreter_initPrimitive();
 	Interpreter_primitiveFail();
-    localSuccess = Interpreter_primitiveSubtract();
+    Interpreter_primitiveSubtract();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 /* assert stack unchanged */
 	resultObject = Interpreter_popStack(); 
 	Expect( resultObject != NilPointer );
@@ -385,7 +341,6 @@ Test(PrimitiveSubtractFailsIfArgumentNotInteger) {
 /*  ----------------------------------------------------------------------------------- */ 
 
 Test(PrimitiveMultiplyBasic) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -402,12 +357,9 @@ Test(PrimitiveMultiplyBasic) {
     
 /* call multiply */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveMultiply();
+    Interpreter_primitiveMultiply();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultShortInteger = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	
 /* assert correct result */
@@ -418,7 +370,6 @@ Test(PrimitiveMultiplyBasic) {
 }
 
 Test(PrimitiveMultiplyFailsIfAlreadyFailed) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -436,12 +387,8 @@ Test(PrimitiveMultiplyFailsIfAlreadyFailed) {
 /* call multiply */
 	Interpreter_initPrimitive();
 	Interpreter_primitiveFail();
-    localSuccess = Interpreter_primitiveMultiply();
+    Interpreter_primitiveMultiply();
 	Expect( Interpreter_success() == NO );
-
-/* assert success */
-	Expect( localSuccess == NO );
-	
 	
 /* assert stack unchanged */
 	resultShortInteger = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
@@ -456,7 +403,6 @@ Test(PrimitiveMultiplyFailsIfAlreadyFailed) {
 }
 
 Test(PrimitiveMultiplyFailsIfAnswerNotInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -474,13 +420,9 @@ Test(PrimitiveMultiplyFailsIfAnswerNotInteger) {
 /* call multiply */
 	Interpreter_initPrimitive();
 	Interpreter_primitiveFail();
-    localSuccess = Interpreter_primitiveAdd();
+    Interpreter_primitiveAdd();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
-	
 /* assert stack unchanged */
 	resultShortInteger = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	Expect( resultShortInteger != NilPointer );
@@ -494,7 +436,6 @@ Test(PrimitiveMultiplyFailsIfAnswerNotInteger) {
 }
 
 Test(PrimitiveMultiplyFailsIfReceiverNotInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer resultObject = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -512,12 +453,9 @@ Test(PrimitiveMultiplyFailsIfReceiverNotInteger) {
 /* call multiply */
 	Interpreter_initPrimitive();
 	Interpreter_primitiveFail();
-    localSuccess = Interpreter_primitiveAdd();
+    Interpreter_primitiveAdd();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 /* assert stack unchanged */
 	resultObject = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	Expect( resultObject != NilPointer );
@@ -531,7 +469,6 @@ Test(PrimitiveMultiplyFailsIfReceiverNotInteger) {
 }
 
 Test(PrimitiveMultiplyFailsIfArgumentNotInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer resultObject = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -549,12 +486,9 @@ Test(PrimitiveMultiplyFailsIfArgumentNotInteger) {
 /* call multiply */
 	Interpreter_initPrimitive();
 	Interpreter_primitiveFail();
-    localSuccess = Interpreter_primitiveAdd();
+    Interpreter_primitiveAdd();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 /* assert stack unchanged */
 	resultObject = Interpreter_popStack(); 
 	Expect( resultObject != NilPointer );
@@ -572,7 +506,6 @@ Test(PrimitiveMultiplyFailsIfArgumentNotInteger) {
 /*  ----------------------------------------------------------------------------------- */ 
 
 Test(PrimitiveDivideBasic) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -589,12 +522,9 @@ Test(PrimitiveDivideBasic) {
     
 /* call divide */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveDivide();
+    Interpreter_primitiveDivide();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultShortInteger = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	
 /* assert correct result */
@@ -605,7 +535,6 @@ Test(PrimitiveDivideBasic) {
 }
 
 Test(PrimitiveDivideFailsIfArgumentZero) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -622,12 +551,9 @@ Test(PrimitiveDivideFailsIfArgumentZero) {
     
 /* call divide  10 / 0 */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveDivide();
+    Interpreter_primitiveDivide();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 /* assert stack unchanged */
 	resultShortInteger = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	Expect( resultShortInteger != NilPointer );
@@ -642,7 +568,6 @@ Test(PrimitiveDivideFailsIfArgumentZero) {
 
 
 Test(PrimitiveDivideFailsIfWontDivideCleanly) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -659,12 +584,9 @@ Test(PrimitiveDivideFailsIfWontDivideCleanly) {
     
 /* call divide */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveDivide();
+    Interpreter_primitiveDivide();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 /* assert stack unchanged */
 	resultShortInteger = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	Expect( resultShortInteger != NilPointer );
@@ -678,7 +600,6 @@ Test(PrimitiveDivideFailsIfWontDivideCleanly) {
 }
 
 Test(PrimitiveDivideFailsIfAlreadyFailed) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -696,13 +617,9 @@ Test(PrimitiveDivideFailsIfAlreadyFailed) {
 /* call divide */
 	Interpreter_initPrimitive();
 	Interpreter_primitiveFail();
-    localSuccess = Interpreter_primitiveDivide();
+    Interpreter_primitiveDivide();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
-	
 /* assert stack unchanged */
 	resultShortInteger = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	Expect( resultShortInteger != NilPointer );
@@ -723,7 +640,6 @@ Test(PrimitiveDivideFailsIfAnswerNotInteger) {
 */
 
 Test(PrimitiveDivideFailsIfReceiverNotInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer resultObject = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -741,12 +657,9 @@ Test(PrimitiveDivideFailsIfReceiverNotInteger) {
 /* call divide */
 	Interpreter_initPrimitive();
 	Interpreter_primitiveFail();
-    localSuccess = Interpreter_primitiveDivide();
+    Interpreter_primitiveDivide();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 /* assert stack unchanged */
 	resultObject = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	Expect( resultObject != NilPointer );
@@ -760,7 +673,6 @@ Test(PrimitiveDivideFailsIfReceiverNotInteger) {
 }
 
 Test(PrimitiveDivideFailsIfArgumentNotInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer resultObject = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -778,12 +690,9 @@ Test(PrimitiveDivideFailsIfArgumentNotInteger) {
 /* call divide */
 	Interpreter_initPrimitive();
 	Interpreter_primitiveFail();
-    localSuccess = Interpreter_primitiveDivide();
+    Interpreter_primitiveDivide();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 /* assert stack unchanged */
 	resultObject = Interpreter_popStack(); 
 	Expect( resultObject != NilPointer );
@@ -802,7 +711,6 @@ Test(PrimitiveDivideFailsIfArgumentNotInteger) {
 /*  ----------------------------------------------------------------------------------- */ 
  
 Test(PrimitiveDivBasic) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -819,12 +727,9 @@ Test(PrimitiveDivBasic) {
     
 /* call div */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveDiv();
+    Interpreter_primitiveDiv();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultShortInteger = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	
 /* assert correct result */
@@ -835,7 +740,6 @@ Test(PrimitiveDivBasic) {
 }
 
 Test(PrimitiveDivFailsIfArgumentZero) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -852,12 +756,9 @@ Test(PrimitiveDivFailsIfArgumentZero) {
     
 /* call div  10 / 0 */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveDiv();
+    Interpreter_primitiveDiv();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 /* assert stack unchanged */
 	resultShortInteger = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	Expect( resultShortInteger != NilPointer );
@@ -871,7 +772,6 @@ Test(PrimitiveDivFailsIfArgumentZero) {
 }
 
 Test(PrimitiveDivFailsIfAlreadyFailed) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -889,12 +789,9 @@ Test(PrimitiveDivFailsIfAlreadyFailed) {
 /* call div */
 	Interpreter_initPrimitive();
 	Interpreter_primitiveFail();
-    localSuccess = Interpreter_primitiveDiv();
+    Interpreter_primitiveDiv();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 	
 /* assert stack unchanged */
 	resultShortInteger = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
@@ -916,7 +813,6 @@ Test(PrimitiveDivFailsIfAnswerNotInteger) {
 */
 
 Test(PrimitiveDivFailsIfReceiverNotInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer resultObject = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -934,12 +830,9 @@ Test(PrimitiveDivFailsIfReceiverNotInteger) {
 /* call div */
 	Interpreter_initPrimitive();
 	Interpreter_primitiveFail();
-    localSuccess = Interpreter_primitiveDiv();
+    Interpreter_primitiveDiv();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 /* assert stack unchanged */
 	resultObject = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	Expect( resultObject != NilPointer );
@@ -953,7 +846,6 @@ Test(PrimitiveDivFailsIfReceiverNotInteger) {
 }
 
 Test(PrimitiveDivFailsIfArgumentNotInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer resultObject = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -971,12 +863,9 @@ Test(PrimitiveDivFailsIfArgumentNotInteger) {
 /* call div */
 	Interpreter_initPrimitive();
 	Interpreter_primitiveFail();
-    localSuccess = Interpreter_primitiveDiv();
+    Interpreter_primitiveDiv();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 /* assert stack unchanged */
 	resultObject = Interpreter_popStack(); 
 	Expect( resultObject != NilPointer );
@@ -990,7 +879,6 @@ Test(PrimitiveDivFailsIfArgumentNotInteger) {
 }
 
 Test(PrimitiveDivRoundsPositiveDown) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -1007,12 +895,9 @@ Test(PrimitiveDivRoundsPositiveDown) {
     
 /* call div  10 // 3 == 3.333 == ROUND DOWN TO 3 */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveDiv();
+    Interpreter_primitiveDiv();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultShortInteger = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	
 /* assert correct result */
@@ -1024,7 +909,6 @@ Test(PrimitiveDivRoundsPositiveDown) {
 
 
 Test(PrimitiveDivRoundsNegativeToNegativeInfinity) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -1041,12 +925,9 @@ Test(PrimitiveDivRoundsNegativeToNegativeInfinity) {
     
 /* call div  -10 // 3 == -3.333 == ROUND DOWN TO -4 */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveDiv();
+    Interpreter_primitiveDiv();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultShortInteger = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	
 /* assert correct result */
@@ -1061,7 +942,6 @@ Test(PrimitiveDivRoundsNegativeToNegativeInfinity) {
 /*  ----------------------------------------------------------------------------------- */ 
 
 Test(PrimitiveModBasic) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -1078,12 +958,9 @@ Test(PrimitiveModBasic) {
     
 /* call mod */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveMod();
+    Interpreter_primitiveMod();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultShortInteger = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	
 /* assert correct result */
@@ -1094,7 +971,6 @@ Test(PrimitiveModBasic) {
 }
 
 Test(PrimitiveModFailsIfArgumentZero) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -1111,12 +987,9 @@ Test(PrimitiveModFailsIfArgumentZero) {
     
 /* call mod  10 / 0 */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveMod();
+    Interpreter_primitiveMod();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 /* assert stack unchanged */
 	resultShortInteger = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	Expect( resultShortInteger != NilPointer );
@@ -1130,7 +1003,6 @@ Test(PrimitiveModFailsIfArgumentZero) {
 }
 
 Test(PrimitiveModFailsIfAlreadyFailed) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -1148,12 +1020,9 @@ Test(PrimitiveModFailsIfAlreadyFailed) {
 /* call mod */
 	Interpreter_initPrimitive();
 	Interpreter_primitiveFail();
-    localSuccess = Interpreter_primitiveMod();
+    Interpreter_primitiveMod();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 	
 /* assert stack unchanged */
 	resultShortInteger = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
@@ -1175,7 +1044,6 @@ Test(PrimitiveModFailsIfAnswerNotInteger) {
 */
 
 Test(PrimitiveModFailsIfReceiverNotInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer resultObject = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -1193,12 +1061,9 @@ Test(PrimitiveModFailsIfReceiverNotInteger) {
 /* call mod */
 	Interpreter_initPrimitive();
 	Interpreter_primitiveFail();
-    localSuccess = Interpreter_primitiveMod();
+    Interpreter_primitiveMod();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 /* assert stack unchanged */
 	resultObject = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	Expect( resultObject != NilPointer );
@@ -1212,7 +1077,6 @@ Test(PrimitiveModFailsIfReceiverNotInteger) {
 }
 
 Test(PrimitiveModFailsIfArgumentNotInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer resultObject = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -1230,12 +1094,9 @@ Test(PrimitiveModFailsIfArgumentNotInteger) {
 /* call mod */
 	Interpreter_initPrimitive();
 	Interpreter_primitiveFail();
-    localSuccess = Interpreter_primitiveMod();
+    Interpreter_primitiveMod();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 /* assert stack unchanged */
 	resultObject = Interpreter_popStack(); 
 	Expect( resultObject != NilPointer );
@@ -1258,7 +1119,6 @@ Test(PrimitiveModFailsIfArgumentNotInteger) {
 /* further we have  gone */
 
 Test(PrimitiveModRoundsToNegativeInfinity) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -1275,12 +1135,9 @@ Test(PrimitiveModRoundsToNegativeInfinity) {
     
 /* call mod */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveMod();
+    Interpreter_primitiveMod();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultShortInteger = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	
 /* assert correct result */
@@ -1294,7 +1151,6 @@ Test(PrimitiveModRoundsToNegativeInfinity) {
 /*  ----------------------------------------------------------------------------------- */ 
 
 Test(PrimitiveQuoBasic) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -1311,12 +1167,9 @@ Test(PrimitiveQuoBasic) {
     
 /* call quo */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveQuo();
+    Interpreter_primitiveQuo();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultShortInteger = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	
 /* assert correct result (quo truncates) */
@@ -1327,7 +1180,6 @@ Test(PrimitiveQuoBasic) {
 }
 
 Test(PrimitiveQuoFailsIfArgumentZero) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -1344,12 +1196,9 @@ Test(PrimitiveQuoFailsIfArgumentZero) {
     
 /* call quo */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveQuo();
+    Interpreter_primitiveQuo();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 /* assert stack unchanged */
 	resultShortInteger = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	Expect( resultShortInteger != NilPointer );
@@ -1363,7 +1212,6 @@ Test(PrimitiveQuoFailsIfArgumentZero) {
 }
 
 Test(PrimitiveQuoFailsIfAlreadyFailed) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -1381,12 +1229,9 @@ Test(PrimitiveQuoFailsIfAlreadyFailed) {
 /* call quo */
 	Interpreter_initPrimitive();
 	Interpreter_primitiveFail();
-    localSuccess = Interpreter_primitiveQuo();
+    Interpreter_primitiveQuo();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 	
 /* assert stack unchanged */
 	resultShortInteger = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
@@ -1408,7 +1253,6 @@ Test(PrimitiveQuoFailsIfAnswerNotInteger) {
 */
 
 Test(PrimitiveQuoFailsIfReceiverNotInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer resultObject = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -1426,12 +1270,9 @@ Test(PrimitiveQuoFailsIfReceiverNotInteger) {
 /* call mod */
 	Interpreter_initPrimitive();
 	Interpreter_primitiveFail();
-    localSuccess = Interpreter_primitiveQuo();
+    Interpreter_primitiveQuo();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 /* assert stack unchanged */
 	resultObject = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	Expect( resultObject != NilPointer );
@@ -1445,7 +1286,6 @@ Test(PrimitiveQuoFailsIfReceiverNotInteger) {
 }
 
 Test(PrimitiveQuoFailsIfArgumentNotInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer resultObject = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -1463,12 +1303,9 @@ Test(PrimitiveQuoFailsIfArgumentNotInteger) {
 /* call mod */
 	Interpreter_initPrimitive();
 	Interpreter_primitiveFail();
-    localSuccess = Interpreter_primitiveQuo();
+    Interpreter_primitiveQuo();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 /* assert stack unchanged */
 	resultObject = Interpreter_popStack(); 
 	Expect( resultObject != NilPointer );
@@ -1482,7 +1319,6 @@ Test(PrimitiveQuoFailsIfArgumentNotInteger) {
 }
 
 Test(PrimitiveQuoRoundsPositiveDown) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -1499,12 +1335,9 @@ Test(PrimitiveQuoRoundsPositiveDown) {
     
 /* call   10 quo 3  */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveQuo();
+    Interpreter_primitiveQuo();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultShortInteger = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	
 /* assert correct result */
@@ -1516,7 +1349,6 @@ Test(PrimitiveQuoRoundsPositiveDown) {
 
 
 Test(PrimitiveQuoRoundsNegativeUpTowardZero) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -1533,12 +1365,9 @@ Test(PrimitiveQuoRoundsNegativeUpTowardZero) {
     
 /* call   -10 quo 3 */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveQuo();
+    Interpreter_primitiveQuo();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultShortInteger = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	
 /* assert correct result */

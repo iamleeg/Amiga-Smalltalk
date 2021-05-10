@@ -108,9 +108,9 @@ ObjectPointer Interpreter_positive16BitIntegerFor(short integerValue);
 short Interpreter_positive16BitValueOf(ObjectPointer integerPointer);
 
 /** Page 619 */
-Bool Interpreter_specialSelectorPrimitiveResponse(void);
-Bool Interpreter_arithmeticSelectorPrimitive(void);
-Bool Interpreter_commonSelectorPrimitive(void);
+void Interpreter_specialSelectorPrimitiveResponse(void);
+void Interpreter_arithmeticSelectorPrimitive(void);
+void Interpreter_commonSelectorPrimitive(void);
 
 
 

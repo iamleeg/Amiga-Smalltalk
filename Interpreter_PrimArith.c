@@ -79,7 +79,7 @@ void Interpreter_dispatchFloatPrimitives( int primitiveIndex ) {
 /**
  * page 622
  */
-Bool Interpreter_primitiveAdd(void) {
+void Interpreter_primitiveAdd(void) {
 	short integerArgument = Interpreter_popInteger();
 	short integerReceiver = Interpreter_popInteger();
 	short integerResult = 0;
@@ -92,13 +92,13 @@ Bool Interpreter_primitiveAdd(void) {
 	} else {
 		Interpreter_unPop(2);
 	}
-	return Interpreter_success();
+
 }
 
 /**
  * page 622
  */
-Bool Interpreter_primitiveSubtract(void) {
+void Interpreter_primitiveSubtract(void) {
 	short integerArgument = Interpreter_popInteger();
 	short integerReceiver = Interpreter_popInteger();
 	short integerResult = 0;
@@ -111,13 +111,13 @@ Bool Interpreter_primitiveSubtract(void) {
 	} else {
 		Interpreter_unPop(2);
 	}
-	return Interpreter_success();
+
 }
 
 /**
  * page 624
  */
-Bool Interpreter_primitiveLessThan(void) {
+void Interpreter_primitiveLessThan(void) {
 	short integerArgument = Interpreter_popInteger();
 	short integerReceiver = Interpreter_popInteger();
 	Bool boolResult = NO;
@@ -129,13 +129,13 @@ Bool Interpreter_primitiveLessThan(void) {
 	} else {
 		Interpreter_unPop(2);
 	}
-	return Interpreter_success();
+
 }
 
 /**
  * page 624
  */
-Bool Interpreter_primitiveGreaterThan(void) {
+void Interpreter_primitiveGreaterThan(void) {
 	short integerArgument = Interpreter_popInteger();
 	short integerReceiver = Interpreter_popInteger();
 	Bool boolResult = NO;
@@ -147,13 +147,13 @@ Bool Interpreter_primitiveGreaterThan(void) {
 	} else {
 		Interpreter_unPop(2);
 	}
-	return Interpreter_success();
+
 }
 
 /**
  * page 624
  */
-Bool Interpreter_primitiveLessOrEqual(void) {
+void Interpreter_primitiveLessOrEqual(void) {
 	short integerArgument = Interpreter_popInteger();
 	short integerReceiver = Interpreter_popInteger();
 	Bool boolResult = NO;
@@ -165,13 +165,13 @@ Bool Interpreter_primitiveLessOrEqual(void) {
 	} else {
 		Interpreter_unPop(2);
 	}
-	return Interpreter_success();
+
 }
 
 /**
  * page 624
  */
-Bool Interpreter_primitiveGreaterOrEqual(void) {
+void Interpreter_primitiveGreaterOrEqual(void) {
 	short integerArgument = Interpreter_popInteger();
 	short integerReceiver = Interpreter_popInteger();
 	Bool boolResult = NO;
@@ -183,13 +183,13 @@ Bool Interpreter_primitiveGreaterOrEqual(void) {
 	} else {
 		Interpreter_unPop(2);
 	}
-	return Interpreter_success();
+
 }
 
 /**
  * page 624
  */
-Bool Interpreter_primitiveEqual(void) {
+void Interpreter_primitiveEqual(void) {
 	short integerArgument = Interpreter_popInteger();
 	short integerReceiver = Interpreter_popInteger();
 	Bool boolResult = NO;
@@ -201,13 +201,13 @@ Bool Interpreter_primitiveEqual(void) {
 	} else {
 		Interpreter_unPop(2);
 	}
-	return Interpreter_success();
+
 }
 
 /**
  * page 624
  */
-Bool Interpreter_primitiveNotEqual(void) {
+void Interpreter_primitiveNotEqual(void) {
 	short integerArgument = Interpreter_popInteger();
 	short integerReceiver = Interpreter_popInteger();
 	Bool boolResult = NO;
@@ -219,13 +219,13 @@ Bool Interpreter_primitiveNotEqual(void) {
 	} else {
 		Interpreter_unPop(2);
 	}
-	return Interpreter_success();
+
 }
 
 /**
  * page 622
  */
-Bool Interpreter_primitiveMultiply(void) {
+void Interpreter_primitiveMultiply(void) {
 	short integerArgument = Interpreter_popInteger();
 	short integerReceiver = Interpreter_popInteger();
 	short integerResult = 0;
@@ -238,13 +238,13 @@ Bool Interpreter_primitiveMultiply(void) {
 	} else {
 		Interpreter_unPop(2);
 	}
-	return Interpreter_success();
+
 }
 
 /**
  * page 622
  */
-Bool Interpreter_primitiveDivide(void) {
+void Interpreter_primitiveDivide(void) {
 	short integerArgument = Interpreter_popInteger();
 	short integerReceiver = Interpreter_popInteger();
 	short integerResult = 0;
@@ -269,7 +269,7 @@ Bool Interpreter_primitiveDivide(void) {
 	} else {
 		Interpreter_unPop(2);
 	}
-	return Interpreter_success();
+
 }
 
 
@@ -279,7 +279,7 @@ Bool Interpreter_primitiveDivide(void) {
 
 /* always rounded toward negative infinity */
 /* not sure how this works for negative numbers */
-Bool Interpreter_primitiveMod(void) {
+void Interpreter_primitiveMod(void) {
 	short integerArgument = Interpreter_popInteger();
 	short integerReceiver = Interpreter_popInteger();
 	short integerResult = 0;
@@ -313,7 +313,7 @@ Bool Interpreter_primitiveMod(void) {
 	} else {
 		Interpreter_unPop(2);
 	}
-	return Interpreter_success();
+
 }
 
 /**
@@ -322,7 +322,7 @@ Bool Interpreter_primitiveMod(void) {
 
 /* always rounded toward negative infinity */
 /* not sure how this works for negative numbers */
-Bool Interpreter_primitiveDiv(void) {
+void Interpreter_primitiveDiv(void) {
 	short integerArgument = Interpreter_popInteger();
 	short integerReceiver = Interpreter_popInteger();
 	short integerResult = 0;
@@ -345,14 +345,14 @@ Bool Interpreter_primitiveDiv(void) {
 	} else {
 		Interpreter_unPop(2);
 	}
-	return Interpreter_success();
+
 }
 
 /**
  * page 623
  */
 /* rounded to zero, like C, so an answer of -3.5 becomes -3, and +3.5 becomes +3 */
-Bool Interpreter_primitiveQuo(void) {
+void Interpreter_primitiveQuo(void) {
 	short integerArgument = Interpreter_popInteger();
 	short integerReceiver = Interpreter_popInteger();
 	short integerResult = 0;
@@ -373,13 +373,13 @@ Bool Interpreter_primitiveQuo(void) {
 	} else {
 		Interpreter_unPop(2);
 	}
-	return Interpreter_success();
+
 }
 
 /**
  * page 624
  */
-Bool Interpreter_primitiveBitAnd(void) {
+void Interpreter_primitiveBitAnd(void) {
 	short integerArgument = Interpreter_popInteger();
 	short integerReceiver = Interpreter_popInteger();
 	short integerResult = 0;
@@ -393,13 +393,13 @@ Bool Interpreter_primitiveBitAnd(void) {
 	} else {
 		Interpreter_unPop(2);
 	}
-	return Interpreter_success();
+
 }
 
 /**
  * page 624
  */
-Bool Interpreter_primitiveBitOr(void) {
+void Interpreter_primitiveBitOr(void) {
 	short integerArgument = Interpreter_popInteger();
 	short integerReceiver = Interpreter_popInteger();
 	short integerResult = 0;
@@ -413,13 +413,13 @@ Bool Interpreter_primitiveBitOr(void) {
 	} else {
 		Interpreter_unPop(2);
 	}
-	return Interpreter_success();
+
 }
 
 /**
  * page 624
  */
-Bool Interpreter_primitiveBitXor(void) {
+void Interpreter_primitiveBitXor(void) {
 	short integerArgument = Interpreter_popInteger();
 	short integerReceiver = Interpreter_popInteger();
 	short integerResult = 0;
@@ -433,13 +433,13 @@ Bool Interpreter_primitiveBitXor(void) {
 	} else {
 		Interpreter_unPop(2);
 	}
-	return Interpreter_success();
+
 }
 
 /**
  * page 624
  */
-Bool Interpreter_primitiveBitShift(void) {
+void Interpreter_primitiveBitShift(void) {
 	short integerArgument = Interpreter_popInteger();
 	short integerReceiver = Interpreter_popInteger();
 	short integerResult = 0;
@@ -457,14 +457,14 @@ Bool Interpreter_primitiveBitShift(void) {
 	} else {
 		Interpreter_unPop(2);
 	}
-	return Interpreter_success();
+
 }
 
 
 /* initializePointIndices - see page 625 - these seem to be "well known" but its not clear
  *  in the existing code where to declare them...thoughts welcome... I put them in 
  *  Interpreter_Constants.h */
-Bool Interpreter_primitiveMakePoint(void) {
+void Interpreter_primitiveMakePoint(void) {
 	ObjectPointer argument = Interpreter_popStack();
 	ObjectPointer receiver = Interpreter_popStack();
 	ObjectPointer result = NilPointer;
@@ -481,13 +481,13 @@ Bool Interpreter_primitiveMakePoint(void) {
 		Interpreter_unPop(2);
 	}
 
-	return Interpreter_success();
+
 }
 
 /**
  * Page 626
  */
-Bool Interpreter_primitiveAsFloat(void) {
+void Interpreter_primitiveAsFloat(void) {
 	ObjectPointer receiver = Interpreter_popStack();
 	short integerReceiver = 0;
 	float floatReceiver = 0.0;
@@ -500,10 +500,10 @@ Bool Interpreter_primitiveAsFloat(void) {
 	} else {
 		Interpreter_unPop(1);
 	}
-	return Interpreter_success();
+
 }
 
-Bool Interpreter_primitiveFloatAdd(void) {
+void Interpreter_primitiveFloatAdd(void) {
 	float argument = Interpreter_popFloat();
 	float receiver = Interpreter_popFloat();
 	float result = 0.0;
@@ -513,10 +513,10 @@ Bool Interpreter_primitiveFloatAdd(void) {
 	} else {
 		Interpreter_unPop(2);
 	}
-	return Interpreter_success();
+
 }
 
-Bool Interpreter_primitiveFloatSubtract(void) {
+void Interpreter_primitiveFloatSubtract(void) {
 	float argument = Interpreter_popFloat();
 	float receiver = Interpreter_popFloat();
 	float result = 0.0;
@@ -526,10 +526,10 @@ Bool Interpreter_primitiveFloatSubtract(void) {
 	} else {
 		Interpreter_unPop(2);
 	}
-	return Interpreter_success();
+
 }
 
-Bool Interpreter_primitiveFloatLessThan(void) {
+void Interpreter_primitiveFloatLessThan(void) {
 	float argument = Interpreter_popFloat();
 	float receiver = Interpreter_popFloat();
 	if( Interpreter_success() ) {
@@ -541,10 +541,10 @@ Bool Interpreter_primitiveFloatLessThan(void) {
 	} else {
 		Interpreter_unPop(2);
 	}
-	return Interpreter_success();
+
 }
 
-Bool Interpreter_primitiveFloatGreaterThan(void) {
+void Interpreter_primitiveFloatGreaterThan(void) {
 	float argument = Interpreter_popFloat();
 	float receiver = Interpreter_popFloat();
 	if( Interpreter_success() ) {
@@ -556,10 +556,10 @@ Bool Interpreter_primitiveFloatGreaterThan(void) {
 	} else {
 		Interpreter_unPop(2);
 	}
-	return Interpreter_success();
+
 }
 
-Bool Interpreter_primitiveFloatLessOrEqual(void) {
+void Interpreter_primitiveFloatLessOrEqual(void) {
 	float argument = Interpreter_popFloat();
 	float receiver = Interpreter_popFloat();
 	if( Interpreter_success() ) {
@@ -571,11 +571,11 @@ Bool Interpreter_primitiveFloatLessOrEqual(void) {
 	} else {
 		Interpreter_unPop(2);
 	}
-	return Interpreter_success();
+
 
 }
 
-Bool Interpreter_primitiveFloatGreaterOrEqual(void) {
+void Interpreter_primitiveFloatGreaterOrEqual(void) {
 	float argument = Interpreter_popFloat();
 	float receiver = Interpreter_popFloat();
 	if( Interpreter_success() ) {
@@ -587,11 +587,11 @@ Bool Interpreter_primitiveFloatGreaterOrEqual(void) {
 	} else {
 		Interpreter_unPop(2);
 	}
-	return Interpreter_success();
+
 
 }
 
-Bool Interpreter_primitiveFloatEqual(void) {
+void Interpreter_primitiveFloatEqual(void) {
 	float argument = Interpreter_popFloat();
 	float receiver = Interpreter_popFloat();
 	if( Interpreter_success() ) {
@@ -603,10 +603,10 @@ Bool Interpreter_primitiveFloatEqual(void) {
 	} else {
 		Interpreter_unPop(2);
 	}
-	return Interpreter_success();
+
 }
 
-Bool Interpreter_primitiveFloatNotEqual(void) {
+void Interpreter_primitiveFloatNotEqual(void) {
 	float argument = Interpreter_popFloat();
 	float receiver = Interpreter_popFloat();
 	if( Interpreter_success() ) {
@@ -618,11 +618,11 @@ Bool Interpreter_primitiveFloatNotEqual(void) {
 	} else {
 		Interpreter_unPop(2);
 	}
-	return Interpreter_success();
+
 
 }
 
-Bool Interpreter_primitiveFloatMultiply(void) {
+void Interpreter_primitiveFloatMultiply(void) {
 	float argument = Interpreter_popFloat();
 	float receiver = Interpreter_popFloat();
 	float result = 0.0;
@@ -632,10 +632,10 @@ Bool Interpreter_primitiveFloatMultiply(void) {
 	} else {
 		Interpreter_unPop(2);
 	}
-	return Interpreter_success();
+
 }
 
-Bool Interpreter_primitiveFloatDivide(void) {
+void Interpreter_primitiveFloatDivide(void) {
 	float argument = 99.0;
 	float receiver = 99.0;
 	float result = 0.0;
@@ -653,10 +653,10 @@ Bool Interpreter_primitiveFloatDivide(void) {
 	} else {
 		Interpreter_unPop(2);
 	}
-	return Interpreter_success();
+
 }
 
-Bool Interpreter_primitiveTruncated(void) {
+void Interpreter_primitiveTruncated(void) {
 	short result = 0;
 	float receiver = Interpreter_popFloat();
 	
@@ -670,11 +670,9 @@ Bool Interpreter_primitiveTruncated(void) {
 	} else {
 		Interpreter_unPop(1);
 	}
-
-	return Interpreter_success();
 }
 
-Bool Interpreter_primitiveFractionalPart(void) {
+void Interpreter_primitiveFractionalPart(void) {
 	float result = 0;
 	float receiver = Interpreter_popFloat();
 	if( Interpreter_success() ) {
@@ -683,19 +681,15 @@ Bool Interpreter_primitiveFractionalPart(void) {
 	} else {
 		Interpreter_unPop(1);
 	}		
-
-	return Interpreter_success();
 }
 
 /** optional */
-Bool Interpreter_primitiveExponent(void) {
+void Interpreter_primitiveExponent(void) {
 	Interpreter_primitiveFail();
-	return NO;
 }
 
 /** optional */
-Bool Interpreter_primitiveTimesTwoPower(void) {
+void Interpreter_primitiveTimesTwoPower(void) {
 	Interpreter_primitiveFail();
-	return NO;
 }
 

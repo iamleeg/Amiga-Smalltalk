@@ -163,43 +163,41 @@ short Interpreter_positive16BitValueOf(ObjectPointer integerPointer) {
 /** 
  * Page 618
  */
-Bool Interpreter_specialSelectorPrimitiveResponse(void) {
+void Interpreter_specialSelectorPrimitiveResponse(void) {
 	Interpreter_initPrimitive();
 	if( currentBytecode >= 176 && currentBytecode <= 191 ) {
 		Interpreter_arithmeticSelectorPrimitive();
 	} else if( currentBytecode >= 192 && currentBytecode <= 207 ) {
 		Interpreter_commonSelectorPrimitive();
 	}
-	return Interpreter_success();
 }
 
 /** 
  * Page 619 
 */
-Bool Interpreter_arithmeticSelectorPrimitive(void) {
+void Interpreter_arithmeticSelectorPrimitive(void) {
 	Interpreter_success_(ObjectMemory_isIntegerObject(Interpreter_stackValue(1)));
 	if( Interpreter_success() ) {
 		switch(currentBytecode) {
-		case 176: Interpreter_success_(Interpreter_primitiveAdd());
-		case 177: Interpreter_success_(Interpreter_primitiveSubtract());
-		case 178: Interpreter_success_(Interpreter_primitiveLessThan());
-		case 179: Interpreter_success_(Interpreter_primitiveGreaterThan());
-		case 180: Interpreter_success_(Interpreter_primitiveLessOrEqual());
-		case 181: Interpreter_success_(Interpreter_primitiveGreaterOrEqual());
-		case 182: Interpreter_success_(Interpreter_primitiveEqual());
-		case 183: Interpreter_success_(Interpreter_primitiveNotEqual());
-		case 184: Interpreter_success_(Interpreter_primitiveMultiply());
-		case 185: Interpreter_success_(Interpreter_primitiveDivide());
-		case 186: Interpreter_success_(Interpreter_primitiveMod());
-		case 187: Interpreter_success_(Interpreter_primitiveMakePoint());
-		case 188: Interpreter_success_(Interpreter_primitiveBitShift());
-		case 189: Interpreter_success_(Interpreter_primitiveDiv());
-		case 190: Interpreter_success_(Interpreter_primitiveBitAnd());
-		case 191: Interpreter_success_(Interpreter_primitiveBitOr());
+		case 176: Interpreter_primitiveAdd();
+		case 177: Interpreter_primitiveSubtract();
+		case 178: Interpreter_primitiveLessThan();
+		case 179: Interpreter_primitiveGreaterThan();
+		case 180: Interpreter_primitiveLessOrEqual();
+		case 181: Interpreter_primitiveGreaterOrEqual();
+		case 182: Interpreter_primitiveEqual();
+		case 183: Interpreter_primitiveNotEqual();
+		case 184: Interpreter_primitiveMultiply();
+		case 185: Interpreter_primitiveDivide();
+		case 186: Interpreter_primitiveMod();
+		case 187: Interpreter_primitiveMakePoint();
+		case 188: Interpreter_primitiveBitShift();
+		case 189: Interpreter_primitiveDiv();
+		case 190: Interpreter_primitiveBitAnd();
+		case 191: Interpreter_primitiveBitOr();
 		default: Interpreter_primitiveFail();
 		}
 	}
-	return Interpreter_success();
 }
 
 
@@ -210,7 +208,7 @@ Bool Interpreter_arithmeticSelectorPrimitive(void) {
  * equiv and class arent really primitives in that they put stuff on the stack and dont set success
  * so not sure what I'm doig with success etc for this function
  */
-Bool Interpreter_commonSelectorPrimitive(void) {
+void Interpreter_commonSelectorPrimitive(void) {
 	// magic number verbatim, but will want to try and explain it 
 	Word argumentCount = Interpreter_fetchInteger_ofObject((((currentBytecode-176)*2)+1), SpecialSelectorsPointer);
 	ObjectPointer receiverClass = ObjectMemory_fetchClassOf(Interpreter_stackValue(argumentCount));
@@ -232,7 +230,6 @@ Bool Interpreter_commonSelectorPrimitive(void) {
 		default:
 			Interpreter_primitiveFail();
 	}
-	return Interpreter_success();
 }
 
 void Interpreter_storeInteger_ofObject_withValue(Word fieldIndex, ObjectPointer objectPointer, short integerValue) {

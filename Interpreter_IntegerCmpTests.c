@@ -9,7 +9,6 @@ extern ObjectPointer stubBlockContext(void);
 /*  ----------------------------------------------------------------------------------- */ 
 
 Test(PrimitiveEqualTrueWorks) {
-	Bool localSuccess = NO;
 	ObjectPointer resultBool = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -28,12 +27,9 @@ Test(PrimitiveEqualTrueWorks) {
 /* 10 == 10 */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveEqual();
+    Interpreter_primitiveEqual();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultBool = Interpreter_popStack(); 
 	
 /* assert  result == TRUE */
@@ -42,7 +38,6 @@ Test(PrimitiveEqualTrueWorks) {
 }
 
 Test(PrimitiveEqualFalseWorks) {
-	Bool localSuccess = NO;
 	ObjectPointer resultBool = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -61,12 +56,9 @@ Test(PrimitiveEqualFalseWorks) {
 /* 10 == 20 */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveEqual();
+    Interpreter_primitiveEqual();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultBool = Interpreter_popStack();
 	
 /* assert  result == FALSE */
@@ -75,7 +67,6 @@ Test(PrimitiveEqualFalseWorks) {
 }
 
 Test(PrimitiveEqualFailsIfReceiverNotInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer resultObject = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -94,12 +85,9 @@ Test(PrimitiveEqualFailsIfReceiverNotInteger) {
 /* 16500 == 10 */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveEqual();
+    Interpreter_primitiveEqual();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 /* assert stack unchanged */
 	resultObject = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	Expect( resultObject != NilPointer );
@@ -114,7 +102,6 @@ Test(PrimitiveEqualFailsIfReceiverNotInteger) {
 }
 
 Test(PrimitiveEqualFailsIfArgumentNotInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer resultObject = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -133,12 +120,9 @@ Test(PrimitiveEqualFailsIfArgumentNotInteger) {
 /* 10 == 16500 */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveEqual();
+    Interpreter_primitiveEqual();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 /* assert stack unchanged */
 	resultObject = Interpreter_popStack(); 
 	Expect( resultObject != NilPointer );
@@ -157,7 +141,6 @@ Test(PrimitiveEqualFailsIfArgumentNotInteger) {
 /*  ----------------------------------------------------------------------------------- */ 
 
 Test(PrimitiveNotEqualTrueWorks) {
-	Bool localSuccess = NO;
 	ObjectPointer resultBool = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -176,12 +159,9 @@ Test(PrimitiveNotEqualTrueWorks) {
 /* 10 != 20 */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveNotEqual();
+    Interpreter_primitiveNotEqual();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultBool = Interpreter_popStack(); 
 	
 /* assert  result == TRUE */
@@ -190,7 +170,6 @@ Test(PrimitiveNotEqualTrueWorks) {
 }
 
 Test(PrimitiveNotEqualFalseWorks) {
-	Bool localSuccess = NO;
 	ObjectPointer resultBool = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -209,12 +188,9 @@ Test(PrimitiveNotEqualFalseWorks) {
 /* 10 != 10 */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveNotEqual();
+    Interpreter_primitiveNotEqual();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultBool = Interpreter_popStack(); 
 	
 /* assert  result == FALSE */
@@ -223,7 +199,6 @@ Test(PrimitiveNotEqualFalseWorks) {
 }
 
 Test(PrimitiveNotEqualFailsIfReceiverNotInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer resultObject = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -242,12 +217,9 @@ Test(PrimitiveNotEqualFailsIfReceiverNotInteger) {
 /* 16500 != 10 */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveNotEqual();
+    Interpreter_primitiveNotEqual();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 /* assert stack unchanged */
 	resultObject = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	Expect( resultObject != NilPointer );
@@ -262,7 +234,6 @@ Test(PrimitiveNotEqualFailsIfReceiverNotInteger) {
 }
 
 Test(PrimitiveNotEqualFailsIfArgumentNotInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer resultObject = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -281,12 +252,9 @@ Test(PrimitiveNotEqualFailsIfArgumentNotInteger) {
 /* 10 != 16500 */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveNotEqual();
+    Interpreter_primitiveNotEqual();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 /* assert stack unchanged */
 	resultObject = Interpreter_popStack(); 
 	Expect( resultObject != NilPointer );
@@ -304,7 +272,6 @@ Test(PrimitiveNotEqualFailsIfArgumentNotInteger) {
 /*  ----------------------------------------------------------------------------------- */ 
  
 Test(PrimitiveGreaterThanTrueWorks) {
-	Bool localSuccess = NO;
 	ObjectPointer resultBool = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -323,12 +290,9 @@ Test(PrimitiveGreaterThanTrueWorks) {
 /* 20 > 10 */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveGreaterThan();
+    Interpreter_primitiveGreaterThan();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultBool = Interpreter_popStack(); 
 	
 /* assert  result == TRUE */
@@ -337,7 +301,6 @@ Test(PrimitiveGreaterThanTrueWorks) {
 }
 
 Test(PrimitiveGreaterThanFalseWorks) {
-	Bool localSuccess = NO;
 	ObjectPointer resultBool = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -356,12 +319,9 @@ Test(PrimitiveGreaterThanFalseWorks) {
 /* 10 > 20 */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveGreaterThan();
+    Interpreter_primitiveGreaterThan();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultBool = Interpreter_popStack(); 
 	
 /* assert  result == FALSE */
@@ -370,7 +330,6 @@ Test(PrimitiveGreaterThanFalseWorks) {
 }
 
 Test(PrimitiveGreaterThanFalseIfEqualWorks) {
-	Bool localSuccess = NO;
 	ObjectPointer resultBool = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -389,12 +348,9 @@ Test(PrimitiveGreaterThanFalseIfEqualWorks) {
 /* 10 > 10 */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveGreaterThan();
+    Interpreter_primitiveGreaterThan();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultBool = Interpreter_popStack(); 
 	
 /* assert  result == FALSE */
@@ -403,7 +359,6 @@ Test(PrimitiveGreaterThanFalseIfEqualWorks) {
 }
 
 Test(PrimitiveGreaterThanFailsIfReceiverNotInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer resultObject = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -422,12 +377,9 @@ Test(PrimitiveGreaterThanFailsIfReceiverNotInteger) {
 /* 16500 > 10 */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveGreaterThan();
+    Interpreter_primitiveGreaterThan();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 /* assert stack unchanged */
 	resultObject = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	Expect( resultObject != NilPointer );
@@ -442,7 +394,6 @@ Test(PrimitiveGreaterThanFailsIfReceiverNotInteger) {
 }
 
 Test(PrimitiveGreaterThanFailsIfArgumentNotInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer resultObject = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -461,12 +412,9 @@ Test(PrimitiveGreaterThanFailsIfArgumentNotInteger) {
 /* 10 > 16500 */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveGreaterThan();
+    Interpreter_primitiveGreaterThan();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 /* assert stack unchanged */
 	resultObject = Interpreter_popStack(); 
 	Expect( resultObject != NilPointer );
@@ -484,7 +432,6 @@ Test(PrimitiveGreaterThanFailsIfArgumentNotInteger) {
 /*  ----------------------------------------------------------------------------------- */ 
 
 Test(PrimitiveLessThanTrueWorks) {
-	Bool localSuccess = NO;
 	ObjectPointer resultBool = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -503,12 +450,9 @@ Test(PrimitiveLessThanTrueWorks) {
 /* 10 < 20 */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveLessThan();
+    Interpreter_primitiveLessThan();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultBool = Interpreter_popStack(); 
 	
 /* assert  result == TRUE */
@@ -517,7 +461,6 @@ Test(PrimitiveLessThanTrueWorks) {
 }
 
 Test(PrimitiveLessThanFalseWorks) {
-	Bool localSuccess = NO;
 	ObjectPointer resultBool = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -536,12 +479,9 @@ Test(PrimitiveLessThanFalseWorks) {
 /* 20 < 10 */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveLessThan();
+    Interpreter_primitiveLessThan();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultBool = Interpreter_popStack(); 
 	
 /* assert  result == FALSE */
@@ -550,7 +490,6 @@ Test(PrimitiveLessThanFalseWorks) {
 }
 
 Test(PrimitiveLessThanFalseIfEqualWorks) {
-	Bool localSuccess = NO;
 	ObjectPointer resultBool = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -569,12 +508,9 @@ Test(PrimitiveLessThanFalseIfEqualWorks) {
 /* 10 < 10 */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveLessThan();
+    Interpreter_primitiveLessThan();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultBool = Interpreter_popStack(); 
 	
 /* assert  result == FALSE */
@@ -583,7 +519,6 @@ Test(PrimitiveLessThanFalseIfEqualWorks) {
 }
 
 Test(PrimitiveLessThanFailsIfReceiverNotInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer resultObject = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -602,12 +537,9 @@ Test(PrimitiveLessThanFailsIfReceiverNotInteger) {
 /* 16500 < 10 */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveLessThan();
+    Interpreter_primitiveLessThan();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 /* assert stack unchanged */
 	resultObject = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	Expect( resultObject != NilPointer );
@@ -622,7 +554,6 @@ Test(PrimitiveLessThanFailsIfReceiverNotInteger) {
 }
 
 Test(PrimitiveLessThanFailsIfArgumentNotInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer resultObject = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -641,12 +572,9 @@ Test(PrimitiveLessThanFailsIfArgumentNotInteger) {
 /* 10 < 16500 */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveLessThan();
+    Interpreter_primitiveLessThan();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 /* assert stack unchanged */
 	resultObject = Interpreter_popStack(); 
 	Expect( resultObject != NilPointer );
@@ -664,7 +592,6 @@ Test(PrimitiveLessThanFailsIfArgumentNotInteger) {
 /*  ----------------------------------------------------------------------------------- */ 
 
 Test(PrimitiveLessOrEqualThanTrueWorks) {
-	Bool localSuccess = NO;
 	ObjectPointer resultBool = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -683,12 +610,9 @@ Test(PrimitiveLessOrEqualThanTrueWorks) {
 /* 10 <= 20 */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveLessOrEqual();
+    Interpreter_primitiveLessOrEqual();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultBool = Interpreter_popStack(); 
 	
 /* assert  result == TRUE */
@@ -697,7 +621,6 @@ Test(PrimitiveLessOrEqualThanTrueWorks) {
 }
 
 Test(PrimitiveLessOrEqualThanFalseWorks) {
-	Bool localSuccess = NO;
 	ObjectPointer resultBool = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -716,12 +639,9 @@ Test(PrimitiveLessOrEqualThanFalseWorks) {
 /* 20 <= 10 */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveLessOrEqual();
+    Interpreter_primitiveLessOrEqual();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultBool = Interpreter_popStack(); 
 	
 /* assert  result == FALSE */
@@ -730,7 +650,6 @@ Test(PrimitiveLessOrEqualThanFalseWorks) {
 }
 
 Test(PrimitiveLessOrEqualThanTrueIfEqualWorks) {
-	Bool localSuccess = NO;
 	ObjectPointer resultBool = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -749,12 +668,9 @@ Test(PrimitiveLessOrEqualThanTrueIfEqualWorks) {
 /* 10 <= 10 */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveLessOrEqual();
+    Interpreter_primitiveLessOrEqual();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultBool = Interpreter_popStack(); 
 	
 /* assert  result == TRUE */
@@ -763,7 +679,6 @@ Test(PrimitiveLessOrEqualThanTrueIfEqualWorks) {
 }
 
 Test(PrimitiveLessOrEqualThanFailsIfReceiverNotInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer resultObject = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -782,12 +697,9 @@ Test(PrimitiveLessOrEqualThanFailsIfReceiverNotInteger) {
 /* 16500 <= 10 */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveLessOrEqual();
+    Interpreter_primitiveLessOrEqual();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 /* assert stack unchanged */
 	resultObject = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	Expect( resultObject != NilPointer );
@@ -802,7 +714,6 @@ Test(PrimitiveLessOrEqualThanFailsIfReceiverNotInteger) {
 }
 
 Test(PrimitiveLessOrEqualThanFailsIfArgumentNotInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer resultObject = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -821,12 +732,9 @@ Test(PrimitiveLessOrEqualThanFailsIfArgumentNotInteger) {
 /* 10 <= 16500 */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveLessOrEqual();
+    Interpreter_primitiveLessOrEqual();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 /* assert stack unchanged */
 	resultObject = Interpreter_popStack(); 
 	Expect( resultObject != NilPointer );
@@ -845,7 +753,6 @@ Test(PrimitiveLessOrEqualThanFailsIfArgumentNotInteger) {
 /*  ----------------------------------------------------------------------------------- */ 
 
 Test(PrimitiveGreaterOrEqualThanTrueWorks) {
-	Bool localSuccess = NO;
 	ObjectPointer resultBool = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -864,12 +771,9 @@ Test(PrimitiveGreaterOrEqualThanTrueWorks) {
 /* 20 >= 10 */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveGreaterOrEqual();
+    Interpreter_primitiveGreaterOrEqual();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultBool = Interpreter_popStack(); 
 	
 /* assert  result == TRUE */
@@ -878,7 +782,6 @@ Test(PrimitiveGreaterOrEqualThanTrueWorks) {
 }
 
 Test(PrimitiveGreaterOrEqualThanFalseWorks) {
-	Bool localSuccess = NO;
 	ObjectPointer resultBool = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -897,12 +800,9 @@ Test(PrimitiveGreaterOrEqualThanFalseWorks) {
 /* 10 >= 20 */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveGreaterOrEqual();
+    Interpreter_primitiveGreaterOrEqual();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultBool = Interpreter_popStack(); 
 	
 /* assert  result == FALSE */
@@ -911,7 +811,6 @@ Test(PrimitiveGreaterOrEqualThanFalseWorks) {
 }
 
 Test(PrimitiveGreaterOrEqualThanTrueIfEqualWorks) {
-	Bool localSuccess = NO;
 	ObjectPointer resultBool = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -930,12 +829,9 @@ Test(PrimitiveGreaterOrEqualThanTrueIfEqualWorks) {
 /* 10 >= 10 */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveGreaterOrEqual();
+    Interpreter_primitiveGreaterOrEqual();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-	
 	resultBool = Interpreter_popStack(); 
 	
 /* assert  result == TRUE */
@@ -944,7 +840,6 @@ Test(PrimitiveGreaterOrEqualThanTrueIfEqualWorks) {
 }
 
 Test(PrimitiveGreaterOrEqualThanFailsIfReceiverNotInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer resultObject = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -963,12 +858,9 @@ Test(PrimitiveGreaterOrEqualThanFailsIfReceiverNotInteger) {
 /* 16500 >= 10 */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveGreaterOrEqual();
+    Interpreter_primitiveGreaterOrEqual();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 /* assert stack unchanged */
 	resultObject = Interpreter_popStack(); /* could just call popInteger, but lets be clear */
 	Expect( resultObject != NilPointer );
@@ -983,7 +875,6 @@ Test(PrimitiveGreaterOrEqualThanFailsIfReceiverNotInteger) {
 }
 
 Test(PrimitiveGreaterOrEqualThanFailsIfArgumentNotInteger) {
-	Bool localSuccess = NO;
 	ObjectPointer resultObject = NilPointer;
 
 	activeContext = stubBlockContext();
@@ -1002,12 +893,9 @@ Test(PrimitiveGreaterOrEqualThanFailsIfArgumentNotInteger) {
 /* 10 >= 16500 */
 
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveGreaterOrEqual();
+    Interpreter_primitiveGreaterOrEqual();
 	Expect( Interpreter_success() == NO );
 
-/* assert success */
-	Expect( localSuccess == NO );
-	
 /* assert stack unchanged */
 	resultObject = Interpreter_popStack(); 
 	Expect( resultObject != NilPointer );

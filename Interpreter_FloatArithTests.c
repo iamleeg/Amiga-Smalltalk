@@ -12,7 +12,6 @@ extern ObjectPointer stubBlockContext(void);
 #define CMP(x) ((int)(x*1000))
 
 Test(PrimitiveFloatAddBasic) {
-	Bool localSuccess = NO;
 	float result = 0.0;
 
 	activeContext = stubBlockContext();
@@ -29,13 +28,10 @@ Test(PrimitiveFloatAddBasic) {
     
 /* call add */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveFloatAdd();
+    Interpreter_primitiveFloatAdd();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-
-	/* 3.1 + 4.1 == 7.2 */
+/* 3.1 + 4.1 == 7.2 */
 	result = Interpreter_popFloat();
 	Expect( CMP(7.2) == CMP(result) ); 
 }
@@ -48,7 +44,6 @@ Test(PrimitiveFloatAddBasic) {
 /*  ----------------------------------------------------------------------------------- */ 
 
 Test(PrimitiveFloatSubtractBasic) {
-	Bool localSuccess = NO;
 	float result = 0.0;
 
 	activeContext = stubBlockContext();
@@ -65,13 +60,10 @@ Test(PrimitiveFloatSubtractBasic) {
     
 /* call subtract */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveFloatSubtract();
+    Interpreter_primitiveFloatSubtract();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-	
-	/* 7.5 - 4.2 == 3.3 */
+/* 7.5 - 4.2 == 3.3 */
 	result = Interpreter_popFloat();
 	Expect( CMP(3.3) == CMP(result) ); 
 }
@@ -81,7 +73,6 @@ Test(PrimitiveFloatSubtractBasic) {
 /*  ----------------------------------------------------------------------------------- */ 
 
 Test(PrimitiveFloatMultiplyBasic) {
-	Bool localSuccess = NO;
 	float result = 0.0;
 
 	activeContext = stubBlockContext();
@@ -98,13 +89,10 @@ Test(PrimitiveFloatMultiplyBasic) {
     
 /* call multiply */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveFloatMultiply();
+    Interpreter_primitiveFloatMultiply();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-	
-	/* 3.0 * 1.1 == 3.3 */
+/* 3.0 * 1.1 == 3.3 */
 	result = Interpreter_popFloat();
 
 	Expect( CMP(3.3) == CMP(result) ); 
@@ -115,7 +103,7 @@ Test(PrimitiveFloatMultiplyBasic) {
 /*  ----------------------------------------------------------------------------------- */ 
 
 Test(PrimitiveFloatDivideBasic) {
-	Bool localSuccess = NO;
+
 	float result = 0.0;
 
 	activeContext = stubBlockContext();
@@ -132,19 +120,15 @@ Test(PrimitiveFloatDivideBasic) {
     
 /* call divide */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveFloatDivide();
+    Interpreter_primitiveFloatDivide();
 	Expect( Interpreter_success() == YES );
-
-/* assert success */
-	Expect( localSuccess == YES );
 	
-	/* 10.0 / 2.0 == 5.0 */
+/* 10.0 / 2.0 == 5.0 */
 	result = Interpreter_popFloat();
 	Expect( CMP(5.0) == CMP(result) ); 
 }
 
 Test(PrimitiveFloatDivideFailsIfArgumentZero) {
-	Bool localSuccess = NO;
 	ObjectPointer resultShortInteger = NilPointer;
 	float pop1 = 99.0;
 	float pop2 = 99.0;
@@ -163,11 +147,8 @@ Test(PrimitiveFloatDivideFailsIfArgumentZero) {
     
 /* call divide  10.0 / 0.0 */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveFloatDivide();
+    Interpreter_primitiveFloatDivide();
 	Expect( Interpreter_success() == NO );
-
-/* assert success */
-	Expect( localSuccess == NO );
 	
 /* assert stack unchanged */
 	pop1 = Interpreter_popFloat();
@@ -182,7 +163,6 @@ Test(PrimitiveFloatDivideFailsIfArgumentZero) {
 /*  ----------------------------------------------------------------------------------- */ 
 
 Test(PrimitiveFloatEqualsTrue) {
-	Bool localSuccess = NO;
 
 	activeContext = stubBlockContext();
     Interpreter_fetchContextRegisters();
@@ -198,18 +178,14 @@ Test(PrimitiveFloatEqualsTrue) {
     
 /* call primitive */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveFloatEqual();
+    Interpreter_primitiveFloatEqual();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-
-	/* 3.1 == 3.1 */
+/* 3.1 == 3.1 */
 	Expect( TruePointer == Interpreter_popStack() ); 
 }
 
 Test(PrimitiveFloatEqualsFalse) {
-	Bool localSuccess = NO;
 
 	activeContext = stubBlockContext();
     Interpreter_fetchContextRegisters();
@@ -225,18 +201,14 @@ Test(PrimitiveFloatEqualsFalse) {
     
 /* call primitive */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveFloatEqual();
+    Interpreter_primitiveFloatEqual();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-
-	/* 3.1 == 4.1  */
+/* 3.1 == 4.1  */
 	Expect( FalsePointer == Interpreter_popStack() ); 
 }
 
 Test(PrimitiveFloatNotEqualsTrue) {
-	Bool localSuccess = NO;
 
 	activeContext = stubBlockContext();
     Interpreter_fetchContextRegisters();
@@ -252,18 +224,14 @@ Test(PrimitiveFloatNotEqualsTrue) {
     
 /* call primitive */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveFloatNotEqual();
+    Interpreter_primitiveFloatNotEqual();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-
-	/* 3.1 != 4.1 */
+/* 3.1 != 4.1 */
 	Expect( TruePointer == Interpreter_popStack() ); 
 }
 
 Test(PrimitiveFloatNotEqualsFalse) {
-	Bool localSuccess = NO;
 
 	activeContext = stubBlockContext();
     Interpreter_fetchContextRegisters();
@@ -279,18 +247,14 @@ Test(PrimitiveFloatNotEqualsFalse) {
     
 /* call primitive */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveFloatNotEqual();
+    Interpreter_primitiveFloatNotEqual();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-
-	/* 3.1 != 3.1  */
+/* 3.1 != 3.1  */
 	Expect( FalsePointer == Interpreter_popStack() ); 
 }
 
 Test(PrimitiveFloatGreaterThanTrue) {
-	Bool localSuccess = NO;
 
 	activeContext = stubBlockContext();
     Interpreter_fetchContextRegisters();
@@ -306,18 +270,14 @@ Test(PrimitiveFloatGreaterThanTrue) {
     
 /* call primitive */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveFloatGreaterThan();
+    Interpreter_primitiveFloatGreaterThan();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-
-	/* 3.1 > 2.1 */
+/* 3.1 > 2.1 */
 	Expect( TruePointer == Interpreter_popStack() ); 
 }
 
 Test(PrimitiveFloatGreaterThanFalse) {
-	Bool localSuccess = NO;
 
 	activeContext = stubBlockContext();
     Interpreter_fetchContextRegisters();
@@ -333,18 +293,14 @@ Test(PrimitiveFloatGreaterThanFalse) {
     
 /* call primitive */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveFloatGreaterThan();
+    Interpreter_primitiveFloatGreaterThan();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-
-	/* 2.1 > 3.1  */
+/* 2.1 > 3.1  */
 	Expect( FalsePointer == Interpreter_popStack() ); 
 }
 
 Test(PrimitiveFloatLessThanTrue) {
-	Bool localSuccess = NO;
 
 	activeContext = stubBlockContext();
     Interpreter_fetchContextRegisters();
@@ -360,18 +316,14 @@ Test(PrimitiveFloatLessThanTrue) {
     
 /* call primitive */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveFloatLessThan();
+    Interpreter_primitiveFloatLessThan();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-
-	/* 3.1 < 4.1 */
+/* 3.1 < 4.1 */
 	Expect( TruePointer == Interpreter_popStack() ); 
 }
 
 Test(PrimitiveFloatLessThanFalse) {
-	Bool localSuccess = NO;
 
 	activeContext = stubBlockContext();
     Interpreter_fetchContextRegisters();
@@ -387,18 +339,14 @@ Test(PrimitiveFloatLessThanFalse) {
     
 /* call primitive */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveFloatLessThan();
+    Interpreter_primitiveFloatLessThan();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-
-	/* 4.1 < 3.1  */
+/* 4.1 < 3.1  */
 	Expect( FalsePointer == Interpreter_popStack() ); 
 }
 
 Test(PrimitiveFloatGreaterEqualTrue) {
-	Bool localSuccess = NO;
 
 	activeContext = stubBlockContext();
     Interpreter_fetchContextRegisters();
@@ -414,18 +362,14 @@ Test(PrimitiveFloatGreaterEqualTrue) {
     
 /* call primitive */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveFloatGreaterOrEqual();
+    Interpreter_primitiveFloatGreaterOrEqual();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-
-	/* 4.1 >= 4.1 */
+/* 4.1 >= 4.1 */
 	Expect( TruePointer == Interpreter_popStack() ); 
 }
 
 Test(PrimitiveFloatGreaterEqualFalse) {
-	Bool localSuccess = NO;
 
 	activeContext = stubBlockContext();
     Interpreter_fetchContextRegisters();
@@ -441,18 +385,14 @@ Test(PrimitiveFloatGreaterEqualFalse) {
     
 /* call primitive */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveFloatGreaterOrEqual();
+    Interpreter_primitiveFloatGreaterOrEqual();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-
-	/* 3.1 >= 4.1  */
+/* 3.1 >= 4.1  */
 	Expect( FalsePointer == Interpreter_popStack() ); 
 }
 
 Test(PrimitiveFloatLessEqualTrue) {
-	Bool localSuccess = NO;
 
 	activeContext = stubBlockContext();
     Interpreter_fetchContextRegisters();
@@ -468,18 +408,14 @@ Test(PrimitiveFloatLessEqualTrue) {
     
 /* call primitive */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveFloatLessOrEqual();
+    Interpreter_primitiveFloatLessOrEqual();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-
-	/* 3.1 <= 3.1 */
+/* 3.1 <= 3.1 */
 	Expect( TruePointer == Interpreter_popStack() ); 
 }
 
 Test(PrimitiveFloatLessEqualFalse) {
-	Bool localSuccess = NO;
 
 	activeContext = stubBlockContext();
     Interpreter_fetchContextRegisters();
@@ -495,13 +431,10 @@ Test(PrimitiveFloatLessEqualFalse) {
     
 /* call primitive */
 	Interpreter_initPrimitive();
-    localSuccess = Interpreter_primitiveFloatLessOrEqual();
+    Interpreter_primitiveFloatLessOrEqual();
 	Expect( Interpreter_success() == YES );
 
-/* assert success */
-	Expect( localSuccess == YES );
-
-	/* 4.1 <= 3.1  */
+/* 4.1 <= 3.1  */
 	Expect( FalsePointer == Interpreter_popStack() ); 
 }
 
