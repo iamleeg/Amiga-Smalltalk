@@ -56,6 +56,15 @@ extern ObjectPointer newMethod;
 /**ST: This is the index of a primitive routine associated with newMethod if one exists. */
 extern Word primitiveIndex;
 
+/**ST: initializeCharacterIndex pp 630 */
+extern Word characterValueIndex;
+
+/**ST: initializeStreamIndices pp 631 */
+extern Word streamArrayIndex;
+extern Word streamIndexIndex;
+extern Word streamReadLimitIndex;
+extern Word streamWriteLimitIndex;
+
 /**
  * Set the success register.
  * @note Actually ANDs the existing and new value, so if you previously failed, you will never un-fail.

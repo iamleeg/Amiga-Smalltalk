@@ -23,6 +23,11 @@ ObjectPointer messageSelector = NilPointer;
 Word argumentCount = 0;
 ObjectPointer newMethod = NilPointer;
 Word primitiveIndex = 0;
+Word characterValueIndex = 0;
+Word streamArrayIndex = 0;
+Word streamIndexIndex = 1;
+Word streamReadLimitIndex = 2;
+Word streamWriteLimitIndex = 3;
 Byte currentBytecode = 0;
 
 /**
